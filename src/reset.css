@@ -1,0 +1,54 @@
+h1,h2,h3,h4,h5,h6 {
+    padding: 0;
+    margin: 0;
+    font-size: normal;
+    font-weight: normal;
+}
+
+ul, ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.fixed {
+    position: fixed;
+}
+
+.rel {
+    position: relative;
+}
+
+.abs {
+    position: absolute;
+}
+
+.bl {
+    display: block;
+}
+
+.ibl li, li {
+    display: inline-block;
+}
+
+.noul {
+    text-decoration: none;
+}
+
+.anim {
+    transition: all 0.2s linear 0s;
+}
+
+body {
+    margin: 0;  
+    padding: 0;
+    font-family: arial;
+}
+
+.s15 {
+    font-size: 15px;
+}
+
+img {
+    display: block;
+}
