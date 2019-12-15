@@ -1,10 +1,9 @@
 import React from 'react'
 import Header from '../src/components/Header'
 import Main from '../src/components/Main'
-import './header.css'
-import './reset.css'
+import './App.css'
 
-function App() {
+function App () {
   return (
     <>
       <Header />
@@ -13,4 +12,4 @@ function App() {
   )
 }
 
-export default App;
+export default App

@@ -1,0 +1,297 @@
+/* Reset */
+
+* {
+    margin: 0;  
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: normal;
+}
+
+body {
+    font-family: arial;
+    padding-top: 160px; 
+}
+
+img {
+    display: block;
+}
+
+.clearfix:after {
+    display: block;
+    content: '';
+    clear: both;
+}
+
+/* Header */
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    z-index: 99;
+    background: #ffffff;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.header .logo {
+    width: 80px;
+    height: 60px;
+    padding: 12px 25px;
+    box-sizing: border-box;
+    display: block;
+}
+
+.header .logo img {
+    max-height: 50px
+}
+
+/* Input Search */
+
+.header .searchbox { 
+    position: relative;
+    width: 50%;
+    left: 510px;
+    bottom: 20px;
+    transform: translate(-50%, -50%);
+}
+
+.header .searchbox .input-search { 
+    width: 100%; 
+    border: 0;
+    padding: 12px;
+    margin-left: 40px;
+    font-size: 15px;
+    border-radius: 8px;
+    background: #eeeeee;
+    display: block;
+    outline: none;
+    font-weight: bold;
+}
+.header .searchbox .btn-search {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border: 0;
+    width: 50px;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    outline: none;
+    color: #777777;
+}
+
+/* Nav */
+
+.header .nav {
+    position: absolute;
+    display: inline-block;
+    top: 30%;
+    height: 30px;
+    transform: translate(-50%);
+    right: -150px;
+}
+
+.header .nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.header .nav li {
+    display: inline-block;
+    line-height: 30px;
+    margin-left: 30px;
+}
+
+.header .nav li a {
+    color: #333333;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.header .nav li:hover a  {
+    background: #eeeeee;
+}
+
+#divider-home-username {
+    border-right: 1.5px solid #eeeeee;
+    padding-right: 20px;
+}
+
+#divider-message-notification {
+    padding-left: 30px;
+}
+
+#icon-message {
+    font-size: 28px;
+    color: #c2c2c2;
+}
+
+#icon-bell1 {
+    font-size: 28px;
+    color: #c2c2c2;
+}
+
+/* Engineer Card */
+
+.container {
+    columns: 4;
+    margin: 0 auto;
+    max-width: 1300px;
+}
+
+.container .box {
+    width: 300px;
+
+    margin: 5px;
+    position: relative;
+    overflow: hidden;
+    break-inside: avoid;
+}
+
+.container .box img {
+    max-width: 300px;
+    border-radius: 8px;
+}
+
+.profile-user {
+    position: absolute;
+    bottom: 0;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    padding: 10px;
+    width: 100%;
+}
+
+.profile-user ul {
+    list-style: none;
+    display: inline;
+}
+
+.profile-user .profile-email {
+    margin: 8px 0;
+    font-size: 15px;
+}
+
+.profile-user .profile-title {
+    font-size: 15px;
+}
+
+.profile-user .profile-salary {
+    font-size: 15px;
+    margin-bottom: 10px;
+    text-align: right;
+}
+
+.profile-user ul li {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* Form Login & Register */
+
+.form-auth {
+    max-width: 550px;
+    padding: 15px 70px;
+    border-radius: 10px;
+    border: 1.5px solid #eeeeee;
+    margin: 0 auto;
+    background: #f5f5f5;
+} 
+
+.form-auth form {
+    width: 100%;
+}
+
+.form-auth h2 {
+    color: #aaaaaa;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-auth select {
+    outline: none;
+    border: none;
+    margin-left: 8px;
+    padding: 8px;
+}
+
+.form-auth form label {
+    font-size: 17px;
+    letter-spacing: 3px;
+}
+
+.form-auth form input {
+    border: none;
+    outline: none;
+    display: block;
+    background: #eeeeee;
+    font-size: 15px;
+    margin: 8px 0;
+    text-transform: lowercase;
+    height: 40px;
+    width: 100%;
+    letter-spacing: 3px;
+    color: #5a5a5a;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.form-auth form button {
+    border: none;
+    outline: none;
+    padding: 8px;
+    margin-top: 10px;
+    text-align: center;
+    width: 120px;
+    display: block;
+    cursor: pointer;
+    background: #9c9c9c;
+    color: #e6e6e6;
+    border-radius: 8px;
+    font-size: 15px;
+    border: 1.5px #a7a7a7;
+}
+
+/* Form Engineer Create & Edit */
+
+.form-engineer {
+    max-width: 550px;
+    padding: 15px 70px;
+    border-radius: 10px;
+    border: 1.5px solid #eeeeee;
+    margin: 0 auto;
+    background: #f5f5f5;
+} 
+
+.form-engineer form {
+    width: 100%;
+}
+
+.form-engineer form input {
+    border: none;
+    outline: none;
+    display: block;
+    background: #eeeeee;
+    color: #5a5a5a;
+    font-size: 15px;
+    margin: 8px 0;
+    text-transform: lowercase;
+    height: 40px;
+    width: 100%;
+    letter-spacing: 3px;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+}
