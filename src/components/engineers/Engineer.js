@@ -3,21 +3,23 @@ import EngineerList from './EngineerList'
 import axios from 'axios'
 
 export default class Engineer extends Component {
-    constructor() {
-      super()
+  constructor() {
+    super()
 
-      this.state = {
-        engineers: [],
-        loading: false,
-        total_data: 0,
-        per_page: 0,
-        current_page: 0
-      }
+    this.state = {
+      engineers: [],
+      loading: false,
+      total_data: 0,
+      per_page: 0,
+      current_page: 0,
+      filterText: ''
     }
-    
-    fetchEngineers = async pageNumber => {
-      this.setState({ loading: true })
-      const res = await axios.get(`http://localhost:3001/api/v1/engineers?page=${pageNumber}`)
+  }
+  
+  fetchEngineers = pageNumber => {
+    this.setState({ loading: true })
+    axios.get(`http://3.90.152.67:5000/api/v1/engineers?page=${pageNumber}`)
+    .then(res => {
       this.setState({ 
         loading: false,
         engineers: res.data.data,
@@ -25,12 +27,18 @@ export default class Engineer extends Component {
         per_page: res.data.per_page,
         current_page: res.data.current_page
       })
-    }
-      
-    componentDidMount() {
-      this.fetchEngineers(1)
-    }
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+    
+  componentDidMount() {
+    this.fetchEngineers(1)
+  }
+
   render() {
+
+    const { filter } = this.props
 
     let renderPageNumbers
 
@@ -51,7 +59,7 @@ export default class Engineer extends Component {
       <>
         <div className='container'>
         { this.state.loading && <p>Loading...</p> } 
-        { !this.state.loading && <EngineerList engineers={this.state.engineers} /> }
+        { !this.state.loading && <EngineerList engineers={this.state.engineers}  /> }
         </div>
         <ul className='pagination-container'>
           <li> {renderPageNumbers} </li>
@@ -59,4 +67,5 @@ export default class Engineer extends Component {
       </>
     )
   }
+
  }

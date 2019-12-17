@@ -6,7 +6,7 @@
     box-sizing: border-box;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
 }
 
@@ -91,10 +91,10 @@ img {
 .header .nav {
     position: absolute;
     display: inline-block;
-    top: 30%;
+    top: 25%;
     height: 30px;
     transform: translate(-50%);
-    right: -150px;
+    right: -125px;
 }
 
 .header .nav {
@@ -109,7 +109,8 @@ img {
     margin-left: 30px;
 }
 
-.header .nav li a {
+.header .nav li #username, 
+.header .nav li .home {
     color: #333333;
     text-decoration: none;
     font-weight: bold;
@@ -118,7 +119,13 @@ img {
     font-size: 15px;
 }
 
-.header .nav li:hover a  {
+.header .nav li .home {
+    margin-right: 20px;
+}
+
+.header .nav li #username:hover, 
+.header .nav li .home:hover
+{
     background: #eeeeee;
 }
 
@@ -133,11 +140,13 @@ img {
 
 #icon-message {
     font-size: 28px;
+    text-decoration: none;
     color: #c2c2c2;
 }
 
 #icon-bell1 {
     font-size: 28px;
+    text-decoration: none;
     color: #c2c2c2;
 }
 
@@ -145,21 +154,22 @@ img {
 
 .container {
     columns: 4;
-    margin: 0 auto;
+    column-gap: 50px;
     max-width: 1200px;
+    margin: 0 auto;
 }
 
 .container .box {
     width: 300px;
-
-    margin: 5px;
+    margin: 20px 0;
+    border-radius: 8px;
     position: relative;
     overflow: hidden;
     break-inside: avoid;
 }
 
 .container .box img {
-    max-width: 300px;
+    max-width: 100%;
     border-radius: 8px;
 }
 
@@ -238,7 +248,6 @@ img {
     background: #eeeeee;
     font-size: 15px;
     margin: 8px 0;
-    text-transform: lowercase;
     height: 40px;
     width: 100%;
     letter-spacing: 3px;
@@ -287,7 +296,6 @@ img {
     color: #5a5a5a;
     font-size: 15px;
     margin: 8px 0;
-    text-transform: lowercase;
     height: 40px;
     width: 100%;
     letter-spacing: 3px;
@@ -321,3 +329,91 @@ img {
    display: inline-block;
    cursor: pointer;
 }
+
+/* Dropdown Username */
+
+.dropdown-container {
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    left: 0; 
+    right: 0;
+    top: 50px;
+}   
+
+.dropdown ul {
+    list-style: none;
+}
+
+.dropdown ul li {
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+    width: 150px;
+    padding: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Options Engineer */
+
+.options-engineers {
+    background: #dddddd;
+    position: absolute;
+    padding: 8px;
+    top: 8px;
+    right: 8px;
+    list-style: none;
+}
+
+.options-engineers li {
+    color: grey;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 5px;
+}
+
+
+/* Form Engineer */
+
+.form-engineer h2 {
+    margin: 30px 0;
+}
+
+.form-engineer textarea {
+    padding: 8px;
+    font-size: 15px;
+    border: none;
+    resize: none;
+    border-radius: 8px;
+    height: 120px;
+    width: 100%;
+    letter-spacing: 3px;
+    outline: none;
+    background: #eeeeee;
+    color: #5a5a5a;
+}
+
+.form-engineer label {
+    margin-left: 5px;
+}
+
+.form-engineer button {
+    padding: 8px;
+    margin: 30px auto;
+    display: block;
+    width: 110px;
+    cursor: pointer;
+}
+
+/* Avatar */
+
+.avatar-user {
+    width: 30px;
+    left: -35px;
+    top: 0;
+    border-radius: 70px;
+    position: absolute;
+}
+

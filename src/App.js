@@ -1,15 +1,24 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Header from '../src/components/Header'
 import Main from '../src/components/Main'
 import './App.css'
 
-function App () {
-  return (
-    <>
-      <Header />
-      <Main />
-    </>
-  )
+export default class App extends Component {  
+  
+  constructor() {
+    super()
+  }
+
+
+  render() {
+      return (
+        <>
+          <Header />
+          <Main />
+        </>
+      )
+  }
+ 
 }
 
-export default App
+
