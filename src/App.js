@@ -1,24 +1,15 @@
-import React, { Component } from 'react'
-import Header from '../src/components/Header'
+import React from 'react'
 import Main from '../src/components/Main'
 import './App.css'
 
-export default class App extends Component {  
-  
-  constructor() {
-    super()
-  }
-
-
-  render() {
-      return (
-        <>
-          <Header />
-          <Main />
-        </>
-      )
-  }
- 
+class App extends React.Component {
+    render() {
+        return (
+          <React.Fragment>
+            <Main />
+          </React.Fragment>
+        )
+    }
 }
 
-
+export default App
