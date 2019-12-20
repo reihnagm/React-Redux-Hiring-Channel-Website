@@ -4,13 +4,13 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 
 export default class EngineerList extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.delete = this.delete.bind(this)
   }
 
-  delete(id) {
+  delete (id) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -33,7 +33,7 @@ export default class EngineerList extends Component {
     })
   }
 
-  render() {
+  render () {
     const { engineers } = this.props
 
     return (

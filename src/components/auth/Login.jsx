@@ -1,5 +1,6 @@
 import React from 'react'
 import Swal from 'sweetalert2'
+import MainHeader from '../templates/MainHeader'
 import axios from 'axios'
 
 
@@ -44,7 +45,6 @@ class Login extends React.Component {
 
     axios.post(`http://3.90.152.67:5000/auth/login`, data).then(res => {
 
-        console.log(res)
         Swal.fire({
             title: 'Yay!',
             text: res.data.message,
@@ -57,7 +57,7 @@ class Login extends React.Component {
             } else if(res.data.data[0].role_id === 2) {
                 this.props.history.push("/company")
             }
-            
+
         })
         .catch(err => {
             localStorage.removeItem('token')
@@ -72,29 +72,33 @@ class Login extends React.Component {
 
   render() {
     return (
-        <div className='form-auth'>
-            <h2>Login</h2>
-            <form onSubmit={this.handlerSubmit}>
-                <input
-                    type='email'
-                    name='email'
-                    onChange={this.handlerChangeEmail}
-                    placeholder='Email'
-                />
-                <input
-                    type='password'
-                    name='password'
-                    onChange={this.handlerChangePassword}
-                    placeholder='Password'
-                />
-                <label>as</label>
-                <select name='role_id' onChange={this.handleRole}>
-                    <option value='1'>Engineer</option>
-                    <option value='2'>Company</option>
-                </select>
-                <button>Login</button>
-            </form>
-        </div>
+        <React.Fragment>
+            <MainHeader/>
+
+            <div className='form-auth'>
+                <h2>Login</h2>
+                <form onSubmit={this.handlerSubmit}>
+                    <input
+                        type='email'
+                        name='email'
+                        onChange={this.handlerChangeEmail}
+                        placeholder='Email'
+                    />
+                    <input
+                        type='password'
+                        name='password'
+                        onChange={this.handlerChangePassword}
+                        placeholder='Password'
+                    />
+                    <label>as</label>
+                    <select name='role_id' onChange={this.handleRole}>
+                        <option value='1'>Engineer</option>
+                        <option value='2'>Company</option>
+                    </select>
+                    <button>Login</button>
+                </form>
+            </div>
+        </React.Fragment>
     )
   }
 }

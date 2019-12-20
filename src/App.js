@@ -3,13 +3,13 @@ import Main from '../src/components/Main'
 import './App.css'
 
 class App extends React.Component {
-    render() {
-        return (
-          <React.Fragment>
-            <Main />
-          </React.Fragment>
-        )
-    }
+  render () {
+    return (
+      <>
+        <Main />
+      </>
+    )
+  }
 }
 
 export default App

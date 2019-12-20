@@ -5,19 +5,23 @@ import Swal from 'sweetalert2'
 
 class Engineer extends React.Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
 
         this.state = {
             engineers: [],
             loading: false,
             open: false,
+            loggedIn: false,
             sort: '',
             total_data: 0,
-            per_page: 0
+            per_page: 0,
+            userId: 0,
+            email: ''
         }
 
         this.delete = this.delete.bind(this)
+
     }
 
     handleDropdownUsername = () => {
@@ -39,13 +43,30 @@ class Engineer extends React.Component {
             confirmButtonText: 'Yes, delete it!'
         }).then(result => {
             if (result.value) {
-                axios.delete(`http://3.90.152.67:5000/api/v1/engineers/${id}`)
-                .then(res => {
-                    Swal.fire('Yay!', res.data.message, 'success')
+                axios.delete(`http://3.90.152.67:5000/api/v1/engineers/${id}`).then(res => {
+                    this.fetch()
+                    return Swal.fire('Yay!', res.data.message, 'success')
+                }).catch(err => {
+                    return Swal.fire('Whoops!', err.response.data.message, 'success')
                 })
-                .catch(err => {
-                    Swal.fire('Whoops!', err.response.data.message, 'success')
-                })
+            }
+        })
+    }
+
+    logout = () => {
+        Swal.fire({
+            title: 'Are you sure want to logout?',
+            text: '',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+        }).then(result => {
+            if (result.value) {
+                localStorage.removeItem('token')
+                window.location.reload()
+                return Swal.fire('', '', 'success')
             }
         })
     }
@@ -57,7 +78,6 @@ class Engineer extends React.Component {
         })
 
         axios.get(`http://3.90.152.67:5000/api/v1/engineers?page=${page}&search=${search}&sort=${sort}`).then(res => {
-            console.log(res)
             this.setState({
                 loading: false,
                 engineers: res.data.data,
@@ -73,11 +93,115 @@ class Engineer extends React.Component {
     componentDidMount()
     {
         this.fetch()
+
+        if(localStorage.getItem('token'))
+        {
+            let base64Url = localStorage.getItem('token').split('.')[1]
+            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+            let payload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)}).join('')
+            )
+
+            let user = JSON.parse(payload)
+            let id = user.id
+            let email = user.email
+
+
+            this.setState({
+                userId: id,
+                email
+            })
+
+        } else {
+            console.log('you are not logged in')
+        }
     }
 
     render() {
 
-        const { engineers, total_data, per_page, sort } = this.state
+        const { engineers, total_data, per_page, sort, email, userId } = this.state
+
+        const checkUser = () => {
+            if(email) {
+                return (
+                    <a id='username' href='#!' onClick={this.handleDropdownUsername}>
+                        { email.substr(0, 10) }
+                    </a>
+                )
+            }
+            else
+            {
+                return (
+                    <React.Fragment>
+                        &nbsp;&nbsp;
+                        <Link className='login' to='/login'>Login</Link>
+                        &nbsp;&nbsp;
+                        <Link className='register' to='/register'>Register</Link>
+                    </React.Fragment>
+                )
+            }
+        }
+
+        const checkLoggedin = () => {
+            if(email) {
+                return (
+                    <React.Fragment>
+                        {this.state.open && (
+                            <div className='dropdown'>
+                                <ul>
+                                    <Link className='engineer-create-link' to='/engineer/create'>
+                                        Create
+                                    </Link>
+                                </ul>
+                                <ul>
+                                    <Link className='engineer-create-link' to='/engineer'>
+                                        Engineer
+                                    </Link>
+                                </ul>
+                                <ul>
+                                    <a href='#!' className='logout' onClick={this.logout}>
+                                        Logout
+                                    </a>
+                                </ul>
+                            </div>
+                        )}
+                    </React.Fragment>
+                )
+            } else {
+                return (
+                    <>
+                        {this.state.open && (
+                            <div className='dropdown'>
+                                <ul>
+                                    <Link className='engineer-create-link' to='engineer/create'>
+                                        Create
+                                    </Link>
+                                </ul>
+                            </div>
+                        )}
+                    </>
+                )
+            }
+        }
+
+
+        const checkPrivilege = (id, engineer_id) => {
+            if(id === userId) {
+                return(
+                    <React.Fragment>
+
+                      <ul className='options-engineers'>
+                        <a className='delete' href='#!' onClick={this.delete.bind(this, engineer_id)}>
+                          Delete
+                        </a>
+                        <span> | </span>
+                        <Link className='edit' to={`/engineer/${engineer_id}/edit`}> Edit </Link>
+                      </ul>
+
+                    </React.Fragment>
+                )
+            }
+        }
 
         const pagePagination = []
 
@@ -93,7 +217,6 @@ class Engineer extends React.Component {
             return (
                 <span key={number} onClick={() =>
                         this.fetch(number, '', sort)
-
                     }>
                     {number}
                 </span>
@@ -126,19 +249,9 @@ class Engineer extends React.Component {
                         </li>
                         <li id='divider-home-username'>
                             <div className='dropdown-container'>
-                                <img className='avatar-user' src='https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/gettyimages-1981871a-1560281723.jpg?crop=0.586xw:0.878xh;0.243xw,0.122xh&resize=640:*' alt=""/>
-                                <a id='username' href='#!' onClick={this.handleDropdownUsername}>
-                                    Achmad
-                                </a>
-                                {this.state.open && (
-                                    <div className='dropdown'>
-                                        <ul>
-                                            <Link className='engineer-create-link' to='engineer/create'>
-                                                Create
-                                            </Link>
-                                        </ul>
-                                    </div>
-                                )}
+                                <img className='avatar-user' src='https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png' alt=""/>
+                                { checkUser() }
+                                { checkLoggedin() }
                             </div>
                         </li>
                         <li id='divider-message-notification'>
@@ -176,13 +289,8 @@ class Engineer extends React.Component {
                             </div>
                           </Link>
 
-                          <ul className='options-engineers'>
-                            <a className='delete' href='#!' onClick={this.delete.bind(this, engineer.id)}>
-                              Delete
-                            </a>
-                            <span> | </span>
-                            <Link className='edit' to={`/engineer/${engineer.id}/edit`}> Edit </Link>
-                          </ul>
+                          { checkPrivilege(engineer.user_id, engineer.id) }
+
                         </div>
                     ))}
                 </div>
@@ -193,6 +301,9 @@ class Engineer extends React.Component {
         )
 
     }
+
 }
+
+
 
 export default Engineer
