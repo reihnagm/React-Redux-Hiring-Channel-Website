@@ -32,9 +32,6 @@ class Company extends React.Component {
 
         return (
             <React.Fragment>
-
-
-
                 <div className='container'>
                     {companies.map(company => (
                         <div key={company.id} className='box'>

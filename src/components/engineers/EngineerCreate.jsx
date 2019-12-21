@@ -86,11 +86,8 @@ export default class EngineerCreate extends Component {
         })
     }
 
-    handlerSubmit = e => {
+    onSubmit = e => {
         e.preventDefault()
-
-        // const showcase = document.querySelector('#showcase').files[0]
-        // const avatar = document.querySelector('#avatar').files[0]
 
         let d = new Date(this.state.date),
             month = '' + (d.getMonth() + 1),
@@ -111,6 +108,8 @@ export default class EngineerCreate extends Component {
                 })
         }
 
+
+        // Uncomment if use JWT
         let base64Url = localStorage.getItem('token').split('.')[1]
         let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
         let payload = decodeURIComponent(atob(base64).split('').map(function(c) {
@@ -118,23 +117,24 @@ export default class EngineerCreate extends Component {
         )
 
         let user = JSON.parse(payload)
-        let email = user.email
-        let role_id = user.role_id
+        // let email = user.email
+        // let role_id = user.role_id
         let user_id = user.id
 
-        // let formData = new FormData()
-        // formData.set('name', this.state.name)
-        // formData.set('description', this.state.description)
-        // formData.set('skill', this.state.skill)
-        // formData.set('location', this.state.location)
-        // formData.set('birthdate', date)
-        // formData.append('showcase', showcase)
-        // formData.set('email', this.state.email)
-        // formData.set('telephone', this.state.telephone)
-        // formData.set('salary', this.state.salary)
-        // formData.set('user_id', user_id)
-        // formData.append('avatar', avatar)
+        let formData = new FormData()
+        formData.set('name', this.state.name)
+        formData.set('description', this.state.description)
+        formData.set('skill', this.state.skill)
+        formData.set('location', this.state.location)
+        formData.set('birthdate', date)
+        formData.append('showcase',  this.state.showcase)
+        formData.set('email', this.state.email)
+        formData.set('telephone', this.state.telephone)
+        formData.set('salary', this.state.salary)
+        formData.set('user_id', user_id)
+        formData.append('avatar', document.querySelector('#avatar').files[0])
 
+        // Uncomment for debugging
         const data = {
             name: this.state.name,
             description: this.state.description,
@@ -149,7 +149,9 @@ export default class EngineerCreate extends Component {
             avatar: this.state.avatar
         }
 
-        axios.post('http://3.90.152.67:5000/api/v1/engineers', data).then(res => {
+        console.log(data)
+
+        axios.post('http://localhost:3000/api/v1/engineers', formData).then(res => {
             this.props.history.push("/engineer")
             return Swal.fire({
                     title: 'Yay!',
@@ -168,7 +170,7 @@ export default class EngineerCreate extends Component {
 
                 <div className='form-engineer'>
                     <h2>Form Create Engineer</h2>
-                    <form onSubmit={this.handlerSubmit}>
+                    <form onSubmit={this.onSubmit}>
                         <input
                             id='name'
                             type='text'
@@ -236,7 +238,7 @@ export default class EngineerCreate extends Component {
                         <label for='avatar'>Avatar</label>
                         <input
                             id='avatar'
-                            type='text'
+                            type='file'
                             name='avatar'
                             onChange={this.handlerChangeAvatar}
                         />

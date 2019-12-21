@@ -13,10 +13,10 @@ class Engineer extends React.Component {
             loading: false,
             open: false,
             loggedIn: false,
-            sort: '',
             total_data: 0,
             per_page: 0,
             userId: 0,
+            sort: '',
             email: ''
         }
 
@@ -45,9 +45,9 @@ class Engineer extends React.Component {
             if (result.value) {
                 axios.delete(`http://3.90.152.67:5000/api/v1/engineers/${id}`).then(res => {
                     this.fetch()
-                    return Swal.fire('Yay!', res.data.message, 'success')
+                    return Swal.fire('', res.data.message, 'success')
                 }).catch(err => {
-                    return Swal.fire('Whoops!', err.response.data.message, 'success')
+                    return Swal.fire('', err.response.data.message, 'success')
                 })
             }
         })
@@ -169,7 +169,7 @@ class Engineer extends React.Component {
                 )
             } else {
                 return (
-                    <>
+                    <React.Fragment>
                         {this.state.open && (
                             <div className='dropdown'>
                                 <ul>
@@ -179,7 +179,7 @@ class Engineer extends React.Component {
                                 </ul>
                             </div>
                         )}
-                    </>
+                    </React.Fragment>
                 )
             }
         }

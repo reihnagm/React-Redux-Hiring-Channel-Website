@@ -32,7 +32,7 @@ class MainHeader extends React.Component {
         }).then(result => {
             if (result.value) {
                 localStorage.removeItem('token')
-                this.props.history.push('/engineer')
+                window.location.reload()
             }
         })
     }
