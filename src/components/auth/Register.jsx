@@ -1,97 +1,103 @@
-import React, { Component } from 'react'
-import Swal from 'sweetalert2'
-import axios from 'axios'
-import MainHeader from '../templates/MainHeader'
+import React, { Fragment, useState } from 'react'
 
-export default class Register extends Component {
-    constructor() {
-        super()
+import { connect } from 'react-redux'
 
-        this.state = {
-            email: '',
-            password: '',
-            role_id: 1
-        }
-    }
+import { Link } from 'react-router-dom'
+import Alert from '../layouts/Alert'
+import { setAlert } from '../../actions/alert'
+import { register } from '../../actions/auth'
 
-    handlerChangeEmail = e => {
-        this.setState({
-          email: e.target.value
-        })
-    }
+// NOTE: for testing register data
+// import axios from 'axios'
 
-    handlerChangePassword = e => {
-        this.setState({
-            password: e.target.value
-        })
-    }
+const Register = ({ setAlert, register }) => {
 
-    handlerChangeRole = e => {
-        this.setState({
-            role_id: e.target.value
-        })
-    }
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        password2: ''
+    })
 
-    handlerSubmit = e => {
+    const { name, email, password, password2 } = formData
+
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+
+    const onSubmit = async e => {
         e.preventDefault()
+        if (password !== password2) {
+            setAlert('password do not match', 'danger')
+        } else {
 
-        const data = {
-            email: this.state.email,
-            password: this.state.password,
-            role_id: parseInt(this.state.role_id)
+            register({ name, email, password })
+
+            // NOTE: Success post register data testings
+            // try {
+            //     let config = {
+            //         headers: {
+            //             'Content-Type': 'application/json'
+            //         }
+            //     }
+            //
+            //     let body = JSON.stringify(formData)
+            //
+            //     let response = await axios.post('http://3.90.152.67:5000/auth/register', body, config)
+            //     console.log(response.data)
+            // } catch (error) {
+            //     console.log(error.response.data)
+            // }
+
         }
+    }
 
-        axios.post(`http://3.90.152.67:5000/auth/register`, data).then(res => {
-                Swal.fire({
-                    title: '',
-                    text: res.data.message,
-                    icon: 'success'
-                })
-
-                localStorage.setItem('token', res.data.token)
-
-                if(res.data.data.role_id === 1) {
-                    this.props.history.push("/engineer")
-                } else if(res.data.data.role_id === 2) {
-                    this.props.history.push("/company")
-                }
-
-            })
-            .catch(err => {
-                localStorage.removeItem('token')
-
-                console.log(err)
-            })
-        }
-
-  render() {
     return (
-        <React.Fragment>
-            <MainHeader/>
+        <Fragment>
+            <div className='container'>
 
-            <div className='form-auth'>
-                <h2>Register</h2>
-                <form onSubmit={this.handlerSubmit}>
-                    <input
-                        type='email'
-                        name='email'
-                        onChange={this.handlerChangeEmail}
-                        placeholder='Email'
-                        />
-                    <input
-                        type='password'
-                        name='password'
-                        onChange={this.handlerChangePassword}
-                        placeholder='Password'
-                    />
-                    <select name='role_id' onChange={this.handlerChangeRole}>
-                        <option value='1'>Engineer</option>
-                        <option value='2'>Company</option>
-                    </select>
-                    <button>Register</button>
-                </form>
+                <header className='navbar has-small-vm'>
+                    <img src='./logo.png' alt="" id='logo' className='img-brand' />
+                </header>
+
+                <Alert />
+
+                <div className='columns is-justify-center'>
+                    <div className='column is-half'>
+                        <div className='cards'>
+                            <h2 id='title-register'> Register </h2>
+                            <form onSubmit={e => onSubmit(e)} id='field-register'>
+                                <div className='field'>
+                                    <label>Name</label>
+                                    <input onChange={e => onChange(e)} value={name} type='text' name='name' />
+
+                                    <label>Email</label>
+                                    <input onChange={e => onChange(e)} value={email} type='email' name='email' />
+
+                                    <label>Password</label>
+                                    <input onChange={e => onChange(e)} value={password} type='password' name='password' />
+
+                                    <label>Confirmation Password</label>
+                                    <input onChange={e => onChange(e)} value={password2} type='password' name='password2' />
+
+                                    <Link to='/' className='button is-info is-rounded'>Back to Homepage</Link>
+                                    <button className='button is-info is-rounded'>Sign Up</button>
+
+                                    <div className='columns is-justify-around is-items-center'>
+                                        <span className='label'>Already have account ?</span>
+                                        <Link to='/login' className='button is-info is-rounded'>Sign In</Link>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </React.Fragment>
+        </Fragment>
     )
-  }
+
 }
+
+export default connect(
+    null,
+    { setAlert, register }
+)(Register)

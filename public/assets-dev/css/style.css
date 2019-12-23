@@ -1,0 +1,44 @@
+@import "variable";
+
+body {
+    color: $main-black !important;
+}
+#card-info {
+    margin: 0 1% !important;
+    padding: 2% !important;
+}
+#home-link,
+#engineers-link,
+#companies-link,
+#engineer-add-link
+ {
+    color: $main-black !important;
+    text-decoration: none !important;
+    font-size: 16px;
+}
+#engineers-link,
+#companies-link {
+    background: none !important;
+}
+#details-engineer li {
+    margin: 20px 0 0 25px;
+    font-size: 17px;
+}
+#name,
+#skill,
+#email, 
+#expected-salary,
+#skills {
+    display: block;
+    margin: 5% 2%;
+}
+#title-register,
+#title-login,
+#title-add-engineer {
+    text-align: center;
+    padding-top: 25px;
+    font-size: 23px;
+}
+#btn-wrapper-landing a {
+    margin: 0 1% !important;
+}

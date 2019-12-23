@@ -1,100 +1,90 @@
-import React from 'react'
-import Swal from 'sweetalert2'
-import MainHeader from '../templates/MainHeader'
-import axios from 'axios'
+import React, { Fragment, useState } from 'react'
 
-class Login extends React.Component {
-    constructor(props) {
-        super(props)
+import { Link } from 'react-router-dom'
+import Alert from '../layouts/Alert'
+import { connect } from 'react-redux'
 
-        this.state = {
-            email: '',
-            password: '',
-            // role_id: 1,
-            show: true
-        }
-    }
+// NOTE: testing login
+// import axios from 'axios'
 
-    handlerChangeEmail = e => {
-        this.setState({
-            email: e.target.value
-        })
-    }
+import { login } from '../../actions/auth'
 
-    handlerChangePassword = e => {
-        this.setState({
-            password: e.target.value
-        })
-    }
+const Login = ({ login, isAuthenticated }) => {
 
-    // handleRole = e => {
-    //     this.setState({
-    //         role_id: e.target.value
-    //     })
-    // }
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    })
 
-    handlerSubmit = e => {
+    const { email, password } = formData
+
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+
+    const onSubmit = async e => {
+
         e.preventDefault()
 
-        const data = {
-            email: this.state.email,
-            password: this.state.password
-        }
+        login(email, password);
 
-        axios.post(`http://3.90.152.67:5000/auth/login`, data).then(res => {
+        // NOTE: Success
+        // try {
+        //     let config = {
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     }
+        //
+        //     let body = JSON.stringify(formData)
+        //
+        //     let response = await axios.post('http://3.90.152.67:5000/auth/register', body, config)
+        //     console.log(response.data)
+        // } catch (error) {
+        //     console.log(error.response.data)
+        // }
 
-            Swal.fire({
-                title: '',
-                text: res.data.message,
-                icon: 'success'
-            })
-
-            localStorage.setItem('token', res.data.token)
-
-            if(res.data.data[0].role_id === 1) {
-                this.props.history.push("/engineer")
-            } else if(res.data.data[0].role_id === 2) {
-                this.props.history.push("/company")
-            }
-
-        })
-        .catch(err => {
-            localStorage.removeItem('token')
-
-            Swal.fire({
-                title: '',
-                text: err.response.data.message,
-                icon: 'error'
-            })
-        })
     }
 
-    render() {
-        return (
-            <React.Fragment>
-                <MainHeader/>
+    return (
+        <Fragment>
+            <div className='container'>
 
-                <div className='form-auth'>
-                    <h2>Login</h2>
-                    <form onSubmit={this.handlerSubmit}>
-                        <input
-                            type='email'
-                            name='email'
-                            onChange={this.handlerChangeEmail}
-                            placeholder='Email'
-                        />
-                        <input
-                            type='password'
-                            name='password'
-                            onChange={this.handlerChangePassword}
-                            placeholder='Password'
-                        />
-                        <button>Login</button>
-                    </form>
+                <header className='navbar has-small-vm'>
+                    <img src='./logo.png' alt="" id='logo' className='img-brand' />
+                </header>
+
+                <Alert />
+
+                <div className='columns is-justify-center'>
+                    <div className='column is-half'>
+                        <div className='cards'>
+                            <h2 id='title-login'> Login </h2>
+                            <form onSubmit={e => onSubmit(e)}>
+                                <div className='field'>
+                                    <label>Email</label>
+                                    <input onChange={e => onChange(e)} value={email} type='email' name='email' required />
+
+                                    <label>Password</label>
+                                    <input onChange={e => onChange(e)} value={password} type='password' name='password' required />
+
+                                    <Link to='/' className='button is-info is-rounded'>Back to Homepage</Link>
+                                    <button className='button is-info is-rounded'>Sign In</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </React.Fragment>
-        )
-    }
+
+            </div>
+        </Fragment>
+    )
+
 }
 
-export default Login
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(
+    mapStateToProps,
+    { login }
+)(Login)

@@ -1,16 +1,18 @@
 const gulp = require('gulp'),
     concat = require('gulp-concat'),
-    sass = require('gulp-sass')
+    sass   = require('gulp-sass')
 
 gulp.task('styles', function () {
-    gulp.src('public/assets-dev/css/**/*')
+    return gulp.src('public/assets-dev/css/**/*')
         .pipe(sass({ outputStyle: 'compressed' }))
-        .pipe(concat('App.css'))
-        .pipe(gulp.dest('src'))
+        .pipe(concat('main.css'))
+        .pipe(gulp.dest('public/assets/css'))
 })
 
 gulp.task('watch', function () {
-    gulp.watch('public/assets-dev/css/**/*', gulp.parallel('styles'))
+    gulp.watch('public/assets-dev/css/**/*', gulp.series('styles'))
 })
 
-gulp.task('default', gulp.parallel('styles', 'watch'));
+// BUG: if task watch no change everything, return the function task styles
+
+gulp.parallel('styles', 'watch');
