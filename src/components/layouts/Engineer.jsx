@@ -6,7 +6,15 @@ import Spinner from './Spinner'
 
 import { getAllEngineers } from '../../actions/engineer' // NOTE: this is what you export in actions e.g export const getAllEngineers
 
-const Engineer = ({ getAllEngineers, engineer: { engineers, loading } }) => {
+const Engineer = ({ getAllEngineers, engineer: { engineers, loading }, auth: { user } }) => {
+
+    let user_id = ''
+
+    if(user === null) {
+        console.log('data nya di render dulu ya')
+    } else {
+        user_id = user[0].id
+    } // NOTE: Concept lifecycle
 
     const [Engineer, setDataEngineer] = useState({
         search: '',
@@ -16,7 +24,7 @@ const Engineer = ({ getAllEngineers, engineer: { engineers, loading } }) => {
 
     const { search, limit, sortBy } = Engineer
 
-    // NOTE : this is to getting all data with same type
+    // NOTE: Getting all data with same type
     // const onChange = e => setDataEngineer({ ...Engineer, [e.target.name]: e.target.value })
 
     const onSearch = e => {
@@ -68,9 +76,10 @@ const Engineer = ({ getAllEngineers, engineer: { engineers, loading } }) => {
                             <input onChange={e => onSearch(e)} value={search} name='search' type='text' />
                         </div>
                     </div>
-                    <div className='column'>
-                        <Link id='home-link' to='/'>Home</Link>
-                        <Link id='engineer-add-link' to='/engineer/add'>Add Engineer</Link>
+                    <div id='navbar-engineer' className='column'>
+                        <Link to='/'>Home</Link>
+
+                        <Link to='/engineer/add'>Add Engineer</Link>
                     </div>
                 </header>
 
@@ -102,11 +111,11 @@ const Engineer = ({ getAllEngineers, engineer: { engineers, loading } }) => {
 
                 <div className='has-small-vm'>
                     <div className='columns is-multiline'>
-                        {engineers.data.slice(0, limit).map(engineer => (
-                            <EngineerItem key={engineer.id} engineer={engineer} /> /* NOTE: if you want mapping data, should be use different component, if not, getting error */
+                        { engineers.data.slice(0, limit).map(engineer => (
+                            <EngineerItem key={engineer.id} engineer={engineer} userid={user_id} /> /* NOTE: if you want mapping data, should be use different component, if not, getting error */
                         ))}
                     </div>
-                    {limit == engineers.data.length &&
+                    { limit == engineers.data.length &&
                         <div className='is-center'>
                             <button onClick={e => loadMore(e)} type="button" className='button is-info'>Load more</button>
                         </div>
@@ -120,6 +129,7 @@ const Engineer = ({ getAllEngineers, engineer: { engineers, loading } }) => {
 
 const mapStateToProps = state => ({
     engineer: state.engineer,  // NOTE: state.engineer (file in reducers, trigger on what index.js passing, e.g engineer)
+    auth: state.auth
 })
 
 export default connect(

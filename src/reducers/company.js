@@ -1,11 +1,10 @@
 import {
-	GET_ENGINEERS,
-	ENGINEER_ERROR,
-	DELETE_ENGINEER
+	GET_COMPANIES,
+	COMPANY_ERROR
 } from '../actions/types'
 
 const initialState = {
-	engineers: [],
+	companies: [],
 	loading: true
 }
 
@@ -13,21 +12,16 @@ export default function (state = initialState, action) {
 	const { type, payload } = action;
 
 	switch (type) {
-		case GET_ENGINEERS:
+		case GET_COMPANIES:
 			return {
 				...state,
-				engineers: payload,
+				companies: payload,
 				loading: false
 			}
-		case ENGINEER_ERROR:
+		case COMPANY_ERROR:
 			return {
 				...state,
-				engineers: payload,
-				loading: false
-			}
-		case DELETE_ENGINEER:
-			return {
-				...state,
+				companies: payload,
 				loading: false
 			}
 		default:

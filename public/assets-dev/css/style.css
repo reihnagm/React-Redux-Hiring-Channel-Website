@@ -7,14 +7,28 @@ body {
     margin: 0 1% !important;
     padding: 2% !important;
 }
-#home-link,
-#engineers-link,
-#companies-link,
-#engineer-add-link
+#navbar-engineer a,
+#navbar-company a
+ {
+    color: $main-black !important;
+    text-decoration: none !important;
+    font-size: 16px !important;
+    margin: 0 8px !important;
+}
+#card-info-company {
+    padding: 10px !important;
+}
+#card-info-company li
+{
+    margin: 15px 0 0 10px !important;
+    display: block !important;
+}
+#navbar-landing a
  {
     color: $main-black !important;
     text-decoration: none !important;
     font-size: 16px;
+    margin: 0 8px;
 }
 #engineers-link,
 #companies-link {
@@ -26,7 +40,7 @@ body {
 }
 #name,
 #skill,
-#email, 
+#email,
 #expected-salary,
 #skills {
     display: block;
@@ -35,9 +49,12 @@ body {
 #title-register,
 #title-login,
 #title-add-engineer {
-    text-align: center;
-    padding-top: 25px;
-    font-size: 23px;
+    text-align: center !important;
+    padding-top: 25px !important;
+    font-size: 23px !important;
+}
+#option-engineer {
+    margin: 8px 0 !important;
 }
 #btn-wrapper-landing a {
     margin: 0 1% !important;

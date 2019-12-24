@@ -1,9 +1,10 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import Register from '../auth/Register';
-import Login from '../auth/Login';
-import Alert from '../layouts/Alert';
-import NotFound from '../layouts/NotFound';
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+import Register from '../auth/Register'
+import Login from '../auth/Login'
+import Alert from '../layouts/Alert'
+import NotFound from '../layouts/NotFound'
+import Company from '../layouts/Company'
 import Engineer from '../layouts/Engineer'
 import EngineerSingle from '../layouts/EngineerSingle'
 import EngineerAdd from '../layouts/EngineerForm'
@@ -15,6 +16,8 @@ const Routes = () => {
 
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/login' component={Login} />
+
+                <Route exact path='/companies' component={Company} />
 
                 <Route exact path='/engineers' component={Engineer} />
                 <Route exact path='/engineer' component={EngineerSingle} />

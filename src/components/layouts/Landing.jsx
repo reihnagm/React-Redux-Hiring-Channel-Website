@@ -11,7 +11,7 @@ const Landing = () => {
                     <img src='./logo.png' alt="" id='logo' className='img-brand' />
                 </div>
 
-                <div className='column'>
+                <div id='navbar-landing' className='column'>
                     <nav>
                         <Link id='engineers-link' to='/engineers'>Engineers</Link>/
                         <Link id='companies-link' to='/companies'>Companies</Link>
