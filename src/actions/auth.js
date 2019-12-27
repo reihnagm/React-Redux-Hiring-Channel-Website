@@ -16,72 +16,56 @@ import {
 import setAuthToken from '../utils/setAuthToken'
 
 export const loadUser = () => async dispatch => {
-
     if (localStorage.token) {
-        setAuthToken(localStorage.token);
+        setAuthToken(localStorage.token)
     }
     try {
-        const response = await axios.get('http://3.90.152.67:5000/auth');
-
+        const response = await axios.get(process.env.REACT_APP_AUTH)
         dispatch({
             type: USER_LOADED,
             payload: response.data
-        });
+        })
     } catch (err) {
         dispatch({
             type: AUTH_ERROR
         })
     }
-
 }
-
 export const register = ({ name, email, password }) => async dispatch => {
-
     const config = {
         headers: {
             'Content-Type': 'application/json'
         }
     }
-
     const body = JSON.stringify({ name, email, password })
-
     try {
-        const response = await axios.post('http://3.90.152.67:5000/auth/register', body, config)
-
+        const response = await axios.post(process.env.REACT_APP_REGISTER, body, config)
         dispatch({
             type: REGISTER_SUCCESS,
             payload: response.data
         })
-
         dispatch(loadUser())
     }
     catch (error)
     {
         const errors = error.response.data.errors
-
         if (errors) {
             errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
         }
-
         dispatch({
             type: REGISTER_FAIL
         })
     }
-
 }
-
 export const login = (email, password) => async dispatch => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         }
     }
-
     const body = JSON.stringify({ email, password })
-
     try {
-
-        const response = await axios.post('http://3.90.152.67:5000/auth/login', body, config)
+        const response = await axios.post(process.env.REACT_APP_LOGIN, body, config)
 
         dispatch({
             type: LOGIN_SUCCESS,
@@ -89,7 +73,6 @@ export const login = (email, password) => async dispatch => {
         })
 
         dispatch(loadUser())
-
     }
     catch (error) {
         const errors = error.response.data.errors
@@ -101,7 +84,6 @@ export const login = (email, password) => async dispatch => {
         })
     }
 }
-
 export const logout = () => dispatch => {
     dispatch({ type: LOGOUT })
 }

@@ -52,8 +52,3 @@ export default function(state = initialState, action) {
     }
 
 }
-
-
-export const logout = () => dispatch => {
-    dispatch({ type: LOGOUT });
-};

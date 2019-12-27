@@ -1,67 +1,54 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { getEngineers } from '../../actions/engineer'
+import { logout } from '../../actions/auth'
 import EngineerItem from './EngineerItem'
 import Spinner from './Spinner'
 
-import { getAllEngineers } from '../../actions/engineer' // NOTE: this is what you export in actions e.g export const getAllEngineers
+const Engineer = ({ getEngineers, logout,
+        engineer: { engineers, loading, search, limit, sortBy, sort },
+        auth: { isAuthenticated } }) => {
 
-const Engineer = ({ getAllEngineers, engineer: { engineers, loading }, auth: { user } }) => {
+    const [searchMask, setSearch] = useState(search)
+    const [limitMask, setLimit] = useState(limit)
+    const [sortByMask, setSortBy] = useState(sortBy)
+    const [orderByMask, setOrderBy] = useState(sort)
 
-    let user_id = ''
+    const authLinks = (
+        <div id='navbar' className='column'>
+            <Link to='/'>Home</Link> |
+            <a href='/companies'>Companies</a> |
+            <a href='/engineer/add'>Add Engineer</a> |
+            <a id='logout' onClick={logout}> Logout </a >
+        </div>
+    )
 
-    if(user === null) {
-        console.log('data nya di render dulu ya')
-    } else {
-        user_id = user[0].id
-    } // NOTE: Concept lifecycle
-
-    const [Engineer, setDataEngineer] = useState({
-        search: '',
-        limit: 5,
-        sortBy: 'date_updated'
-    })
-
-    const { search, limit, sortBy } = Engineer
-
-    // NOTE: Getting all data with same type
-    // const onChange = e => setDataEngineer({ ...Engineer, [e.target.name]: e.target.value })
-
-    const onSearch = e => {
-        setDataEngineer({
-            search: e.target.value,
-            limit,
-            sortBy
-        })
-    }
-
-    const onSortBy = e => {
-        setDataEngineer({
-            sortBy: e.target.value,
-            search,
-            limit
-        })
-    }
+    const guestLinks = (
+        <div id='navbar' className='column'>
+            <Link to='/'>Home</Link>
+            <Link to='/register'>Register</Link>
+            <Link to='/login'>Login</Link>
+        </div>
+    )
 
     const onLimit = e => {
-        setDataEngineer({
-            limit: e.target.value,
-            search,
-            sortBy
-        })
+        setLimit(e.target.value)
     }
-
-    const loadMore = e => {
-        setDataEngineer({
-            limit: limit + 4,
-            search,
-            sortBy
-        })
+    const onSearch = e => {
+        setSearch(e.target.value)
+    }
+    const onSortBy = e => {
+        setSortBy(e.target.value)
+    }
+    const onOrderBy = e => {
+        setOrderBy(e.target.value)
     }
 
     useEffect(() => {
-        getAllEngineers(search, limit, sortBy)
-    }, [getAllEngineers, search, limit, sortBy]) // NOTE: use useEffect to render read data in props
+        getEngineers(searchMask, limitMask, sortByMask, orderByMask)
+    }, [getEngineers, searchMask, limitMask, sortByMask, orderByMask])
+
 
     return loading ? (<Spinner />
     ) : (
@@ -71,15 +58,15 @@ const Engineer = ({ getAllEngineers, engineer: { engineers, loading }, auth: { u
                     <div className='column'>
                         <img src='./logo.png' alt='Logo' />
                     </div>
-                    <div className='column'>
+                    <div className='column is-half'>
                         <div className='field'>
-                            <input onChange={e => onSearch(e)} value={search} name='search' type='text' />
+                            <input onChange={e => onSearch(e)} name='search' type='text' />
                         </div>
                     </div>
-                    <div id='navbar-engineer' className='column'>
-                        <Link to='/'>Home</Link>
-
-                        <Link to='/engineer/add'>Add Engineer</Link>
+                    <div id='navbar-engineer' className='column column is-half'>
+                    {!loading && (
+                        <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+                    )}
                     </div>
                 </header>
 
@@ -87,17 +74,26 @@ const Engineer = ({ getAllEngineers, engineer: { engineers, loading }, auth: { u
                     <div className='columns'>
                         <div className='column'>
                             <div className='columns'>
-                                Filter by :
-                                     <select onChange={e => onSortBy(e)} name='sortBy'>
-                                    <option value='date_updated'>date updated</option>
-                                    <option value='name'>name</option>
-                                    <option value='skill'>skill</option>
+                                Sort by :
+                                    <select onChange={e => onSortBy(e)} name='sortBy'>
+                                    <option value='date_updated'>Date Updated</option>
+                                    <option value='name'>Name</option>
+                                    <option value='skill'>Skill</option>
                                 </select>
                             </div>
                         </div>
                         <div className='column'>
                             <div className='columns'>
-                                Limit :
+                                Order by :
+                                    <select onChange={e => onOrderBy(e)} name='sort'>
+                                    <option value='ASC'>Oldest</option>
+                                    <option value='DESC'>Newest</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className='column'>
+                            <div className='columns'>
+                                Show Page :
                                     <select onChange={e => onLimit(e)} name='limit'>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
@@ -110,17 +106,11 @@ const Engineer = ({ getAllEngineers, engineer: { engineers, loading }, auth: { u
                 </div>
 
                 <div className='has-small-vm'>
-                    <div className='columns is-multiline'>
-                        { engineers.data.slice(0, limit).map(engineer => (
-                            <EngineerItem key={engineer.id} engineer={engineer} userid={user_id} /> /* NOTE: if you want mapping data, should be use different component, if not, getting error */
-                        ))}
-                    </div>
-                    { limit == engineers.data.length &&
-                        <div className='is-center'>
-                            <button onClick={e => loadMore(e)} type="button" className='button is-info'>Load more</button>
-                        </div>
-                    }
+                    { engineers.length !== 0 && engineers !== null  && engineers.data.map(engineer => (
+                        <EngineerItem key={engineer.id} engineer={engineer} />
+                    ))}
                 </div>
+
 
             </Fragment >
         )
@@ -128,11 +118,11 @@ const Engineer = ({ getAllEngineers, engineer: { engineers, loading }, auth: { u
 }
 
 const mapStateToProps = state => ({
-    engineer: state.engineer,  // NOTE: state.engineer (file in reducers, trigger on what index.js passing, e.g engineer)
+    engineer: state.engineer,
     auth: state.auth
 })
 
 export default connect(
     mapStateToProps,
-    { getAllEngineers }
-)(Engineer) // NOTE: Component connect to Redux
+    { getEngineers, logout }
+)(Engineer)

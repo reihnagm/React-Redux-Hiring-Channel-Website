@@ -2,15 +2,12 @@ import React, { Fragment, useState } from 'react'
 
 import { connect } from 'react-redux'
 
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import Alert from '../layouts/Alert'
 import { setAlert } from '../../actions/alert'
 import { register } from '../../actions/auth'
 
-// NOTE: for testing register data
-// import axios from 'axios'
-
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
 
     const [formData, setFormData] = useState({
         name: '',
@@ -28,26 +25,12 @@ const Register = ({ setAlert, register }) => {
         if (password !== password2) {
             setAlert('password do not match', 'danger')
         } else {
-
             register({ name, email, password })
-
-            // NOTE: Success post register data testings
-            // try {
-            //     let config = {
-            //         headers: {
-            //             'Content-Type': 'application/json'
-            //         }
-            //     }
-            //
-            //     let body = JSON.stringify(formData)
-            //
-            //     let response = await axios.post('http://3.90.152.67:5000/auth/register', body, config)
-            //     console.log(response.data)
-            // } catch (error) {
-            //     console.log(error.response.data)
-            // }
-
         }
+    }
+
+    if (isAuthenticated) {
+        return <Redirect to='/' />;
     }
 
     return (
@@ -78,12 +61,12 @@ const Register = ({ setAlert, register }) => {
                                     <label>Confirmation Password</label>
                                     <input onChange={e => onChange(e)} value={password2} type='password' name='password2' />
 
-                                    <Link to='/' className='button is-info is-rounded'>Back to Homepage</Link>
+                                    <a href='/' className='button is-info is-rounded'>Back to Homepage</a>
                                     <button className='button is-info is-rounded'>Sign Up</button>
 
                                     <div className='columns is-justify-around is-items-center'>
                                         <span className='label'>Already have account ?</span>
-                                        <Link to='/login' className='button is-info is-rounded'>Sign In</Link>
+                                        <a href='/login' className='button is-info is-rounded'>Sign In</a>
                                     </div>
                                 </div>
                             </form>
@@ -97,7 +80,11 @@ const Register = ({ setAlert, register }) => {
 
 }
 
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+})
+
 export default connect(
-    null,
+    mapStateToProps,
     { setAlert, register }
 )(Register)

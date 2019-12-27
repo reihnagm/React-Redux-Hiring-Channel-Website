@@ -1,13 +1,8 @@
 import React, { Fragment, useState } from 'react'
-
-import { Link } from 'react-router-dom'
-import Alert from '../layouts/Alert'
+import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-
-// NOTE: testing login
-// import axios from 'axios'
-
 import { login } from '../../actions/auth'
+import Alert from '../layouts/Alert'
 
 const Login = ({ login, isAuthenticated }) => {
 
@@ -20,28 +15,13 @@ const Login = ({ login, isAuthenticated }) => {
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
 
-    const onSubmit = async e => {
-
+    const onSubmit = e => {
         e.preventDefault()
-
         login(email, password);
+    }
 
-        // NOTE: Success
-        // try {
-        //     let config = {
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     }
-        //
-        //     let body = JSON.stringify(formData)
-        //
-        //     let response = await axios.post('http://3.90.152.67:5000/auth/register', body, config)
-        //     console.log(response.data)
-        // } catch (error) {
-        //     console.log(error.response.data)
-        // }
-
+    if (isAuthenticated) {
+        return <Redirect to='/' />;
     }
 
     return (
@@ -61,13 +41,18 @@ const Login = ({ login, isAuthenticated }) => {
                             <form onSubmit={e => onSubmit(e)}>
                                 <div className='field'>
                                     <label>Email</label>
-                                    <input onChange={e => onChange(e)} value={email} type='email' name='email' required />
+                                    <input onChange={e => onChange(e)} value={email} type='email' name='email'/>
 
                                     <label>Password</label>
-                                    <input onChange={e => onChange(e)} value={password} type='password' name='password' required />
+                                    <input onChange={e => onChange(e)} value={password} type='password' name='password'/>
 
-                                    <Link to='/' className='button is-info is-rounded'>Back to Homepage</Link>
-                                    <button className='button is-info is-rounded'>Sign In</button>
+                                    <a href='/' className='button is-info is-rounded'>Back to Homepage</a>
+                                    <button type='submit' className='button is-info is-rounded'>Sign In</button>
+
+                                    <div className='columns is-justify-around is-items-center'>
+                                        <span className='label'>Don't have account ?</span>
+                                        <a href='/register' className='button is-info is-rounded'>Sign Up</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>

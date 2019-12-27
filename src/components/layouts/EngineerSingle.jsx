@@ -1,39 +1,83 @@
-import React, { Fragment } from 'react'
+import React, { useEffect, Fragment } from 'react'
+import Spinner from './Spinner'
+import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
+import logo from './logo.png'
 import { connect } from 'react-redux'
+import { logout } from '../../actions/auth'
+import { getEngineer } from '../../actions/engineer'
 
-const EngineerSingle = () => {
+const EngineerSingle = ({ getEngineer, logout, auth: { isAuthenticated }, engineer: {  engineer, loading }, match }) => {
 
-    return (
-        <Fragment>
-            <header className='navbar has-small-vm'>
-                <div className='column'>
-                    <img src='./logo.png' alt='' />
-                </div>
-                <div className='column'>
-                    <Link id='home-link' to='/'>Home</Link>
-                </div>
-            </header>
+    const authLinks = (
+        <div id='navbar' className='column is-half'>
+            <Link to='/'>Home</Link> |
+            <a href='/engineers'>Engineers</a> |
+            <a href='/companies'>Companies</a> |
+            <a id='logout' onClick={logout}> Logout </a>
+        </div>
+    )
 
-            <div className='cards is-horizontal has-small-vm'>
-                <img src='https://cdn.idntimes.com/content-images/community/2019/05/keanu-036c463ea1f3c42605f00bbf3bb432e5_600x400.jpg' alt='John Doe' />
-                <div className='content'>
-                    <ul id='details-engineer'>
-                        <li>John Doe</li>
-                        <li>Hello iam john doe</li>
-                        <li>laravel, css, Javascript</li>
-                        <li>Jakarta</li>
-                        <li>birthdate</li>
-                        <li>https://johndoe.com/showcase</li>
-                        <li>johndoe@gmail.com</li>
-                        <li>089670558381</li>
-                        <li>Expected Salary : 10.000.000</li>
-                    </ul>
-                </div>
+    const guestLinks = (
+        <div id='navbar' className='column is-half'>
+            <Link to='/'>Home</Link> |
+            <Link to='/register'>Register</Link> |
+            <Link to='/login'>Login</Link>
+        </div>
+    )
+
+    useEffect(() => {
+        getEngineer(match.params.id);
+    }, [getEngineer, match.params.id]);
+
+    return loading || engineer === null ? (
+    <Spinner />
+    ) : (
+    <Fragment>
+        <header className='navbar has-small-vm'>
+            <div className='column'>
+                <img src={logo} alt='' />
             </div>
-        </Fragment >
+            {!loading && (
+                <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+            )}
+        </header>
+
+        <div className='cards is-horizontal has-small-vm'>
+            <img src={engineer.avatar} alt={engineer.name} />
+            <div className='content'>
+                <ul id='details-engineer'>
+                    <li>{engineer.name}</li>
+                    <li>{engineer.description}</li>
+                    <li>{engineer.skill}</li>
+                    <li>{engineer.location}</li>
+                    <li> Birthdate{' '}
+                        <Moment format="YYYY/MM/DD">
+                            {engineer.birthdate}
+                        </Moment>
+                    </li>
+                    <li>{engineer.showcase}</li>
+                    <li>{engineer.email}</li>
+                    <li>{engineer.telephone}</li>
+                    <li>Expected Salary : {engineer.salary}</li>
+                </ul>
+            </div>
+        </div>
+
+        <a href='/engineers' className='button is-info'>
+            Back To Engineers
+        </a>
+
+    </Fragment>
     )
 }
 
+const mapStateToProps = state => ({
+    engineer: state.engineer,
+    auth: state.auth
+})
 
-export default connect(null, {})(EngineerSingle)
+export default connect(
+    mapStateToProps,
+    { getEngineer, logout }
+)(EngineerSingle)

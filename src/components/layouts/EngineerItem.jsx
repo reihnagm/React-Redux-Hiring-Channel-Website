@@ -1,17 +1,21 @@
 import React, { Fragment } from 'react'
+import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { delete_engineer } from '../../actions/engineer'
+import { deleteEngineer } from '../../actions/engineer'
+import Spinner from './Spinner'
+const MySwal = withReactContent(Swal)
 
-const EngineerItem = ({ delete_engineer, engineer: { id, name, avatar, email, salary, skill, user_id }, userid }) => {
 
-    const editEngineer = (e) => {
+const EngineerItem = ({ deleteEngineer, loading, engineer: { id, name, avatar, email, salary, skill, user_id }, auth }) => {
 
-    }
+    const userid = auth.user === null ? '' : auth.user[0].id
 
-    const deleteEngineer = (e) => {
-        Swal.fire({
+    const delete_engineer = async (e) => {
+        e.preventDefault()
+
+        const swal = await MySwal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
             icon: 'warning',
@@ -19,41 +23,32 @@ const EngineerItem = ({ delete_engineer, engineer: { id, name, avatar, email, sa
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Deleted!',
-                    'Your data has been deleted.',
-                    'success'
-                )
-            }
-            delete_engineer(id)
         })
+
+        if(swal.value) {
+            deleteEngineer(id)
+            setTimeout(function() {
+                window.location.reload()
+            }, 2000)
+        }
     }
 
-    return (
-        <div className='column is-one-third'>
-            <div className='cards fade-in'>
-                <img src={avatar} alt={name} />
-                <div id='card-info'>
-                    <span id='name'>{name}</span>
-                    <span id='email'>{email}</span>
-                    <span id='expected-salary'>Expected Salary: {salary}</span>
-                    <p id='skills'>
-                        <p>Skills : {skill}</p>
-                    </p>
-
-                    { user_id === userid && (
-                    <ul id='option-engineer'>
-                        <li onClick={e => editEngineer(e)} className='has-margin-vm button is-info is-block'>Edit</li>
-                        <li onClick={e => deleteEngineer(e)} className='has-margin-vm button is-danger is-block'>Delete</li>
-                    </ul> ) }
+    return loading ? (<Spinner />
+    )   :
+        (
+            <Fragment>
+                <div className='masonry'>
+                    <div className='item'>
+                        <img src={avatar} />
+                    </div>
                 </div>
-            </div>
-            <Link to='/engineer'>Show Details</Link>
-        </div>
-    )
+            </Fragment>
+        )
 }
 
+const mapStateToProps = state => ({
+    auth: state.auth,
+    loading: state.engineer.loading
+})
 
-export default connect(null, {delete_engineer})(EngineerItem)
+export default connect(mapStateToProps,{ deleteEngineer })(EngineerItem)

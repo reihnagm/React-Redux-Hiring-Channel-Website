@@ -7,18 +7,17 @@ body {
     margin: 0 1% !important;
     padding: 2% !important;
 }
-#navbar-engineer a,
-#navbar-company a
- {
+#navbar a
+{
     color: $main-black !important;
     text-decoration: none !important;
     font-size: 16px !important;
-    margin: 0 8px !important;
+    margin: 10px 12px !important;
 }
-#card-info-company {
+#list-card-company {
     padding: 10px !important;
 }
-#card-info-company li
+#list-card-company li
 {
     margin: 15px 0 0 10px !important;
     display: block !important;
@@ -53,9 +52,18 @@ body {
     padding-top: 25px !important;
     font-size: 23px !important;
 }
-#option-engineer {
+#option-engineer,
+#option-company {
     margin: 8px 0 !important;
 }
 #btn-wrapper-landing a {
     margin: 0 1% !important;
+}
+#show-details {
+    padding: 25px 10px !important;
+}
+#logout {
+    margin-top: 8px !important;
+    display: inline-block;
+    cursor: pointer !important;
 }

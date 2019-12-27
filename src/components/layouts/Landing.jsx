@@ -1,34 +1,49 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { logout } from '../../actions/auth'
 
-const Landing = () => {
+const Landing = ({ isAuthenticated, logout }) => {
+
+    const authLinks = (
+        <Fragment>
+            <a href='/engineers'>Engineers</a> |
+            <a href='/companies'>Companies</a> |
+            <a onClick={logout}>Logout</a>
+        </Fragment>
+    )
+
+    const guestLinks = (
+        <Fragment>
+            <a href='/engineers'>Engineers</a> |
+            <a href='/companies'>Companies</a> |
+            <Link to='/register'>Register</Link> |
+            <Link to='/login'>Login</Link>
+        </Fragment>
+    )
 
     return (
         <div className='container'>
 
             <header className='navbar has-small-vm'>
                 <div className='column'>
-                    <img src='./logo.png' alt="" id='logo' className='img-brand' />
+                    <img src='./logo.png' alt="" id='logo' className='img-brand'/>
                 </div>
 
-                <div id='navbar-landing' className='column'>
-                    <nav>
-                        <Link id='engineers-link' to='/engineers'>Engineers</Link>/
-                        <Link id='companies-link' to='/companies'>Companies</Link>
-                    </nav>
+                <div id='navbar' className='column is-half'>
+                    <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
                 </div>
             </header>
 
-            <div className='hero is-center is-info has-small-vm'>
-                <div id='btn-wrapper-landing'>
-                    <Link to='/register' className='button button-register-landing is-info is-rounded'>Sign Up</Link>
-                    <Link to='/login' className='button button-login-landing is-info is-rounded'>Sign In</Link>
-                </div>
-            </div>
+            <div className='hero is-center has-small-vm'></div>
 
         </div>
     )
 
 }
 
-export default Landing
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, {logout })(Landing)
