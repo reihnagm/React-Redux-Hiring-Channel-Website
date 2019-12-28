@@ -16,7 +16,6 @@ const EngineerEdit = ({ getEngineer, updateEngineer, logout, engineer: {  engine
         skill: '',
         location: '',
         showcase: '',
-        email: '',
         telephone: '',
         birthdate: '',
         salary: ''
@@ -56,13 +55,19 @@ const EngineerEdit = ({ getEngineer, updateEngineer, logout, engineer: {  engine
         const formData = new FormData()
         formData.append('file', files[0])
         formData.append('upload_preset', 'reihanagam')
-        const response = await fetch('https://api.cloudinary.com/v1_1/dilzovvfk/image/upload', {
-            method: 'POST',
-            body: formData
-        })
-        const file = await response.json()
-        setAvatar(file.secure_url)
+
+        try {
+            const response = await fetch('https://api.cloudinary.com/v1_1/dilzovvfk/image/upload', {
+                method: 'POST',
+                body: formData
+            })
+            const file = await response.json()
+            setAvatar(file.secure_url)
+        } catch(error) {
+            alert(error)
+        }
     }
+
     const data = {
         name,
         description,
@@ -76,6 +81,7 @@ const EngineerEdit = ({ getEngineer, updateEngineer, logout, engineer: {  engine
         avatar,
         user_id
     }
+    
     const update_engineer = (e) => {
         e.preventDefault()
         updateEngineer(match.params.id, data)
@@ -122,10 +128,6 @@ const EngineerEdit = ({ getEngineer, updateEngineer, logout, engineer: {  engine
                         </div>
                         <div className='field'>
                             <input onChange={e => onChange(e)} type='text' value={showcase} name='showcase' placeholder='Showcase' />
-                        </div>
-                        <div className='field'>
-                            <input onChange={e => onChange(e)} type='text' value={email} name='email'
-                             placeholder=' Email' />
                         </div>
                         <div className='field'>
                             <InputMask name='telephone' onChange={e => onChange(e)} type='text' mask="9999-9999-9999" value={telephone} placeholder='Enter phone number' />

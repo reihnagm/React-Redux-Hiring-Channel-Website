@@ -17,7 +17,6 @@ const EngineerAdd = ({ addEngineer, isAuthenticated, auth: { user }, logout }) =
         skill: '',
         location: '',
         showcase: '',
-        email: '',
         telephone: '',
         birthdate: '',
         salary: ''
@@ -34,12 +33,17 @@ const EngineerAdd = ({ addEngineer, isAuthenticated, auth: { user }, logout }) =
         const formData = new FormData()
         formData.append('file', files[0])
         formData.append('upload_preset', 'reihanagam')
-        const response = await fetch('https://api.cloudinary.com/v1_1/dilzovvfk/image/upload', {
-            method: 'POST',
-            body: formData
-        })
-        const file = await response.json()
-        setAvatar(file.secure_url)
+
+        try {
+            const response = await fetch('https://api.cloudinary.com/v1_1/dilzovvfk/image/upload', {
+                method: 'POST',
+                body: formData
+            })
+            const file = await response.json()
+            setAvatar(file.secure_url)
+        } catch(error) {
+            alert(error)
+        }
     }
 
     const add_engineer = (e) => {
@@ -102,9 +106,6 @@ const EngineerAdd = ({ addEngineer, isAuthenticated, auth: { user }, logout }) =
                             </div>
                             <div className='field'>
                                 <input onChange={e => onChange(e)} value={showcase} type='text' name='showcase' placeholder='Showcase'></input>
-                            </div>
-                            <div className='field'>
-                                <input onChange={e => onChange(e)} value={email} type='text' name='email' placeholder='Email'></input>
                             </div>
                             <div className='field'>
                                 <InputMask name='telephone' onChange={e => onChange(e)} type='text' mask="9999-9999-9999" value={telephone} placeholder='Enter phone number' />
