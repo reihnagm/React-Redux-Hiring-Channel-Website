@@ -1,5 +1,8 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import {
+        Route,
+        Switch
+    } from 'react-router-dom'
 import Register from '../auth/Register'
 import Login from '../auth/Login'
 import NotFound from '../layouts/NotFound'
@@ -11,7 +14,6 @@ import Engineer from '../layouts/Engineer'
 import EngineerAdd from '../layouts/EngineerAdd'
 import EngineerSingle from '../layouts/EngineerSingle'
 import EngineerEdit from '../layouts/EngineerEdit'
-
 
 const Routes = () => {
     return (
@@ -35,7 +37,7 @@ const Routes = () => {
 
             </Switch>
         </div>
-    );
-};
+    )
+}
 
-export default Routes;
+export default Routes

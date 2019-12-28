@@ -106,9 +106,11 @@ const Engineer = ({ getEngineers, logout,
                 </div>
 
                 <div className='has-small-vm'>
-                    { engineers.length !== 0 && engineers !== null  && engineers.data.map(engineer => (
-                        <EngineerItem key={engineer.id} engineer={engineer} />
-                    ))}
+                    <div className='masonry'>
+                        { engineers.length !== 0 && engineers !== null  && engineers.data.map(engineer => (
+                            <EngineerItem key={engineer.id} engineer={engineer} />
+                        ))}
+                    </div>
                 </div>
 
 

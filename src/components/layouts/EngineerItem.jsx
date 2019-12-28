@@ -33,14 +33,12 @@ const EngineerItem = ({ deleteEngineer, loading, engineer: { id, name, avatar, e
         }
     }
 
-    return loading ? (<Spinner />
-    )   :
+    return loading ? 
+    ( <Spinner /> ) :
         (
             <Fragment>
-                <div className='masonry'>
-                    <div className='item'>
-                        <img src={avatar} />
-                    </div>
+                <div className='item'>
+                    <img src={avatar} />
                 </div>
             </Fragment>
         )

@@ -6,26 +6,25 @@ import Landing from './components/layouts/Landing'
 import Routes from './components/routing/Routes'
 
 // NOTE: Redux
-import { Provider } from 'react-redux';
-import store from './store';
-import { loadUser } from './actions/auth';
-import setAuthToken from './utils/setAuthToken';
+import { Provider } from 'react-redux'
+import { loadUser } from './actions/auth'
+import store from './store'
+import setAuthToken from './utils/setAuthToken'
 
 if (localStorage.token) {
-    setAuthToken(localStorage.token);
+    setAuthToken(localStorage.token)
 }
 
 let dotenv = require('dotenv')
 let dotenvExpand = require('dotenv-expand')
 
-let myEnv = dotenv.config()
-dotenvExpand(myEnv)
+dotenvExpand(dotenv.config())
 
 const App = () => {
 
     useEffect(() => {
-        store.dispatch(loadUser());
-    }, []);
+        store.dispatch(loadUser())
+    }, [])
 
     return (
         <Provider store={store}>
