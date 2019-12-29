@@ -12,8 +12,6 @@ const EngineerAdd = ({ addEngineer, isAuthenticated, auth: { user }, logout }) =
     let user_id = user === null ? '' : user[0].id
     let check_auth = isAuthenticated === false ? false : true
 
-    console.log(isAuthenticated)
-
     const [formAddEngineer, setFormAddEngineer] = useState({
         description: '',
         skill: '',
