@@ -10,9 +10,11 @@ import { logout } from '../../actions/auth'
 const EngineerAdd = ({ addEngineer, isAuthenticated, auth: { user }, logout }) => {
 
     let user_id = user === null ? '' : user[0].id
+    let check_auth = isAuthenticated === false ? false : true
+
+    console.log(isAuthenticated)
 
     const [formAddEngineer, setFormAddEngineer] = useState({
-        name: '',
         description: '',
         skill: '',
         location: '',
@@ -23,33 +25,58 @@ const EngineerAdd = ({ addEngineer, isAuthenticated, auth: { user }, logout }) =
     })
     const [avatar, setAvatar] = useState()
 
-    const { name, description, skill, location, birthdate, showcase, email, telephone,  salary } = formAddEngineer
+    const {description,skill,location,birthdate,showcase,email,telephone,salary} = formAddEngineer
 
     const onChange = e => setFormAddEngineer({ ...formAddEngineer, [e.target.name]: e.target.value })
 
     const onChangeAvatar = async e => {
         const files = e.target.files
+        const ext = files[0].name.split('.')
+        const filename = ext[ext.length - 1]
+        const size = files[0].size
+        if(size >= 5242880 ) {
+            alert('Oops!, Size cannot more than 5MB')
+            document.getElementById('avatar').value = ''
+            return false
+        } else if(!isImage(filename.toLowerCase())) {
+            alert('Oops!, File allowed only JPG, JPEG, PNG, GIF, SVG')
+            document.getElementById('avatar').value = ''
+            return false
+        }
+        else {
+            const formData = new FormData()
+            formData.append('file', files[0])
+            formData.append('upload_preset', 'reihanagam')
 
-        const formData = new FormData()
-        formData.append('file', files[0])
-        formData.append('upload_preset', 'reihanagam')
-
-        try {
-            const response = await fetch('https://api.cloudinary.com/v1_1/dilzovvfk/image/upload', {
-                method: 'POST',
-                body: formData
-            })
-            const file = await response.json()
-            setAvatar(file.secure_url)
-        } catch(error) {
-            alert(error)
+            try {
+                const response = await fetch('https://api.cloudinary.com/v1_1/dilzovvfk/image/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                const file = await response.json()
+                console.log(file)
+                setAvatar(file.secure_url)
+            } catch(error) {
+                alert(error)
+            }
         }
     }
+
+    function isImage(filename) {
+        switch (filename) {
+            case 'jpg':
+            case 'gif':
+            case 'bmp':
+            case 'png':
+                  return true
+            }
+            return false
+    }
+
 
     const add_engineer = (e) => {
 
         const data = {
-            name,
             description,
             skill,
             location,
@@ -64,6 +91,11 @@ const EngineerAdd = ({ addEngineer, isAuthenticated, auth: { user }, logout }) =
 
         e.preventDefault()
         addEngineer(data)
+    }
+
+
+    if(!check_auth) {
+        return <Redirect to='/' />
     }
 
     return (
@@ -89,9 +121,6 @@ const EngineerAdd = ({ addEngineer, isAuthenticated, auth: { user }, logout }) =
                         <h3 id='title-add-engineer'>Add Form Engineer</h3>
 
                         <form onSubmit={ e => add_engineer(e) }>
-                            <div className='field'>
-                                <input onChange={e => onChange(e)} value={name} type='text' name='name' placeholder='Name'></input>
-                            </div>
                             <div className='field'>
                                 <textarea onChange={e => onChange(e)} value={description} name='description' placeholder='Description'></textarea>
                             </div>
@@ -133,7 +162,8 @@ const EngineerAdd = ({ addEngineer, isAuthenticated, auth: { user }, logout }) =
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    isAuthenticated: state.auth.isAuthenticated
 })
 
 export default connect(mapStateToProps, {addEngineer, logout})(EngineerAdd)
