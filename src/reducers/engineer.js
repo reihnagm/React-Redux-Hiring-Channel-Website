@@ -12,7 +12,7 @@ const initialState = {
 	search: '',
 	sortBy: 'date_updated',
 	sort: 'ASC',
-	limit: 5,
+	limit: '5',
 	loading: true,
 	error: {}
 }

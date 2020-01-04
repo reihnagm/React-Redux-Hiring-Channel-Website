@@ -6,12 +6,22 @@
 }
 
 #search-header {
-    padding: 8px 0;
+    padding: 8px 12px;
+}
+
+#label-sortBy,
+#label-orderBy,
+#label-showPage {
+    color: #000000;
+    margin-right: 10px;
+}
+
+#logo {
+    height: 50px;
 }
 
 #header-menu li {
     font-size: 16px;
-    margin-top: 2px;
     display: inline-block;
     position: relative;
 }

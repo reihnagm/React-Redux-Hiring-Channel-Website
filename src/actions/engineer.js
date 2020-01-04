@@ -12,7 +12,7 @@ import {
 
 export const getEngineers = (search, limit, sortBy, sort) => async dispatch => {
     try {
-        const response = await axios.get(`http://localhost:5000/api/v1/engineers?search=${search}&limit=${limit}&sortBy=${sortBy}&sort=${sort}`)
+        const response = await axios.get(`http://localhost:5000/api/v1/engineers?search=${search}&limit=${parseInt(limit)}&sortBy=${sortBy}&sort=${sort}`)
         dispatch({
             type: GET_ENGINEERS,
             payload: response.data
