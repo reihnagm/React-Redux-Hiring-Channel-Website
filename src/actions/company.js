@@ -11,7 +11,7 @@ import {
 
 export const getCompanies = () => async dispatch => {
     try {
-        const response = await axios.get(process.env.REACT_APP_GET_COMPANIES)
+        const response = await axios.get(process.env.REACT_APP_GET_LOCAL_COMPANIES)
         dispatch({
             type: GET_COMPANIES,
             payload: response.data
@@ -25,7 +25,7 @@ export const getCompanies = () => async dispatch => {
 }
 export const getCompany = (id) => async dispatch => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_GET_COMPANIES}/${id}`)
+        const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}/${id}`)
         dispatch({
             type: GET_COMPANY,
             payload: response.data[0]
@@ -40,7 +40,7 @@ export const getCompany = (id) => async dispatch => {
 }
 export const addCompany = (formData) => async dispatch => {
     try {
-        const response = await axios.post(`${process.env.REACT_APP_GET_COMPANIES}`, formData)
+        const response = await axios.post(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}`, formData)
         dispatch({
             type: ADD_COMPANY,
             payload: response.data
@@ -61,7 +61,7 @@ export const addCompany = (formData) => async dispatch => {
 
 export const updateCompany = (id, formData) => async dispatch => {
     try {
-        const response = await axios.patch(`${process.env.REACT_APP_GET_COMPANIES}/${id}`, formData)
+        const response = await axios.patch(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}/${id}`, formData)
         dispatch({
             type: UPDATE_COMPANY,
             payload: response.data
@@ -82,7 +82,7 @@ export const updateCompany = (id, formData) => async dispatch => {
 
 export const deleteCompany = (id, history) => async dispatch => {
     try {
-        await axios.delete(`${process.env.REACT_APP_GET_COMPANIES}/${id}`)
+        await axios.delete(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}/${id}`)
         dispatch({
             type: DELETE_COMPANY,
             payload: id

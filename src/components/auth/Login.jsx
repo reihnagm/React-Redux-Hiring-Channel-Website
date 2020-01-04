@@ -13,10 +13,10 @@ const Login = ({ login, isAuthenticated }) => {
 
     const { email, password } = formData
 
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+    const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
 
-    const onSubmit = e => {
-        e.preventDefault()
+    const onSubmit = event => {
+        event.preventDefault()
         login(email, password);
     }
 
@@ -46,12 +46,13 @@ const Login = ({ login, isAuthenticated }) => {
                                     <label>Password</label>
                                     <input onChange={e => onChange(e)} value={password} type='password' name='password'/>
 
-                                    <a href='/' className='button is-info is-rounded'>Back to Homepage</a>
+                                    <Link to='/' className='button is-info is-rounded'>Back to Homepage</Link>
+                                    &nbsp;&nbsp;
                                     <button type='submit' className='button is-info is-rounded'>Sign In</button>
 
                                     <div className='columns is-justify-around is-items-center'>
                                         <span className='label'>Don't have account ?</span>
-                                        <a href='/register' className='button is-info is-rounded'>Sign Up</a>
+                                        <Link to='/register' className='button is-info is-rounded'>Sign Up</Link>
                                     </div>
                                 </div>
                             </form>

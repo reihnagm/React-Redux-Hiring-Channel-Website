@@ -1,31 +1,29 @@
 import React, { Fragment, useState } from 'react'
-
-import { connect } from 'react-redux'
-
 import { Link, Redirect } from 'react-router-dom'
-import Alert from '../layouts/Alert'
-import { setAlert } from '../../actions/alert'
+import { connect } from 'react-redux'
 import { register } from '../../actions/auth'
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+const Register = ({ register, isAuthenticated }) => {
 
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        role: 1,
         password: '',
         password2: ''
     })
 
-    const {name,email,password,password2} = formData
+    const { name, email, password, password2, role } = formData
 
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+    const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
 
-    const onSubmit = async e => {
-        e.preventDefault()
+    const onSubmit = async event => {
+        event.preventDefault()
         if (password !== password2) {
-            setAlert('password do not match', 'danger')
+            // setAlert('password do not match', 'danger')
+            // mau dari sweetalert
         } else {
-            register({ name, email, password })
+            register({ name, email, password, role })
         }
     }
 
@@ -41,8 +39,6 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                     <img src='./logo.png' alt="" id='logo' className='img-brand' />
                 </header>
 
-                <Alert />
-
                 <div className='columns is-justify-center'>
                     <div className='column is-half'>
                         <div className='cards'>
@@ -50,23 +46,28 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                             <form onSubmit={e => onSubmit(e)} id='field-register'>
                                 <div className='field'>
                                     <label>Name</label>
-                                    <input onChange={e => onChange(e)} value={name} type='text' name='name' />
+                                    <input onChange={event => onChange(event)} value={name} type='text' name='name' />
 
                                     <label>Email</label>
-                                    <input onChange={e => onChange(e)} value={email} type='email' name='email' />
+                                    <input onChange={event => onChange(event)} value={email} type='email' name='email' />
 
                                     <label>Password</label>
-                                    <input onChange={e => onChange(e)} value={password} type='password' name='password' />
+                                    <input onChange={event => onChange(event)} value={password} type='password' name='password' />
 
                                     <label>Confirmation Password</label>
-                                    <input onChange={e => onChange(e)} value={password2} type='password' name='password2' />
+                                    <input onChange={event => onChange(event)} value={password2} type='password' name='password2' />
 
-                                    <a href='/' className='button is-info is-rounded'>Back to Homepage</a>
+                                    <select name="role" onChange={event => onChange(event)} value={role}>
+                                        <option value="1">Engineer</option>
+                                        <option value="2">Company</option>
+                                    </select>
+
+                                    <Link to='/' className='button is-info is-rounded'>Back to Homepage</Link>
                                     <button className='button is-info is-rounded'>Sign Up</button>
 
                                     <div className='columns is-justify-around is-items-center'>
                                         <span className='label'>Already have account ?</span>
-                                        <a href='/login' className='button is-info is-rounded'>Sign In</a>
+                                        <Link href='/login' className='button is-info is-rounded'>Sign In</Link>
                                     </div>
                                 </div>
                             </form>
@@ -86,5 +87,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { setAlert, register }
+    { register }
 )(Register)

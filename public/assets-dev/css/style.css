@@ -1,69 +1,46 @@
-@import "variable";
+#masonry {
+    column-count: 4;
+    column-gap: 1em;
+}
 
-body {
-    color: $main-black !important;
+#item {
+    position: relative;
 }
-#card-info {
-    margin: 0 1% !important;
-    padding: 2% !important;
+
+#avatar {
+    border-radius: 20px;
 }
-#navbar a
-{
-    color: $main-black !important;
-    text-decoration: none !important;
-    font-size: 16px !important;
-    margin: 10px 12px !important;
+
+#description-engineer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
-#list-card-company {
-    padding: 10px !important;
+
+#text-name {
+    font-size: 20px;
+    margin-bottom: 10px;
 }
-#list-card-company li
-{
-    margin: 15px 0 0 10px !important;
-    display: block !important;
-}
-#navbar-landing a
- {
-    color: $main-black !important;
-    text-decoration: none !important;
-    font-size: 16px;
-    margin: 0 8px;
-}
-#engineers-link,
-#companies-link {
-    background: none !important;
-}
-#details-engineer li {
-    margin: 20px 0 0 25px;
-    font-size: 17px;
-}
-#name,
-#skill,
-#email,
-#expected-salary,
-#skills {
-    display: block;
-    margin: 5% 2%;
-}
-#title-register,
-#title-login,
-#title-add-engineer {
-    text-align: center !important;
-    padding-top: 25px !important;
-    font-size: 23px !important;
-}
-#option-engineer,
-#option-company {
-    margin: 8px 0 !important;
-}
-#btn-wrapper-landing a {
-    margin: 0 1% !important;
-}
-#show-details {
-    padding: 25px 10px !important;
-}
-#logout {
-    margin-top: 8px !important;
+
+#text-email {
     display: inline-block;
-    cursor: pointer !important;
+}
+
+#text-salary {
+    display: inline-block;
+    margin-left: 20px
+}
+
+#title-skill {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+#name-skill {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+#text-skill {
+    line-height: 20px;
 }

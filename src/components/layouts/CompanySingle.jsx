@@ -1,7 +1,6 @@
 import React, { useEffect, Fragment } from 'react'
 import Spinner from './Spinner'
 import { Link } from 'react-router-dom'
-import logo from './logo.png'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/auth'
 import { getCompany } from '../../actions/company'
@@ -18,7 +17,7 @@ const CompanySingle = ({ getCompany, logout, company: {  company, loading }, mat
     <Fragment>
         <header className='navbar has-small-vm'>
             <div className='column'>
-                <img src={logo} alt='' />
+                <img src='' alt='' />
             </div>
             <div id='navbar' className='column is-half'>
                 <Link to='/'>Home</Link> |

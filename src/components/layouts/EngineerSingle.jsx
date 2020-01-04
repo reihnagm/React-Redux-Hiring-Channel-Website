@@ -2,7 +2,6 @@ import React, { useEffect, Fragment } from 'react'
 import Spinner from './Spinner'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
-import logo from './logo.png'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/auth'
 import { getEngineer } from '../../actions/engineer'
@@ -36,7 +35,7 @@ const EngineerSingle = ({ getEngineer, logout, auth: { isAuthenticated }, engine
     <Fragment>
         <header className='navbar has-small-vm'>
             <div className='column'>
-                <img src={logo} alt='' />
+                <img src='' alt='' />
             </div>
             {!loading && (
                 <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>

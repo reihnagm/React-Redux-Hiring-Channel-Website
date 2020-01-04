@@ -2,14 +2,13 @@ import React, { Fragment, useEffect } from 'react'
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
-import Landing from './components/layouts/Landing'
-import Routes from './components/routing/Routes'
+import Landing from './layouts/Landing'
+import Routes from './routing/Routes'
 
-// NOTE: Redux
 import { Provider } from 'react-redux'
-import { loadUser } from './actions/auth'
-import store from './store'
-import setAuthToken from './utils/setAuthToken'
+import { loadUser } from '../actions/auth'
+import store from '../store'
+import setAuthToken from '../utils/setAuthToken'
 
 if (localStorage.token) {
     setAuthToken(localStorage.token)

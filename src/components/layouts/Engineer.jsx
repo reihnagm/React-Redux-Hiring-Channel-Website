@@ -15,23 +15,6 @@ const Engineer = ({ getEngineers, logout,
     const [sortByMask, setSortBy] = useState(sortBy)
     const [orderByMask, setOrderBy] = useState(sort)
 
-    const authLinks = (
-        <div id='navbar' className='column'>
-            <Link to='/'>Home</Link> |
-            <a href='/companies'>Companies</a> |
-            <a href='/engineer/add'>Add Engineer</a> |
-            <a id='logout' onClick={logout}> Logout </a >
-        </div>
-    )
-
-    const guestLinks = (
-        <div id='navbar' className='column'>
-            <Link to='/'>Home</Link>
-            <Link to='/register'>Register</Link>
-            <Link to='/login'>Login</Link>
-        </div>
-    )
-
     const onLimit = e => {
         setLimit(e.target.value)
     }
@@ -54,9 +37,9 @@ const Engineer = ({ getEngineers, logout,
     ) : (
             <Fragment>
 
-                <header className='navbar has-small-vm'>
+                <header id='header' className='navbar'>
                     <div className='column'>
-                        <img src='./logo.png' alt='Logo' />
+                        <img src='' alt='Logo' />
                     </div>
                     <div className='column is-half'>
                         <div className='field'>
@@ -64,13 +47,14 @@ const Engineer = ({ getEngineers, logout,
                         </div>
                     </div>
                     <div id='navbar-engineer' className='column column is-half'>
-                    {!loading && (
-                        <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
-                    )}
+                        <ul id="header-menu">
+                            <Link to='/'>Home</Link>
+                            <Link to='engineer/profile'>Update Profile</Link>
+                        </ul>
                     </div>
                 </header>
 
-                <div className='has-small-vm'>
+                <div id='sort'>
                     <div className='columns'>
                         <div className='column'>
                             <div className='columns'>
@@ -105,8 +89,8 @@ const Engineer = ({ getEngineers, logout,
                     </div>
                 </div>
 
-                <div className='has-small-vm'>
-                    <div className='masonry'>
+                <div id='content'>
+                    <div id='masonry'>
                         {engineers.data.map(engineer => (
                                 <EngineerItem key={engineer.id} engineer={engineer} />
                         ))}

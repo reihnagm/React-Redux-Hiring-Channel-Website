@@ -20,7 +20,7 @@ export const loadUser = () => async dispatch => {
         setAuthToken(localStorage.token)
     }
     try {
-        const response = await axios.get(process.env.REACT_APP_AUTH)
+        const response = await axios.get(process.env.REACT_APP_LOCAL_AUTH)
         dispatch({
             type: USER_LOADED,
             payload: response.data
@@ -31,15 +31,15 @@ export const loadUser = () => async dispatch => {
         })
     }
 }
-export const register = ({ name, email, password }) => async dispatch => {
+export const register = ({ name, email, password, role }) => async dispatch => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         }
     }
-    const body = JSON.stringify({ name, email, password })
+    const body = JSON.stringify({ name, email, password, role_id: role })
     try {
-        const response = await axios.post(process.env.REACT_APP_REGISTER, body, config)
+        const response = await axios.post(`http://localhost:5000/auth/register`, body, config)
         dispatch({
             type: REGISTER_SUCCESS,
             payload: response.data
@@ -65,7 +65,7 @@ export const login = (email, password) => async dispatch => {
     }
     const body = JSON.stringify({ email, password })
     try {
-        const response = await axios.post(process.env.REACT_APP_LOGIN, body, config)
+        const response = await axios.post(process.env.REACT_APP_LOCAL_LOGIN, body, config)
 
         dispatch({
             type: LOGIN_SUCCESS,

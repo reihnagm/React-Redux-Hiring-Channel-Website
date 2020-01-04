@@ -27,7 +27,7 @@ const Landing = ({ isAuthenticated, logout }) => {
 
             <header className='navbar has-small-vm'>
                 <div className='column'>
-                    <img src='./logo.png' alt="" id='logo' className='img-brand'/>
+                    <img src='' alt="" id='logo' className='img-brand'/>
                 </div>
 
                 <div id='navbar' className='column is-half'>
@@ -46,4 +46,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 })
 
-export default connect(mapStateToProps, {logout })(Landing)
+export default connect(mapStateToProps, { logout })(Landing)

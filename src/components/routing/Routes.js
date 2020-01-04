@@ -1,8 +1,5 @@
 import React from 'react'
-import {
-        Route,
-        Switch
-    } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import Register from '../auth/Register'
 import Login from '../auth/Login'
 import NotFound from '../layouts/NotFound'
@@ -11,13 +8,13 @@ import CompanyAdd from '../layouts/CompanyAdd'
 import CompanySingle from '../layouts/CompanySingle'
 import CompanyEdit from '../layouts/CompanyEdit'
 import Engineer from '../layouts/Engineer'
-import EngineerAdd from '../layouts/EngineerAdd'
+import ProfileEngineer from '../layouts/ProfileEngineer'
+import UpdateProfileEngineer from '../layouts/UpdateProfileEngineer'
 import EngineerSingle from '../layouts/EngineerSingle'
 import EngineerEdit from '../layouts/EngineerEdit'
 
 const Routes = () => {
     return (
-        <div className='container'>
             <Switch>
 
                 <Route exact path='/register' component={Register} />
@@ -29,14 +26,14 @@ const Routes = () => {
                 <Route exact path='/company/show/:id' component={CompanySingle} />
 
                 <Route exact path='/engineers' component={Engineer} />
-                <Route exact path='/engineer/add' component={EngineerAdd} />
+                <Route exact path='/engineer/profile' component={ProfileEngineer} />
+                <Route exact path='/engineer/update/profile' component={UpdateProfileEngineer} />
                 <Route exact path='/engineer/edit/:id' component={EngineerEdit} />
                 <Route exact path='/engineer/show/:id' component={EngineerSingle} />
 
                 <Route component={NotFound} />
 
             </Switch>
-        </div>
     )
 }
 

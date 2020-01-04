@@ -1,8 +1,7 @@
 import {
 	GET_ENGINEERS,
 	GET_ENGINEER,
-	ADD_ENGINEER,
-	UPDATE_ENGINEER,
+	UPDATE_PROFILE_ENGINEER,
 	ENGINEER_ERROR,
 	DELETE_ENGINEER
 } from '../actions/types'
@@ -34,16 +33,10 @@ export default function (state = initialState, action) {
 	        	engineer: payload,
 	        	loading: false
 	      	}
-		case ADD_ENGINEER:
+		case UPDATE_PROFILE_ENGINEER:
 	      	return {
 	        	...state,
-	        	engineers: payload,
-	        	loading: false
-	      	}
-		case UPDATE_ENGINEER:
-	      	return {
-	        	...state,
-	        	engineers: payload,
+	        	engineers: [...payload, state.engineers],
 	        	loading: false
 	      	}
 		case DELETE_ENGINEER:

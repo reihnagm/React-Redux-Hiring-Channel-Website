@@ -3,22 +3,21 @@ import Alert from './Alert'
 import Spinner from './Spinner'
 import InputMask from 'react-input-mask'
 import { Link } from 'react-router-dom'
-import logo from './logo.png'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/auth'
-import { getEngineer, updateEngineer } from '../../actions/engineer'
+import { getEngineer, updateProfileEngineer } from '../../actions/engineer'
 
-const EngineerEdit = ({ getEngineer, updateEngineer, logout, engineer: {  engineer, loading }, match }) => {
+const EngineerEdit = ({ getEngineer, updateProfileEngineer, logout, engineer: {  engineer, loading }, match }) => {
 
     const [formEditEngineer, setFormEditEngineer] = useState({
-        name: '',
         description: '',
         skill: '',
         location: '',
         showcase: '',
         telephone: '',
         birthdate: '',
-        salary: ''
+        salary: '',
+        user_id: ''
     })
 
     const [avatar, setAvatar] = useState()
@@ -29,7 +28,6 @@ const EngineerEdit = ({ getEngineer, updateEngineer, logout, engineer: {  engine
         getEngineer(match.params.id)
 
         setFormEditEngineer({
-            name: loading || !engineer.name ? '' : engineer.name,
             description: loading || !engineer.description ? '' : engineer.description,
             skill: loading || !engineer.skill ? '' : engineer.skill,
             location: loading || !engineer.location ? '' : engineer.location,
@@ -47,29 +45,13 @@ const EngineerEdit = ({ getEngineer, updateEngineer, logout, engineer: {  engine
 
     }, [getEngineer, loading, match.params.id])
 
-    const {name, description, skill, location, showcase, email, telephone, birthdate, salary, user_id} = formEditEngineer
+    const { name, description, skill, location, showcase, email, telephone, birthdate, salary, user_id } = formEditEngineer
 
     const onChangeAvatar = async e => {
-        const files = e.target.files
 
-        const formData = new FormData()
-        formData.append('file', files[0])
-        formData.append('upload_preset', 'reihanagam')
-
-        try {
-            const response = await fetch('https://api.cloudinary.com/v1_1/dilzovvfk/image/upload', {
-                method: 'POST',
-                body: formData
-            })
-            const file = await response.json()
-            setAvatar(file.secure_url)
-        } catch(error) {
-            alert(error)
-        }
     }
 
     const data = {
-        name,
         description,
         skill,
         location,
@@ -81,10 +63,10 @@ const EngineerEdit = ({ getEngineer, updateEngineer, logout, engineer: {  engine
         avatar,
         user_id
     }
-    
+
     const update_engineer = (e) => {
         e.preventDefault()
-        updateEngineer(match.params.id, data)
+        updateProfileEngineer(match.params.id, data)
     }
 
     return loading ? (
@@ -93,7 +75,7 @@ const EngineerEdit = ({ getEngineer, updateEngineer, logout, engineer: {  engine
     <Fragment>
         <header className='navbar has-small-vm'>
             <div className='column'>
-                <img src={logo} alt='' />
+                <img src='' alt='' />
             </div>
             <div id='navbar' className='column is-half'>
                 <Link to='/'>Home</Link> |
@@ -158,4 +140,4 @@ const mapStateToProps = state => ({
     engineer: state.engineer
 })
 
-export default connect(mapStateToProps, { getEngineer, updateEngineer, logout })(EngineerEdit)
+export default connect(mapStateToProps, { getEngineer, updateProfileEngineer, logout })(EngineerEdit)

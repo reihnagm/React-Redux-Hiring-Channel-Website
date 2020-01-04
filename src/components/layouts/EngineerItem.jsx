@@ -1,19 +1,20 @@
 import React, { Fragment } from 'react'
 import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { deleteEngineer } from '../../actions/engineer'
 import Spinner from './Spinner'
 const MySwal = withReactContent(Swal)
 
-
-const EngineerItem = ({ deleteEngineer, loading, engineer: { id, name, avatar, email, salary, skill, user_id }, auth }) => {
+const EngineerItem =
+    ({ deleteEngineer, loading,
+    engineer: { id, name, email, description, skill, location, birthdate, showcase, telephone, salary, avatar, user_id }, auth }) => {
 
     const userid = auth.user === null ? '' : auth.user[0].id
 
-    const delete_engineer = async (e) => {
-        e.preventDefault()
+    const delete_engineer = async (event) => {
+        event.preventDefault()
 
         const swal = await MySwal.fire({
             title: 'Are you sure?',
@@ -27,22 +28,35 @@ const EngineerItem = ({ deleteEngineer, loading, engineer: { id, name, avatar, e
 
         if(swal.value) {
             deleteEngineer(id)
-            setTimeout(function() {
-                window.location.reload()
-            }, 2000)
         }
     }
 
-    return loading ? 
-    ( <Spinner /> ) :
+    return loading ? ( <Spinner /> ) :
         (
             <Fragment>
-                <div className='item'>
-                    <img src={avatar} />
+                <div id='item'>
+                    <img id='avatar' src={`http://localhost:5000/images/engineer/${avatar}`} />
+                    <div id='description-engineer'>
+                        <div style={{
+                                padding: '15px 30px',
+                                borderRadius: '20px',
+                                backgroundColor: 'rgba(0,0,0, 0.4)'
+                            }}>
+                            <p id='text-name'>{name}</p>
+                            <div id='email-and-salary-container'>
+                                <p id='text-email'>{email}</p>
+                                <p id='text-salary'>{salary}</p>
+                            </div>
+                            <p id='title-skill'>Skills :</p>
+                            <ul>
+                                <li id='text-skill'>{skill}</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </Fragment>
         )
-}
+    }
 
 const mapStateToProps = state => ({
     auth: state.auth,
