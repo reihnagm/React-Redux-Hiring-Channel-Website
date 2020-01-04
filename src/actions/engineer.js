@@ -61,7 +61,8 @@ export const deleteEngineer = (id) => async dispatch => {
         })
     } catch (error) {
         dispatch({
-            type: ENGINEER_ERROR
+            type: ENGINEER_ERROR,
+            payload: error
         })
     }
 }

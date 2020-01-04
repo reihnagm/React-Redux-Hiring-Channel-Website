@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getEngineers } from '../../actions/engineer'
 import { logout } from '../../actions/auth'
+import dummyPhoto from '../../images/dummy.jpg'
 import EngineerItem from './EngineerItem'
 import Spinner from './Spinner'
 
@@ -43,13 +44,20 @@ const Engineer = ({ getEngineers, logout,
                     </div>
                     <div className='column is-half'>
                         <div className='field'>
-                            <input onChange={e => onSearch(e)} name='search' type='text' />
+                            <input id='search-header' onChange={e => onSearch(e)} name='search' type='text' />
                         </div>
                     </div>
-                    <div id='navbar-engineer' className='column column is-half'>
+                    <div id='navbar-engineer' className='column is-two-third'>
                         <ul id="header-menu">
-                            <Link to='/'>Home</Link>
-                            <Link to='engineer/profile'>Update Profile</Link>
+                            <li><Link to='/'>Home</Link></li>
+                            <li id='display-username'>
+                                <img id='small-avatar' src={dummyPhoto}/>
+                                <Link id='username-link' to='/'>Reihan Agam</Link>
+                                <ul id="sub-header-menu">
+                                    <li><Link to='/'>Update Profile</Link></li>
+                                    <li><Link to='/'>Logout</Link></li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </header>

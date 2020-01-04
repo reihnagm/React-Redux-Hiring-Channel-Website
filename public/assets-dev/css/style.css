@@ -1,6 +1,79 @@
+#header {
+    border-bottom: 2px solid #eee;
+    box-shadow: 2px 2px 2px #eee;
+    height: 80px;
+    line-height: 80px;
+}
+
+#search-header {
+    padding: 8px 0;
+}
+
+#header-menu li {
+    font-size: 16px;
+    margin-top: 2px;
+    display: inline-block;
+    position: relative;
+}
+
+#header-menu li:hover #sub-header-menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+#sub-header-menu {
+    visibility: hidden;
+    position: absolute;
+    opacity: 0;
+    z-index: 1;
+    transition: all .25s ease;
+    top: 100%;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+    border-bottom-left-radius: 10px;
+    box-shadow: 5px 5px 5px #eeeeee;
+    border-bottom-right-radius: 10px;
+}
+
+#sub-header-menu li {
+    display: block;
+    border-bottom: 1px solid #eeeeee;
+}
+
+#sub-header-menu li a {
+    color: #000000;
+    margin-left: 20px;
+}
+
+#display-username {
+    font-weight: bold;
+    position: relative;
+}
+
+#username-link {
+    color: #999999 !important;
+    margin-left: 70px;
+}
+
+#small-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    position: absolute;
+    top: 22px;
+    left: 22px;
+}
+
+#header-menu li a {
+    color: #000000;
+    font-weight: bold;
+    text-decoration: none
+}
+
 #masonry {
     column-count: 4;
-    column-gap: 1em;
+    column-gap: 1.6em;
 }
 
 #item {
@@ -23,16 +96,15 @@
 }
 
 #text-email {
-    display: inline-block;
+    margin-bottom: 10px;
 }
 
 #text-salary {
     display: inline-block;
-    margin-left: 20px
 }
 
 #title-skill {
-    margin: 10px 0;
+    margin: 10px 0 5px 0;
     font-size: 16px;
 }
 

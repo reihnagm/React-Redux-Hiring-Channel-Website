@@ -45,7 +45,7 @@ const EngineerItem =
                             <p id='text-name'>{name}</p>
                             <div id='email-and-salary-container'>
                                 <p id='text-email'>{email}</p>
-                                <p id='text-salary'>{salary}</p>
+                                <p id='text-salary'>Expected Salary: {salary}</p>
                             </div>
                             <p id='title-skill'>Skills :</p>
                             <ul>
