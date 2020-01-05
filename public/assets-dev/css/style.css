@@ -9,6 +9,83 @@
     padding: 8px 12px;
 }
 
+#cover-background-login {
+    background: linear-gradient(to top right, #cc66ff 0%, #ffffff 100%);
+}
+
+#cover-login {
+    background-image: url('../../assets/cover/cover_login.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 500px;
+}
+
+#title-cover-login {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+#sub-title-cover-login {
+    font-size: 17px;
+    text-align: justify;
+    width: 480px;
+    line-height: 24px;
+    margin-top: 10px;
+}
+
+#label-email {
+    color: #000000;
+    margin-bottom: 10px;
+}
+#input-email {
+    background: #ffffff;
+    box-shadow: 0px 0.3px 0px rgba(0,0,0, 0.5);
+    padding: 12px;
+}
+
+#label-password {
+    color: #000000;
+    margin-bottom: 10px;
+}
+#input-password {
+    background: #ffffff;
+    box-shadow: 0px 0.3px 0px rgba(0,0,0, 0.5);
+    padding: 12px;
+}
+
+#login-form {
+    margin-top: 90px;
+}
+
+#container-login-register {
+    margin-top: 50px;
+}
+
+#btn-login {
+    color:  rgb(213,130,255);
+    border: 1px solid rgb(213,130,255);
+}
+#btn-register {
+    color: rgb(213,130,255);
+    border: 1px solid rgb(213,130,255);
+}
+
+#btn-login:hover {
+    color: #ffffff;
+    background-color: rgb(213,130,255);
+}
+#btn-register:hover {
+    color: #ffffff;
+    background-color: rgb(213,130,255);
+}
+
+#title-content-login {
+    font-size: 27px;
+    color: #000000;
+    font-weight: bold;
+}
+
 #label-sortBy,
 #label-orderBy,
 #label-showPage {
