@@ -37,7 +37,8 @@ export const register = ({ name, email, password, role }) => async dispatch => {
             'Content-Type': 'application/json'
         }
     }
-    const body = JSON.stringify({ name, email, password, role_id: role })
+    const body = JSON.stringify({ name, email, password, role_id: role.value })
+
     try {
         const response = await axios.post(`http://localhost:5000/auth/register`, body, config)
         dispatch({

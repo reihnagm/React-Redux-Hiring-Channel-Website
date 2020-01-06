@@ -4,9 +4,9 @@ import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/auth'
-import { getEngineer } from '../../actions/engineer'
+import { getCurrentProfileEngineer } from '../../actions/engineer'
 
-const EngineerSingle = ({ getEngineer, logout, auth: { isAuthenticated }, engineer: {  engineer, loading }, match }) => {
+const EngineerSingle = ({ getCurrentProfileEngineer, logout, auth: { isAuthenticated }, engineer: {  engineer, loading }, match }) => {
 
     const authLinks = (
         <div id='navbar' className='column is-half'>
@@ -26,8 +26,8 @@ const EngineerSingle = ({ getEngineer, logout, auth: { isAuthenticated }, engine
     )
 
     useEffect(() => {
-        getEngineer(match.params.id);
-    }, [getEngineer, match.params.id]);
+        getCurrentProfileEngineer(match.params.id);
+    }, [getCurrentProfileEngineer, match.params.id]);
 
     return loading || engineer === null ? (
     <Spinner />
@@ -78,5 +78,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getEngineer, logout }
+    { getCurrentProfileEngineer, logout }
 )(EngineerSingle)

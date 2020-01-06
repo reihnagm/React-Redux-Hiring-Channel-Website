@@ -27,7 +27,7 @@ const Routes = () => {
 
                 <Route exact path='/engineers' component={Engineer} />
                 <Route exact path='/engineer/profile' component={ProfileEngineer} />
-                <Route exact path='/engineer/update/profile' component={UpdateProfileEngineer} />
+                <Route exact path='/engineer/update-profile/:id/edit' component={UpdateProfileEngineer} />
                 <Route exact path='/engineer/edit/:id' component={EngineerEdit} />
                 <Route exact path='/engineer/show/:id' component={EngineerSingle} />
 

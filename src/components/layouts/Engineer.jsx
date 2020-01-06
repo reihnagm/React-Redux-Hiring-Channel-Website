@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getEngineers } from '../../actions/engineer'
+import { getEngineers, getCurrentProfileEngineer } from '../../actions/engineer'
 import { logout } from '../../actions/auth'
 import dummyPhoto from '../../images/dummy.jpg'
 import logo from '../../images/logo.png'
@@ -10,9 +10,11 @@ import Dropdown from 'react-dropdown'
 import EngineerItem from './EngineerItem'
 import Spinner from './Spinner'
 
-const Engineer = ({ getEngineers, logout,
-        engineer: { engineers, loading, search, limit, sortBy, sort },
-        auth: { isAuthenticated } }) => {
+const Engineer = ({ getEngineers, getCurrentProfileEngineer, logout,
+        engineer: { engineers, engineer, loading, search, limit, sortBy, sort },
+        auth: { isAuthenticated, user } }) => {
+
+    let user_id = user === null ? '' : user[0].id
 
     const [searchMask, setSearch] = useState(search)
     const [limitMask, setLimit] = useState(limit)
@@ -32,9 +34,18 @@ const Engineer = ({ getEngineers, logout,
         setOrderBy(e.value)
     }
 
+    const authLinks = (
+        <p>test</p>
+    )
+
+    const guestLinks = (
+        <p>test</p>
+    )
+
     useEffect(() => {
         getEngineers(searchMask, limitMask, sortByMask, orderByMask)
-    }, [getEngineers, searchMask, limitMask, sortByMask, orderByMask])
+        getCurrentProfileEngineer(user_id)
+    }, [getEngineers, user_id, searchMask, limitMask, sortByMask, orderByMask])
 
     const optionsSortBy = [
         { value: 'date_updated', label: 'Date Updated' },
@@ -71,8 +82,13 @@ const Engineer = ({ getEngineers, logout,
                             <img id='small-avatar' src={dummyPhoto}/>
                             <Link id='username-link' to='/'>Reihan Agam</Link>
                             <ul id="sub-header-menu">
-                                <li><Link to='/'>Update Profile</Link></li>
-                                <li><Link to='/'>Logout</Link></li>
+                                <li>
+                                    <Link
+                                        to={`engineer/update-profile/${user_id}/edit`}>
+                                        Update Profile
+                                    </Link>
+                                </li>
+                                <li><a style={{ cursor:'pointer' }} onClick={e => logout()}>Logout</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -104,7 +120,7 @@ const Engineer = ({ getEngineers, logout,
                 <div className='container'>
                     <div id='content'>
                         <div id='masonry'>
-                            {engineers.data.map(engineer => (
+                            {engineers.map(engineer => (
                                     <EngineerItem key={engineer.id} engineer={engineer} />
                             ))}
                         </div>
@@ -124,5 +140,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getEngineers, logout }
+    { getEngineers, getCurrentProfileEngineer, logout }
 )(Engineer)

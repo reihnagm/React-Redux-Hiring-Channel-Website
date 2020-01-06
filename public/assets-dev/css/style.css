@@ -7,6 +7,7 @@
 
 #search-header {
     padding: 8px 12px;
+    border-radius: 8px;
 }
 
 #cover-background-login {
@@ -18,7 +19,7 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
-    height: 500px;
+    height: 515px;
 }
 
 #title-cover-login {
@@ -32,6 +33,16 @@
     width: 480px;
     line-height: 24px;
     margin-top: 10px;
+}
+
+#input-name {
+    background: #ffffff;
+    box-shadow: 0px 0.3px 0px rgba(0,0,0, 0.5);
+    padding: 12px;
+}
+#label-name {
+    color: #000000;
+    margin-bottom: 10px;
 }
 
 #label-email {
@@ -52,6 +63,11 @@
     background: #ffffff;
     box-shadow: 0px 0.3px 0px rgba(0,0,0, 0.5);
     padding: 12px;
+}
+
+#label-role {
+    color: #000000;
+    margin-bottom: 10px;
 }
 
 #login-form {
@@ -84,6 +100,13 @@
     font-size: 27px;
     color: #000000;
     font-weight: bold;
+}
+
+#title-update-engineer {
+    font-size: 22px;
+    padding: 15px 12px;
+    text-align: center;
+    color: #000000;
 }
 
 #label-sortBy,

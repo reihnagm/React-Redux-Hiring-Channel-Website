@@ -14,11 +14,6 @@ if (localStorage.token) {
     setAuthToken(localStorage.token)
 }
 
-let dotenv = require('dotenv')
-let dotenvExpand = require('dotenv-expand')
-
-dotenvExpand(dotenv.config())
-
 const App = () => {
 
     useEffect(() => {

@@ -5,9 +5,9 @@ import InputMask from 'react-input-mask'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/auth'
-import { getEngineer, updateProfileEngineer } from '../../actions/engineer'
+import { getCurrentProfileEngineer, updateProfileEngineer } from '../../actions/engineer'
 
-const EngineerEdit = ({ getEngineer, updateProfileEngineer, logout, engineer: {  engineer, loading }, match }) => {
+const EngineerEdit = ({ getCurrentProfileEngineer, updateProfileEngineer, logout, engineer: {  engineer, loading }, match }) => {
 
     const [formEditEngineer, setFormEditEngineer] = useState({
         description: '',
@@ -25,7 +25,7 @@ const EngineerEdit = ({ getEngineer, updateProfileEngineer, logout, engineer: { 
     const onChange = e => setFormEditEngineer({ ...formEditEngineer, [e.target.name]: e.target.value })
 
     useEffect(() => {
-        getEngineer(match.params.id)
+        getCurrentProfileEngineer(match.params.id)
 
         setFormEditEngineer({
             description: loading || !engineer.description ? '' : engineer.description,
@@ -43,7 +43,7 @@ const EngineerEdit = ({ getEngineer, updateProfileEngineer, logout, engineer: { 
             avatar:  loading || !engineer.avatar ? '' : engineer.avatar
         })
 
-    }, [getEngineer, loading, match.params.id])
+    }, [getCurrentProfileEngineer, loading, match.params.id])
 
     const { name, description, skill, location, showcase, email, telephone, birthdate, salary, user_id } = formEditEngineer
 
@@ -140,4 +140,4 @@ const mapStateToProps = state => ({
     engineer: state.engineer
 })
 
-export default connect(mapStateToProps, { getEngineer, updateProfileEngineer, logout })(EngineerEdit)
+export default connect(mapStateToProps, { getCurrentProfileEngineer, updateProfileEngineer, logout })(EngineerEdit)

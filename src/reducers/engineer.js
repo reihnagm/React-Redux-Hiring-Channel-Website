@@ -1,6 +1,6 @@
 import {
 	GET_ENGINEERS,
-	GET_ENGINEER,
+	GET_CURRENT_PROFILE_ENGINEER,
 	UPDATE_PROFILE_ENGINEER,
 	ENGINEER_ERROR,
 	DELETE_ENGINEER
@@ -27,16 +27,16 @@ export default function (state = initialState, action) {
 				engineers: payload,
 				loading: false
 			}
-		case GET_ENGINEER:
-	      	return {
-	        	...state,
-	        	engineer: payload,
-	        	loading: false
-	      	}
+		case GET_CURRENT_PROFILE_ENGINEER:
+			return {
+				...state,
+				engineer: payload,
+				loading: false
+			}
 		case UPDATE_PROFILE_ENGINEER:
 	      	return {
 	        	...state,
-	        	engineers: [...payload, state.engineers],
+	        	engineers: [payload, ...state.engineers],
 	        	loading: false
 	      	}
 		case DELETE_ENGINEER:

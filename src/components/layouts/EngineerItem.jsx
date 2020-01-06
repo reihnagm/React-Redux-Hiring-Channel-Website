@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { deleteEngineer } from '../../actions/engineer'
+import dummyImage from '../../images/dummy.jpg'
 import Spinner from './Spinner'
 const MySwal = withReactContent(Swal)
 
@@ -31,11 +32,13 @@ const EngineerItem =
         }
     }
 
+    let checkAvatar = avatar !== null ? `http://localhost:5000/images/engineer/${avatar}` : dummyImage
+
     return loading ? ( <Spinner /> ) :
         (
             <Fragment>
                 <div id='item'>
-                    <img id='avatar' src={`http://localhost:5000/images/engineer/${avatar}`} />
+                    <img id='avatar' src={checkAvatar} />
                     <div id='description-engineer'>
                         <div style={{
                                 padding: '15px 30px',
