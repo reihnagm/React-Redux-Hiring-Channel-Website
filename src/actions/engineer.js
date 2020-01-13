@@ -27,9 +27,9 @@ export const getEngineers = (search, limit, sortBy, sort) => async dispatch => {
         })
     }
 }
-export const getCurrentProfileEngineer = (id) => async dispatch => {
+export const getCurrentProfileEngineer = (user_id) => async dispatch => {
     try {
-        const response = await axios.get(`http://localhost:5000/api/v1/engineers/${id}`)
+        const response = await axios.get(`http://localhost:5000/api/v1/engineers/${user_id}`)
         dispatch({
             type: GET_CURRENT_PROFILE_ENGINEER,
             payload: response.data

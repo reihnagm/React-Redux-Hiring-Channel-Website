@@ -7,8 +7,10 @@ const Login = ({ login, isAuthenticated }) => {
 
     const [formData, setFormData] = useState({
         email: '',
-        password: ''
+        password: '',
     })
+
+    const [error, setError] = useState()
 
     const { email, password } = formData
 
@@ -16,11 +18,31 @@ const Login = ({ login, isAuthenticated }) => {
 
     const onSubmit = event => {
         event.preventDefault()
-        login(email, password);
+
+        let error = false
+
+        try {
+            if(email === '') {
+                error = true
+                throw new Error('Email required')
+            }
+
+            if(password === '') {
+                error = true
+                throw new Error('Password required')
+            }
+
+            if(error === false) {
+                console.log('test')
+                login(email, password)
+            }
+        } catch(error) {
+            setError(error.message)
+        }
     }
 
     if (isAuthenticated) {
-        return <Redirect to='/engineers' />;
+        return <Redirect to='/engineers' />
     }
 
     return (
@@ -48,7 +70,7 @@ const Login = ({ login, isAuthenticated }) => {
                                 <input id='input-password' onChange={e => onChange(e)} value={password} type='password' name='password'/>
                             </div>
                         </div>
-                        
+
                         <div id='container-login-register' className='columns is-direction-column'>
                             <div className='column is-marginless'>
                                 <button id='btn-login' type='submit' className='button is-block is-fullwidth is-rounded'>Login</button>

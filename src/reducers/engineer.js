@@ -8,7 +8,7 @@ import {
 
 const initialState = {
 	engineers: [],
-	engineer: null,
+	engineer: {},
 	search: '',
 	sortBy: 'date_updated',
 	sort: 'ASC',

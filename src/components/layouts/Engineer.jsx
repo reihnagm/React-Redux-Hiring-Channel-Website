@@ -1,25 +1,28 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getEngineers, getCurrentProfileEngineer } from '../../actions/engineer'
+import { getEngineers } from '../../actions/engineer'
 import { logout } from '../../actions/auth'
 import dummyPhoto from '../../images/dummy.jpg'
 import logo from '../../images/logo.png'
 import 'react-dropdown/style.css'
 import Dropdown from 'react-dropdown'
 import EngineerItem from './EngineerItem'
+import useDebounce from '../../use-debounce'
+import NavbarAuthComponent from './NavbarAuthComponent'
 import Spinner from './Spinner'
 
-const Engineer = ({ getEngineers, getCurrentProfileEngineer, logout,
-        engineer: { engineers, engineer, loading, search, limit, sortBy, sort },
-        auth: { isAuthenticated, user } }) => {
-
-    let user_id = user === null ? '' : user[0].id
+const Engineer = ({ getEngineers, logout,
+        engineer: { engineers, loading, search, limit, sortBy, sort },
+        auth: { user }
+        }) => {
 
     const [searchMask, setSearch] = useState(search)
     const [limitMask, setLimit] = useState(limit)
     const [sortByMask, setSortBy] = useState(sortBy)
     const [orderByMask, setOrderBy] = useState(sort)
+
+    const debouncedValue = useDebounce(searchMask, 1000)
 
     const onSearch = e => {
         setSearch(e.target.value)
@@ -42,10 +45,17 @@ const Engineer = ({ getEngineers, getCurrentProfileEngineer, logout,
         <p>test</p>
     )
 
+    const getDataUser = () => {
+        if(typeof user === "undefined" || user === null) {
+            return false
+        } else {
+            return user.data
+        }
+    }
+
     useEffect(() => {
-        getEngineers(searchMask, limitMask, sortByMask, orderByMask)
-        getCurrentProfileEngineer(user_id)
-    }, [getEngineers, user_id, searchMask, limitMask, sortByMask, orderByMask])
+        getEngineers(debouncedValue, limitMask, sortByMask, orderByMask)
+    }, [getEngineers, debouncedValue, limitMask, sortByMask, orderByMask])
 
     const optionsSortBy = [
         { value: 'date_updated', label: 'Date Updated' },
@@ -65,7 +75,7 @@ const Engineer = ({ getEngineers, getCurrentProfileEngineer, logout,
         { value: '30', label: '30' }
     ]
 
-    return loading ? (<Spinner />
+    return loading ? ( <Spinner />
     ) : (
             <Fragment>
 
@@ -76,22 +86,7 @@ const Engineer = ({ getEngineers, getCurrentProfileEngineer, logout,
                             <input id='search-header' placeholder='Search by Skill and Name Here...' onChange={e => onSearch(e)} name='search' type='text' />
                         </div>
                     </div>
-                    <ul id="header-menu">
-                        <li><Link to='/'>Home</Link></li>
-                        <li id='display-username'>
-                            <img id='small-avatar' src={dummyPhoto}/>
-                            <Link id='username-link' to='/'>Reihan Agam</Link>
-                            <ul id="sub-header-menu">
-                                <li>
-                                    <Link
-                                        to={`engineer/update-profile/${user_id}/edit`}>
-                                        Update Profile
-                                    </Link>
-                                </li>
-                                <li><a style={{ cursor:'pointer' }} onClick={e => logout()}>Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <NavbarAuthComponent user={getDataUser()}/>
                 </header>
 
                 <div id='sort'>
@@ -140,5 +135,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getEngineers, getCurrentProfileEngineer, logout }
+    { getEngineers, logout }
 )(Engineer)

@@ -2,27 +2,21 @@ import React, { Fragment, useState, useEffect } from 'react'
 import InputMask from 'react-input-mask'
 import DatePicker from 'react-datepicker'
 import Moment from 'react-moment'
+import Spinner from './Spinner'
+import EditComponent from './EditComponent'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { updateProfileEngineer, getCurrentProfileEngineer } from '../../actions/engineer'
 
-const UpdateProfileEngineer = ({ updateProfileEngineer, getCurrentProfileEngineer, history }, props) => {
+const UpdateProfileEngineer = ({
+    updateProfileEngineer,
+    getCurrentProfileEngineer,
+    engineer: { engineer, loading },
+    auth: { user },
+    history, match }) => {
 
-    console.log(props)
-
-    const [formData, setFormData] = useState({
-        id: '',
-        name: '',
-        email: '',
-        description: '',
-        birthdate: new Date(),
-        showcase: '',
-        telephone: '',
-        skill: '',
-        salary: '',
-        location: ''
-    })
+    const user_id = match.params.id
 
     const onChangeAvatar = (event) => {
         const files = event.target.files
@@ -52,45 +46,57 @@ const UpdateProfileEngineer = ({ updateProfileEngineer, getCurrentProfileEnginee
             return false
     }
 
+    const [id, setId] = useState(128)
+    const [name, setName] = useState()
     const [avatar, setAvatar] = useState()
+    const [email, setEmail] = useState('reihanagam7@gmail.com')
+    const [description, setDescription] = useState('hello hello world')
+    const [showcase, setShowcase] = useState('http://reihanagam.id/showcase')
+    const [telephone, setTelephone] = useState('089670558381')
+    const [skill, setSkill] = useState('Laravel, CSS, Javascript')
+    const [salary, setSalary] = useState('1.000.000')
+    const [location, setLocation] = useState('Jakarta')
     const [birthdate, setBirthdate] = useState(new Date())
+
+    const onChangeName = (event) => {
+
+    }
+
+    const onChangeEmail = (event) => {
+
+    }
+
+    const onChangeSalary = (event) => {
+
+    }
+
+    const onChangeSkill = (event) => {
+
+    }
+
+    const onChangeDescription = (event) => {
+
+    }
+
+    const onChangeLocation = (event) => {
+
+    }
+
+    const onChangeShowcase = (event) => {
+
+    }
+
+    const onChangeTelephone = (event) => {
+
+    }
+
     const onChangeBirthdate = (value) => {
         setBirthdate(value)
     }
 
     useEffect(() => {
-
-        // setFormData({
-        //     id: !item ? '' : item.id,
-        //     name: !item ? '' : item.name,
-        //     email: !item ? '' : item.email,
-        //     description: !item ? '' : item.description,
-        //     skill: !item ? '' : item.skill,
-        //     telephone: !item ? '' : item.telephone,
-        //     salary: !item ? '' : item.salary,
-        //     showcase: !item ? '' : item.showcase,
-        //     location: !item ? '' : item.location
-        // })
-        //
-        // setAvatar(!item ? '' : item.avatar)
-
-    },[])
-
-    const { id, name, email, description, skill, telephone, salary, showcase, location } = formData
-
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    const data = {
-        avatar,
-        name,
-        description,
-        skill,
-        telephone,
-        birthdate,
-        salary,
-        showcase,
-        location
-    }
+        getCurrentProfileEngineer(user_id)
+    },[getCurrentProfileEngineer, user_id])
 
     const updateEngineer = (event) => {
         event.preventDefault()
@@ -104,131 +110,16 @@ const UpdateProfileEngineer = ({ updateProfileEngineer, getCurrentProfileEnginee
         formData.set('showcase', showcase)
         formData.set('location', location)
         formData.append('avatar', avatar)
-        formData.set('user_id', 49)
+        formData.set('user_id', user_id)
 
-        updateProfileEngineer(128, formData, history)
+        updateProfileEngineer(id, formData, history)
     }
 
-    return (
-        <Fragment>
-            <div className='columns is-justify-center'>
-                <div className='column is-half'>
-                    <div className='cards'>
-                        <h3 id='title-update-engineer'>Update Engineer</h3>
-                        <form onSubmit={ e => updateEngineer(e) }>
-                            <div className='field'>
-                                <label> Name </label>
-                                <input
-                                    onChange={e => onChange(e)}
-                                    value={name}
-                                    name='name'
-                                    placeholder='Name'>
-                                </input>
-                            </div>
-                            <div className='field'>
-                                <label> E-mail Address </label>
-                                <input
-                                    disabled
-                                    onChange={e => onChange(e)}
-                                    value={email}
-                                    name='email'
-                                    placeholder='E-mail Address'>
-                                </input>
-                            </div>
-                            <div className='field'>
-                                <label> Description </label>
-                                <textarea
-                                    onChange={e => onChange(e)}
-                                    value={description}
-                                    name='description'
-                                    placeholder='Description'>
-                                </textarea>
-                            </div>
-                            <div className='field'>
-                                <label> Skill </label>
-                                <input
-                                    onChange={e => onChange(e)}
-                                    value={skill}
-                                    type='text'
-                                    name='skill'
-                                    placeholder='Skill'>
-                                </input>
-                            </div>
-                            <div className='field'>
-                                <label> Location </label>
-                                <input
-                                    onChange={e => onChange(e)}
-                                    value={location}
-                                    type='text'
-                                    name='location'
-                                    placeholder='Location'>
-                                </input>
-                            </div>
-                            <div className='field'>
-                                <label> Birthdate </label>
-                                <DatePicker
-                                    onChange={e => onChangeBirthdate(e)}
-                                    selected={birthdate}
-                                    dateFormat='yyyy-MM-dd'
-                                 />
-                            </div>
-                            <div className='field'>
-                                <label> Showcase </label>
-                                <input
-                                    onChange={e => onChange(e)}
-                                    value={showcase}
-                                    type='text'
-                                    name='showcase'
-                                    placeholder='Showcase'>
-                                </input>
-                            </div>
-                            <div className='field'>
-                                <label> Telephone </label>
-                                <InputMask
-                                    onChange={e => onChange(e)}
-                                    name='telephone'
-                                    type='text'
-                                    value={telephone}
-                                    placeholder='Enter phone number'
-                                />
-                            </div>
-                            <div className='field'>
-                                <label> Avatar </label>
-                                <img style={{ display:'block', margin: '30px auto', width: '120px' }} src={avatar} />
-                                <input id='avatar' type='file' onChange={e => onChangeAvatar(e)}/>
-                            </div>
-                            <div className='field'>
-                                <label> Salary </label>
-                                <InputMask
-                                    onChange={e => onChange(e)}
-                                    value={salary}
-                                    name='salary'
-                                    type='text'
-                                    placeholder='Salary'
-                                />
-                            </div>
-                            <div className='field'>
-                                <button
-                                    type='submit'
-                                    className='is-block is-rounded is-padding-small button is-info is-fullwidth'>
-                                    Submit
-                                </button>
-                            </div>
-                            <div className='field'>
-                                <Link
-                                    to='/engineers'
-                                    className='is-block is-center is-rounded is-padding-small button is-danger is-fullwidth'>
-                                    Back
-                                </Link>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </Fragment>
-    )
-}
+        return loading ? ( <Spinner/> ) : (
+            <EditComponent data={engineer[0]} />
+        )
 
+}
 const mapStateToProps = state => ({
     engineer: state.engineer,
     auth: state.auth

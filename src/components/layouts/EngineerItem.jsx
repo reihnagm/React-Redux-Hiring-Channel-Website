@@ -12,8 +12,6 @@ const EngineerItem =
     ({ deleteEngineer, loading,
     engineer: { id, name, email, description, skill, location, birthdate, showcase, telephone, salary, avatar, user_id }, auth }) => {
 
-    const userid = auth.user === null ? '' : auth.user[0].id
-
     const delete_engineer = async (event) => {
         event.preventDefault()
 
