@@ -2,36 +2,25 @@ import React, { Fragment, useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login } from '../../actions/auth'
-
 const Login = ({ login, isAuthenticated }) => {
-
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     })
-
-    const [error, setError] = useState()
-
     const { email, password } = formData
-
     const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
-
     const onSubmit = event => {
         event.preventDefault()
-
         let error = false
-
         try {
             if(email === '') {
                 error = true
                 throw new Error('Email required')
             }
-
             if(password === '') {
                 error = true
                 throw new Error('Password required')
             }
-
             if(error === false) {
                 console.log('test')
                 login(email, password)
@@ -40,11 +29,9 @@ const Login = ({ login, isAuthenticated }) => {
             setError(error.message)
         }
     }
-
     if (isAuthenticated) {
         return <Redirect to='/engineers' />
     }
-
     return (
         <Fragment>
             <div className='columns'>
@@ -55,7 +42,6 @@ const Login = ({ login, isAuthenticated }) => {
                 </div>
                 <div id='content-login' className='column is-marginless'>
                     <h2 id='title-content-login'>Login</h2>
-
                 <form onSubmit={e => onSubmit(e)}>
                     <div id='login-form' className='columns is-direction-column'>
                         <div className='column is-marginless'>
@@ -70,7 +56,6 @@ const Login = ({ login, isAuthenticated }) => {
                                 <input id='input-password' onChange={e => onChange(e)} value={password} type='password' name='password'/>
                             </div>
                         </div>
-
                         <div id='container-login-register' className='columns is-direction-column'>
                             <div className='column is-marginless'>
                                 <button id='btn-login' type='submit' className='button is-block is-fullwidth is-rounded'>Login</button>
@@ -83,11 +68,9 @@ const Login = ({ login, isAuthenticated }) => {
         </Fragment>
     )
 }
-
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 })
-
 export default connect(
     mapStateToProps,
     { login }

@@ -7,9 +7,7 @@ import { addCompany } from '../../actions/company'
 import { logout } from '../../actions/auth'
 
 const CompanyAdd = ({ addCompany, auth: { user, isAuthenticated }, logout }) => {
-
     let user_id = user === null ? '' : user[0].id
-
     const [formAddCompany, setFormAddCompany] = useState({
         name: '',
         location: '',
@@ -17,16 +15,11 @@ const CompanyAdd = ({ addCompany, auth: { user, isAuthenticated }, logout }) => 
         email: '',
         telephone: ''
     })
-
     const [logo, setLogo] = useState()
-
     const { name, location, description, email, telephone } = formAddCompany
-
     const onChange = e => setFormAddCompany({ ...formAddCompany, [e.target.name]: e.target.value })
-
     const onChangeLogo = async e => {
         const files = e.target.files
-
         const formData = new FormData()
         formData.append('file', files[0])
         formData.append('upload_preset', 'reihanagam')

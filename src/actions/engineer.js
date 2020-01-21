@@ -4,7 +4,6 @@ import {
 } from './alert'
 import {
     GET_ENGINEERS,
-    GET_ENGINEER,
     GET_CURRENT_PROFILE_ENGINEER,
     UPDATE_PROFILE_ENGINEER,
     DELETE_ENGINEER,
@@ -13,12 +12,11 @@ import {
 
 export const getEngineers = (search, limit, sortBy, sort) => async dispatch => {
     const limitParse = parseInt(limit)
-
     try {
         const response = await axios.get(`http://localhost:5000/api/v1/engineers?search=${search}&limit=${limitParse}&sortBy=${sortBy}&sort=${sort}`)
         dispatch({
             type: GET_ENGINEERS,
-            payload: response.data.data
+            payload: response.data
         })
     } catch (error) {
         dispatch({
