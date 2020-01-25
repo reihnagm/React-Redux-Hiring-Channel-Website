@@ -6,14 +6,14 @@ const Landing = ({ isAuthenticated, logout }) => {
     const authLinks = (
         <Fragment>
             <Link to='/engineers'>Engineers</Link> |
-            <a href='/companies'>Companies</a> |
+            <Link to='/companies'>Companies</Link> |
             <a onClick={logout}>Logout</a>
         </Fragment>
     )
     const guestLinks = (
         <Fragment>
             <Link to='/engineers'>Engineers</Link> |
-            <a href='/companies'>Companies</a> |
+            <Link href='/companies'>Companies</Link> |
             <Link to='/register'>Register</Link> |
             <Link to='/login'>Login</Link>
         </Fragment>

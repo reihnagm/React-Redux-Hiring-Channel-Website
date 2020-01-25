@@ -45,18 +45,18 @@ export const login = (email, password) => async dispatch => {
         dispatch(setAlert('Invalid Credentials', 'danger'));
     }
 }
-export const register = ({ name, email, password, role }) => async dispatch => {
+export const register = (name, email, password, role) => async dispatch => {
     try {
         const response = await axios.post(`http://localhost:5000/auth/register`, {
             name,
             email,
             password,
             role_id: role.value
-        })
+        });
         dispatch({
             type: REGISTER_SUCCESS,
             payload: response.data
-        })
+        });
         dispatch(loadUser())
     }
     catch (error)

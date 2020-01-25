@@ -23,7 +23,6 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
         }
         _fetchData();
     }, [getCurrentProfileEngineer]);
-
     const deleteProfileAccount = () => {
         deleteProfileEngineer(id)
     }
@@ -31,7 +30,7 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
         <div id="top-screen">
             <div id="box-profile-container">
                 <div id="box-profile-avatar">
-                    <img src={ avatar }/>
+                    <img id="profile-avatar" src={ avatar }/>
                     <h2 id="profile-email"> { email } </h2>
                     <h3 id="profile-phone"> { phone } </h3>
                     <h4 id="profile-location"> { location } </h4>

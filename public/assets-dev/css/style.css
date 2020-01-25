@@ -27,6 +27,7 @@
     text-decoration: none;
 }
 #search-header {
+    background: rgba(0,0,0,0.1);
     padding: 8px 12px;
     border-radius: 8px;
 }
@@ -62,6 +63,14 @@
     margin-top: 20px;
     text-align: center;
     font-size: 20px;
+}
+#profile-avatar {
+    width: 250px !important;
+    border-radius: 20px;
+}
+#profile-logo {
+    width: 250px !important;
+    border-radius: 20px;
 }
 #profile-phone {
     text-align: center;
@@ -129,9 +138,6 @@
 }
 #profile-list {
     color: #000;
-}
-#box-profile-avatar img {
-    border-radius: 20px;
 }
 #avatar-image {
     border-radius: 20px;
@@ -274,6 +280,8 @@
     text-decoration: none
 }
 #masonry {
+    padding-top: 30px;
+    padding-bottom: 20px;
     column-count: 4;
     column-gap: 1em;
 }
@@ -281,9 +289,16 @@
     position: relative;
     display: inline-block;
     margin: 0 0 1em;
-    width: 100%;
 }
 #description-engineer {
+    position: absolute;
+    bottom: 0;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: rgba(0,0,0, 0.7);
+    width: 100%;
+}
+#description-company {
     position: absolute;
     bottom: 0;
     padding: 10px 20px;
@@ -297,6 +312,10 @@
 }
 #text-email {
     margin-bottom: 10px;
+}
+#text-description {
+    margin-top: 10px;
+    line-height: 22px;
 }
 #text-salary {
     display: inline-block;

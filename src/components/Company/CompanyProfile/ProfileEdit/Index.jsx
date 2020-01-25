@@ -48,7 +48,6 @@ const ProfileEdit = ({
             email: emailProps,
             telephone: telephoneProps
         });
-        setLogo(logoProps);
     },[getCurrentProfileCompany, idProps, nameProps, locationProps, descriptionProps, emailProps, telephoneProps]);
     const onChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -119,6 +118,7 @@ const ProfileEdit = ({
             }
             if(error === false) {
                 let data = new FormData();
+                console.log(logo)
                 data.set('user_id', user_id);
                 data.set('name', name ? name : '');
                 data.append('logo', logo ? logo : '');
@@ -128,7 +128,9 @@ const ProfileEdit = ({
                 data.set('email', email ? email: '');
                 data.set('telephone', telephone ? telephone : '');
                 updateProfileCompany(id, data);
-                history.push('/companies');
+                setTimeout(() => {
+                    history.push('/companies');
+                }, 800);
             }
         } catch (error) {
             store.dispatch(setAlert(error.message, 'danger'));
@@ -193,7 +195,7 @@ const ProfileEdit = ({
                         </div>
                         <div className='field'>
                            <label> Logo </label>
-                           <input id='logo' type='file' onChange={e => handlelogo(e)}/>
+                           <input id='logo' type='file' onChange={e => handleLogo(e)}/>
                         </div>
                        <div className='field'>
                            <button
@@ -221,6 +223,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
     mapStateToProps,
-    { getCurrentProfileCompany, updateProfileCompany, setAlert })
-    (withRouter(CompanyEdit)
-);
+    { getCurrentProfileCompany, updateProfileCompany, setAlert }
+)(withRouter(ProfileEdit));

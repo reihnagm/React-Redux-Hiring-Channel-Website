@@ -25,7 +25,7 @@ export default function (state = initialState, action) {
 		case GET_COMPANIES:
 			return {
 				...state,
-				engineers: payload
+				companies: payload
 			}
 		case GET_COMPANIES_ERROR:
 			return {
@@ -35,7 +35,7 @@ export default function (state = initialState, action) {
 		case GET_CURRENT_PROFILE_COMPANY:
 			return {
 				...state,
-				companies: payload
+				company: payload
 			}
 		case GET_CURRENT_PROFILE_COMPANY_ERROR:
 			return {
@@ -45,7 +45,7 @@ export default function (state = initialState, action) {
 		case UPDATE_PROFILE_COMPANY:
 	      	return {
 	        	...state,
-	        	companies: [payload, ...state.companies]
+	        	companies: state.companies.concat(payload)
 			}
 		case UPDATE_PROFILE_COMPANY_ERROR:
 			return {

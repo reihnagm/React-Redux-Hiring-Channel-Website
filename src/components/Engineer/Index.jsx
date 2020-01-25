@@ -1,5 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
+import { getCurrentProfileCompany } from '../../actions/company';
 import { getEngineers, getCurrentProfileEngineer } from '../../actions/engineer';
 import { logout } from '../../actions/auth';
 import { Link } from 'react-router-dom';
@@ -18,14 +19,23 @@ class Engineer extends Component {
             sort: props.sort,
             sortBy: props.sortBy,
             limit: props.limit,
-            page: props.page
+            page: props.page,
+            name_company: '',
+            logo_company: '',
+            name_engineer: '',
+            avatar_engineer: ''
         }
     }
     async UNSAFE_componentWillMount() {
         await this.props.getEngineers();
         await this.props.getCurrentProfileEngineer();
+        await this.props.getCurrentProfileCompany();
         this.setState({
-            loading: false
+            loading: false,
+            name_engineer: this.props.engineer && this.props.engineer.data && this.props.engineer.data.name,
+            avatar_engineer: this.props.engineer && this.props.engineer.data && this.props.engineer.data.avatar,
+            name_company: this.props.company && this.props.company.data && this.props.company.data.name,
+            logo_company: this.props.company &&  this.props.company.data && this.props.company.data.logo
         });
     }
     handleSort = async (e) => {
@@ -79,7 +89,9 @@ class Engineer extends Component {
         });
     }
     render() {
-        let imageSource = this.props.engineer.data && this.props.engineer.data.avatar ? `http://localhost:5000/images/engineer/${this.props.engineer.data && this.props.engineer.data.avatar}`: defaultImage
+        const { name_engineer, avatar_engineer, name_company, logo_company } = this.state
+        let engineer_imageSource = avatar_engineer ? `http://localhost:5000/images/engineer/${avatar_engineer}`: defaultImage
+        let company_imageSource = logo_company ? `http://localhost:5000/images/company/${logo_company}` : defaultImage
         const optionsSortBy = [
             { value: 'date_updated', label: 'Date Updated' },
             { value: 'name', label : 'Name' },
@@ -95,6 +107,34 @@ class Engineer extends Component {
             { value: '20', label: '20' },
             { value: '30', label: '30' }
         ]
+        const CompaniesMenu = (
+            <Fragment>
+                <li id="display-username">
+                    <img id="small-avatar" src={company_imageSource}/>
+                    <Link id="username-link" to='/'>{name_company}</Link>
+                    <ul id="sub-header-menu">
+                        <li><Link to={`engineers`}>Engineers</Link></li>
+                        <li><Link to={`company/profile`}>Profile</Link></li>
+                        <li><Link to={`company/profile/edit`}>Edit Profile</Link></li>
+                        <li><a onClick={this.props.logout} href="javascript:void(0);">Logout</a></li>
+                    </ul>
+                </li>
+            </Fragment>
+        )
+        const EngineersMenu = (
+            <Fragment>
+                <li id="display-username">
+                    <img id="small-avatar" src={engineer_imageSource}/>
+                    <Link id="username-link" to='/'>{name_engineer}</Link>
+                    <ul id="sub-header-menu">
+                        <li><Link to={`companies`}>Companies</Link></li>
+                        <li><Link to={`engineer/profile`}>Profile</Link></li>
+                        <li><Link to={`engineer/profile/edit`}>Edit Profile</Link></li>
+                        <li><a onClick={this.props.logout} href="javascript:void(0);">Logout</a></li>
+                    </ul>
+                </li>
+            </Fragment>
+        )
         const authLinks = (
             <header id='header' className='navbar'>
                 <img id='logo' src={logo} alt='Logo' />
@@ -112,15 +152,7 @@ class Engineer extends Component {
                 </div>
                 <ul id="header-menu">
                     <li> <Link to='/'>Home</Link> </li>
-                    <li id="display-username">
-                        <img id="small-avatar" src={imageSource}/>
-                        <Link id="username-link" to='/'>{this.props.engineer.data && this.props.engineer.data.name}</Link>
-                        <ul id="sub-header-menu">
-                            <li><Link to={`engineer/profile`}>Profile</Link></li>
-                            <li><Link to={`engineer/profile/edit`}>Edit Profile</Link></li>
-                            <li><a onClick={this.props.logout} href="javascript:void(0);">Logout</a></li>
-                        </ul>
-                    </li>
+                    { this.props.user && this.props.user.data && this.props.user.data.role_id === 2 ? CompaniesMenu : EngineersMenu }
                 </ul>
             </header>
         )
@@ -180,8 +212,8 @@ class Engineer extends Component {
                     <EngineerList
                         engineers={this.props.engineers && this.props.engineers.data}
                         handlePagination={this.handlePagination}
-                        nextPage={this.props.engineers && this.props.engineers.pageDetail.next_page}
-                        prevPage={this.props.engineers && this.props.engineers.pageDetail.prev_page}
+                        nextPage={this.props.engineers && this.props.engineers.pageDetail && this.props.engineers.pageDetail.next_page}
+                        prevPage={this.props.engineers && this.props.engineers.pageDetail && this.props.engineers.pageDetail.prev_page}
                     />
                 )}
             </Fragment >
@@ -191,15 +223,17 @@ class Engineer extends Component {
 const mapStateToProps = state => ({
     engineers: state.engineer.engineers,
     engineer: state.engineer.engineer,
+    company: state.company.company,
     loading: state.engineer.loading,
     search: state.engineer.search,
     sort: state.engineer.sort,
     sortBy: state.engineer.sortBy,
     limit: state.engineer.limit,
     page: state.engineer.page,
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
 })
 export default connect(
     mapStateToProps,
-    { getEngineers, getCurrentProfileEngineer, logout }
+    { getEngineers, getCurrentProfileEngineer, getCurrentProfileCompany, logout }
 )(Engineer)

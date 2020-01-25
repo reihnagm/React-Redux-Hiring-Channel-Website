@@ -26,7 +26,7 @@ const ProfileEdit = ({
     let telephoneProps = engineer.data && engineer.data.telephone;
     let showcaseProps = engineer.data && engineer.data.showcase;
     let salaryProps = engineer.data && engineer.data.salary;
-    let locationProps = engineer.data && engineer.data.location
+    let locationProps = engineer.data && engineer.data.location;
     let user_id = user.data && user.data.id;
     const [formData, setFormData] = useState({
         id: '',
@@ -141,7 +141,9 @@ const ProfileEdit = ({
                 data.set('salary', salary ? salary : '');
                 data.set('location', location ? location : '');
                 updateProfileEngineer(id, data);
-                history.push('/engineers');
+                setTimeout(() => {
+                    history.push('/engineers');
+                }, 800);
             }
         } catch (error) {
             store.dispatch(setAlert(error.message, 'danger'));

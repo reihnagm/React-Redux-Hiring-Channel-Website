@@ -39,7 +39,7 @@ export const getCurrentProfileCompany = () => async dispatch => {
         user_id = data.user.id;
     }
     try {
-        const response = await axios.post(`http://localhost:5000/api/v1/company/profile`,
+        const response = await axios.post(`http://localhost:5000/api/v1/companies/profile`,
             {
                 user_id
             });
@@ -57,7 +57,7 @@ export const getCurrentProfileCompany = () => async dispatch => {
 export const updateProfileCompany = (id, data) => async dispatch => {
     let company_id = id;
     try {
-        const response = await axios.patch(`http://localhost:5000/api/v1/engineers/${company_id}`, data);
+        const response = await axios.patch(`http://localhost:5000/api/v1/companies/${company_id}`, data);
         dispatch({
             type: UPDATE_PROFILE_COMPANY,
             payload: data
@@ -70,9 +70,9 @@ export const updateProfileCompany = (id, data) => async dispatch => {
     }
 }
 export const deleteProfileCompany = (id) => async dispatch => {
-    const company_id = id
+    const company_id = id;
     try {
-        await axios.delete(`http://localhost:5000/api/v1/engineers/${engineer_id}`)
+        await axios.delete(`http://localhost:5000/api/v1/engineers/${company_id}`)
         dispatch({
             type: DELETE_COMPANY,
             payload: company_id

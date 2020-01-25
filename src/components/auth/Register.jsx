@@ -7,7 +7,7 @@ import store from '../../store';
 import { setAlert } from '../../actions/alert';
 import 'react-dropdown/style.css';
 import Dropdown from 'react-dropdown';
-const Register = ({ register, isAuthenticated }) => {
+const Register = ({ register, isAuthenticated, history }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -23,7 +23,6 @@ const Register = ({ register, isAuthenticated }) => {
         )
     }
     const onSubmit = event => {
-        console.log(role)
         event.preventDefault()
         let error = false;
         try {
@@ -54,7 +53,13 @@ const Register = ({ register, isAuthenticated }) => {
                 throw new Error('Role Required.')
             }
             if(error === false) {
-                register({ name, email, password, role });
+                if(role.value === 1) {
+                    history.push("/engineers");
+                }
+                if(role.value === 2) {
+                    history.push("/companies");
+                }
+                register(name, email, password, role);
             }
         } catch(error) {
             store.dispatch(setAlert(error.message,'danger'))

@@ -9,11 +9,13 @@ const EngineerItem = ({ engineer }) => {
                 <p id='text-name'>{engineer.name}</p>
                 <div id='email-and-salary-container'>
                     <p id='text-email'>{engineer.email}</p>
-                    <p id='text-salary'>Expected Salary: <span style={{ display: 'block', marginTop: '10px' }}> {engineer.salary} </span> </p>
+                    <p id='text-salary'>Expected Salary:
+                        <span style={{ display: 'inline-block', marginLeft: '10px' }}> {engineer.salary} </span>
+                    </p>
                 </div>
                 <p id='title-skill'>Skills :</p>
                 <ul>
-                    <li id='text-skill'>{engineer.skill}</li>
+                    <li id='text-skill'>{ engineer.skill && engineer.skill.substring(0, 70)}...</li>
                 </ul>
             </div>
         </Fragment>

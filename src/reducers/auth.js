@@ -10,8 +10,8 @@ import {
 const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: {},
+    user: {},
     loading: true,
-    user: {}
 };
 export default function(state = initialState, action) {
     const { type, payload } = action;

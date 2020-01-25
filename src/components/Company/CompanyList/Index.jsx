@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react'
-import EngineerItem from '../EngineerItem/Index'
-const EngineerList = ({ engineers, handlePagination, nextPage, prevPage }) => {
+import CompanyItem from '../CompanyItem/Index'
+const CompanyList = ({ companies, handlePagination, nextPage, prevPage }) => {
     return (
         <Fragment>
             <div className='container'>
                 <div id='masonry'>
-                    {engineers && engineers.map(engineer => (
-                        <div id='item' key={engineer.id}>
-                            <EngineerItem engineer={engineer} />
+                    {companies && companies.map(company => (
+                        <div id='item' key={company.id}>
+                            <CompanyItem company={company} />
                         </div>
                     ))}
                 </div>
@@ -21,4 +21,4 @@ const EngineerList = ({ engineers, handlePagination, nextPage, prevPage }) => {
         </Fragment>
     )
 }
-export default EngineerList
+export default CompanyList
