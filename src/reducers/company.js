@@ -1,58 +1,66 @@
 import {
 	GET_COMPANIES,
-	GET_COMPANY,
-	ADD_COMPANY,
-	UPDATE_COMPANY,
-	COMPANY_ERROR,
-	DELETE_COMPANY
+	GET_COMPANIES_ERROR,
+	GET_CURRENT_PROFILE_COMPANY,
+	GET_CURRENT_PROFILE_COMPANY_ERROR,
+	UPDATE_PROFILE_COMPANY,
+	UPDATE_PROFILE_COMPANY_ERROR,
+	DELETE_COMPANY,
+	DELETE_COMPANY_ERROR
 } from '../actions/types'
-
 const initialState = {
-	companies: [],
-	company: null,
+	companies: {},
+	company: {},
+	error: {},
 	loading: true,
-	error: {}
+	search: '',
+	sort: 'DESC',
+	sortBy: 'date_updated',
+	limit: '10',
+	page: '1'
 }
-
 export default function (state = initialState, action) {
 	const { type, payload } = action;
-
 	switch (type) {
 		case GET_COMPANIES:
 			return {
 				...state,
-				companies: payload,
-				loading: false
+				engineers: payload
 			}
-		case GET_COMPANY:
-	      	return {
-	        	...state,
-	        	company: payload,
-	        	loading: false
-	      	}
-		case ADD_COMPANY:
-	      	return {
-	        	...state,
-	        	companies: payload,
-	        	loading: false
-	      	}
-		case UPDATE_COMPANY:
-	      	return {
-	        	...state,
-	        	companies: payload,
-	        	loading: false
-	      	}
-		case COMPANY_ERROR:
+		case GET_COMPANIES_ERROR:
 			return {
 				...state,
-				companies: payload,
-				loading: false
+				error: payload
+			}
+		case GET_CURRENT_PROFILE_COMPANY:
+			return {
+				...state,
+				companies: payload
+			}
+		case GET_CURRENT_PROFILE_COMPANY_ERROR:
+			return {
+				...state,
+				error: payload
+			}
+		case UPDATE_PROFILE_COMPANY:
+	      	return {
+	        	...state,
+	        	companies: [payload, ...state.companies]
+			}
+		case UPDATE_PROFILE_COMPANY_ERROR:
+			return {
+				...state,
+				error: payload
 			}
 		case DELETE_COMPANY:
 			return {
 				...state,
-				companies: state.companies.filter(company => company.id !== payload),
-				loading: false
+				companies: state.companies.filter(company => company.id !== payload)
+			}
+		case DELETE_COMPANY_ERROR:
+			return {
+				...state,
+				error: payload
 			}
 		default:
 			return state

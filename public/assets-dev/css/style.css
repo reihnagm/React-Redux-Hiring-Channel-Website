@@ -4,16 +4,35 @@
     height: 80px;
     line-height: 80px;
 }
-
+#container-pagination {
+    display: flex;
+}
+#container-pagination li {
+    display: inline-block;
+    margin: 0 12px;
+}
+#link-pagination {
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-sizing: border-box;
+    color: #333;
+    cursor: default;
+    text-align: center;
+    outline: none;
+    padding: 12px;
+    transition: all 200ms ease;
+    text-decoration: none;
+}
 #search-header {
     padding: 8px 12px;
     border-radius: 8px;
 }
-
 #cover-background-login {
     background: linear-gradient(to top right, #cc66ff 0%, #ffffff 100%);
 }
-
 #cover-login {
     background-image: url('../../assets/cover/cover_login.png');
     background-size: contain;
@@ -21,36 +40,106 @@
     background-position: center center;
     height: 521px;
 }
-
 #top-screen {
-    background: linear-gradient(to top right, #cc66ff 0%, #ffffff 100%);
-    height: 250px;
+    background: #db96e1;
+    max-height: 250px;
+    position: relative;
 }
-
 #box-profile-container {
-    padding-top: 55px;
-    padding-left: 30px;
+    margin-left: 20px;
+    padding-top: 180px;
+    width: 80%;
     display: flex;
     align-items: center;
 }
-
-#box-profile-avatar {
-    width: 350px;
-}
-
 #box-profile-name {
-    align-self: center;
+    margin-top: 20px;
+    width: 100%;
 }
-
+#profile-email {
+    font-weight: lighter;
+    color: #000;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 20px;
+}
+#profile-phone {
+    text-align: center;
+    font-weight: lighter;
+    color: #000;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+#profile-showcase {
+    text-align: center;
+    font-weight: lighter;
+    color: #000;
+    margin-top: 12px;
+    text-align: center;
+    font-size: 16px;
+}
+#profile-edit-image {
+    display: block;
+    width: 300px;
+    margin: 14px auto 14px auto;
+}
+#profile-location {
+    text-align: center;
+    font-weight: lighter;
+    color: #000;
+    margin-top: 12px;
+    text-align: center;
+    font-size: 16px;
+}
+#profile-name {
+    font-size: 30px;
+    font-weight: bold;
+    color: #000;
+    position: absolute;
+    bottom: 0;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+#container-profile-desc {
+    position: relative;
+    width: 100%;
+}
+#profile-desc {
+    margin-top: 20px;
+    margin-left: 20px;
+    line-height: 28px;
+    position: absolute;
+    top: 100%;
+    width: 70%;
+    color: #000;
+}
+#profile-delete-account {
+    text-align: center;
+    padding: 10px;
+    margin-top: 30px;
+    display: block;
+    color : red;
+    text-decoration: none;
+}
+#profile-skill {
+    position: absolute;
+    bottom: -100%;
+    margin: 20px 0 0 20px;
+}
+#profile-list {
+    color: #000;
+}
 #box-profile-avatar img {
-    border-radius: 10px;
+    border-radius: 20px;
 }
-
+#avatar-image {
+    border-radius: 20px;
+}
 #title-cover-login {
     font-size: 23px;
     font-weight: bold;
 }
-
 #sub-title-cover-login {
     font-size: 17px;
     text-align: justify;
@@ -58,7 +147,6 @@
     line-height: 24px;
     margin-top: 10px;
 }
-
 #input-name {
     background: #ffffff;
     box-shadow: 0px 0.3px 0px rgba(0,0,0, 0.5);
@@ -68,7 +156,6 @@
     color: #000000;
     margin-bottom: 10px;
 }
-
 #label-email {
     color: #000000;
     margin-bottom: 10px;
@@ -78,7 +165,6 @@
     box-shadow: 0px 0.3px 0px rgba(0,0,0, 0.5);
     padding: 12px;
 }
-
 #label-password {
     color: #000000;
     margin-bottom: 10px;
@@ -88,20 +174,16 @@
     box-shadow: 0px 0.3px 0px rgba(0,0,0, 0.5);
     padding: 12px;
 }
-
 #label-role {
     color: #000000;
     margin-bottom: 10px;
 }
-
 #login-form {
     margin-top: 90px;
 }
-
 #container-login-register {
     margin-top: 50px;
 }
-
 #btn-login {
     color:  rgb(213,130,255);
     border: 1px solid rgb(213,130,255);
@@ -110,7 +192,6 @@
     color: rgb(213,130,255);
     border: 1px solid rgb(213,130,255);
 }
-
 #btn-login:hover {
     color: #ffffff;
     background-color: rgb(213,130,255);
@@ -119,42 +200,35 @@
     color: #ffffff;
     background-color: rgb(213,130,255);
 }
-
 #title-content-login {
     font-size: 27px;
     color: #000000;
     font-weight: bold;
 }
-
-#title-update-engineer {
+#title-edit-engineer {
     font-size: 22px;
-    padding: 15px 12px;
+    padding: 25px 12px 0 12px;
     text-align: center;
     color: #000000;
 }
-
 #label-sortBy,
 #label-orderBy,
 #label-showPage {
     color: #000000;
     margin-right: 10px;
 }
-
 #logo {
     height: 50px;
 }
-
 #header-menu li {
     font-size: 16px;
     display: inline-block;
     position: relative;
 }
-
 #header-menu li:hover #sub-header-menu {
     opacity: 1;
     visibility: visible;
 }
-
 #sub-header-menu {
     visibility: hidden;
     position: absolute;
@@ -162,91 +236,79 @@
     z-index: 1;
     transition: all .25s ease;
     top: 100%;
-    width: 100%;
+    right: -20%;
+    width: 250px;
     background: #ffffff;
     border: 1px solid #eeeeee;
     border-bottom-left-radius: 10px;
     box-shadow: 5px 5px 5px #eeeeee;
     border-bottom-right-radius: 10px;
 }
-
 #sub-header-menu li {
     display: block;
     border-bottom: 1px solid #eeeeee;
 }
-
 #sub-header-menu li a {
     color: #000000;
     margin-left: 20px;
 }
-
 #display-username {
     font-weight: bold;
     position: relative;
 }
-
 #username-link {
     color: #999999 !important;
     margin-left: 70px;
 }
-
 #small-avatar {
     width: 32px;
     height: 32px;
     border-radius: 50%;
     position: absolute;
-    top: 22px;
-    left: 22px;
+    top: 24px;
+    left: 24px;
 }
-
 #header-menu li a {
     color: #000000;
     font-weight: bold;
     text-decoration: none
 }
-
 #masonry {
     column-count: 4;
-    column-gap: 1.6em;
+    column-gap: 1em;
 }
-
 #item {
     position: relative;
+    display: inline-block;
+    margin: 0 0 1em;
+    width: 100%;
 }
-
-#avatar {
-    border-radius: 20px;
-}
-
 #description-engineer {
     position: absolute;
     bottom: 0;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: rgba(0,0,0, 0.7);
     width: 100%;
 }
-
 #text-name {
     font-size: 20px;
     margin-bottom: 10px;
 }
-
 #text-email {
     margin-bottom: 10px;
 }
-
 #text-salary {
     display: inline-block;
 }
-
 #title-skill {
     margin: 10px 0 5px 0;
     font-size: 16px;
 }
-
 #name-skill {
     font-size: 16px;
     margin: 5px 0;
 }
-
 #text-skill {
     line-height: 20px;
 }

@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-
 const NotFound = () => {
     return (
         <Fragment>
@@ -10,5 +9,4 @@ const NotFound = () => {
         </Fragment>
     );
 };
-
 export default NotFound;

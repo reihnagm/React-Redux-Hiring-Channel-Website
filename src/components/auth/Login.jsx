@@ -1,7 +1,10 @@
-import React, { Fragment, useState } from 'react'
-import { Link, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { login } from '../../actions/auth'
+import React, { Fragment, useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import Alert from '../Alert/Index';
+import store from '../../store';
+import { setAlert } from '../../actions/alert'
+import { connect } from 'react-redux';
+import { login } from '../../actions/auth';
 const Login = ({ login, isAuthenticated }) => {
     const [formData, setFormData] = useState({
         email: '',
@@ -13,24 +16,34 @@ const Login = ({ login, isAuthenticated }) => {
         event.preventDefault()
         let error = false
         try {
-            if(email === '') {
+            if(email.trim() === '') {
                 error = true
-                throw new Error('Email required')
+                throw new Error('Email Required.')
             }
-            if(password === '') {
+            let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
+            let checkEmail = regexp.test(email)
+            if(checkEmail) {
+                error = false
+            } else {
+                throw new Error('Invalid Email. e.g : johndoe@gmail.com')
+            }
+            if(password.trim() === '') {
                 error = true
-                throw new Error('Password required')
+                throw new Error('Password Required.')
+            }
+            if(password.length < 6) {
+                error = true
+                throw new Error('Password Minimum 6 Character.')
             }
             if(error === false) {
-                console.log('test')
                 login(email, password)
             }
         } catch(error) {
-            setError(error.message)
+            store.dispatch(setAlert(error.message, 'danger'))
         }
     }
     if (isAuthenticated) {
-        return <Redirect to='/engineers' />
+        return <Redirect to='/' />
     }
     return (
         <Fragment>
@@ -42,27 +55,28 @@ const Login = ({ login, isAuthenticated }) => {
                 </div>
                 <div id='content-login' className='column is-marginless'>
                     <h2 id='title-content-login'>Login</h2>
-                <form onSubmit={e => onSubmit(e)}>
-                    <div id='login-form' className='columns is-direction-column'>
-                        <div className='column is-marginless'>
-                            <div className='field'>
-                                <label id='label-email'>Email</label>
-                                <input id='input-email' onChange={e => onChange(e)} value={email} type='email' name='email'/>
-                            </div>
-                        </div>
-                        <div className='column is-marginless'>
-                            <div className='field'>
-                                <label id='label-password'>Password</label>
-                                <input id='input-password' onChange={e => onChange(e)} value={password} type='password' name='password'/>
-                            </div>
-                        </div>
-                        <div id='container-login-register' className='columns is-direction-column'>
+                    <form onSubmit={e => onSubmit(e)}>
+                        <div id='login-form' className='columns is-direction-column'>
+                            <Alert />
                             <div className='column is-marginless'>
-                                <button id='btn-login' type='submit' className='button is-block is-fullwidth is-rounded'>Login</button>
+                                <div className='field'>
+                                    <label id='label-email'>Email</label>
+                                    <input id='input-email' onChange={e => onChange(e)} value={email} type='text' name='email'/>
+                                </div>
+                            </div>
+                            <div className='column is-marginless'>
+                                <div className='field'>
+                                    <label id='label-password'>Password</label>
+                                    <input id='input-password' onChange={e => onChange(e)} value={password} type='password' name='password'/>
+                                </div>
+                            </div>
+                            <div id='container-login-register' className='columns is-direction-column'>
+                                <div className='column is-marginless'>
+                                    <button id='btn-login' type='submit' className='button is-block is-fullwidth is-rounded'>Login</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
                 </div>
             </div>
         </Fragment>

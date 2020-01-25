@@ -1,71 +1,88 @@
-import axios from 'axios'
+import axios from 'axios';
 import {
     setAlert
-} from './alert'
+} from './alert';
 import {
     GET_ENGINEERS,
+    GET_ENGINEERS_ERROR,
     GET_CURRENT_PROFILE_ENGINEER,
+    GET_CURRENT_PROFILE_ENGINEER_ERROR,
     UPDATE_PROFILE_ENGINEER,
+    UPDATE_PROFILE_ENGINEER_ERROR,
     DELETE_ENGINEER,
-    ENGINEER_ERROR
+    DELETE_ENGINEER_ERROR
 } from './types'
-
-export const getEngineers = (search, limit, sortBy, sort) => async dispatch => {
-    const limitParse = parseInt(limit)
+export const getEngineers = (search = '',sort = 'DESC',sortBy = 'date_updated',limit = '10',page = '1') => async dispatch => {
     try {
-        const response = await axios.get(`http://localhost:5000/api/v1/engineers?search=${search}&limit=${limitParse}&sortBy=${sortBy}&sort=${sort}`)
+        const response = await axios.get(`http://localhost:5000/api/v1/engineers?search=${search}&sort=${sort}&sortBy=${sortBy}&limit=${limit}&page=${page}`);
         dispatch({
             type: GET_ENGINEERS,
             payload: response.data
-        })
+        });
     } catch (error) {
         dispatch({
-            type: ENGINEER_ERROR,
+            type: GET_ENGINEERS_ERROR,
             payload: error
-        })
+        });
     }
 }
-export const getCurrentProfileEngineer = (user_id) => async dispatch => {
+export const getCurrentProfileEngineer = () => async dispatch => {
+    let payload;
+    let data;
+    let user_id;
+    const token = localStorage.token;
+    if(token)  {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        payload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        data = JSON.parse(payload);
+        user_id = data.user.id;
+    }
     try {
-        const response = await axios.get(`http://localhost:5000/api/v1/engineers/${user_id}`)
+        const response = await axios.post(`http://localhost:5000/api/v1/engineers/profile`,
+            {
+                user_id
+            });
         dispatch({
             type: GET_CURRENT_PROFILE_ENGINEER,
             payload: response.data
-        })
+        });
     } catch (error) {
         dispatch({
-            type: ENGINEER_ERROR,
+            type: GET_CURRENT_PROFILE_ENGINEER_ERROR,
             payload: error
-        })
+        });
     }
 }
-export const updateProfileEngineer = (id, data, history) => async dispatch => {
+export const updateProfileEngineer = (id, data) => async dispatch => {
+    let engineer_id = id;
     try {
-        const response = await axios.patch(`http://localhost:5000/api/v1/engineers/${id}`, data)
+        const response = await axios.patch(`http://localhost:5000/api/v1/engineers/${engineer_id}`, data);
         dispatch({
             type: UPDATE_PROFILE_ENGINEER,
-            payload: response.data
-        })
-
-        history.push('/engineers')
+            payload: data
+        });
     } catch (error) {
         dispatch({
-            type: ENGINEER_ERROR,
+            type: UPDATE_PROFILE_ENGINEER_ERROR,
             payload: error
-        })
+        });
     }
 }
-export const deleteEngineer = (id) => async dispatch => {
+export const deleteProfileEngineer = (id) => async dispatch => {
+    const engineer_id = id;
     try {
-        await axios.delete(`http://localhost:5000/api/v1/engineers/${id}`)
+        await axios.delete(`http://localhost:5000/api/v1/engineers/${engineer_id}`);
         dispatch({
             type: DELETE_ENGINEER,
-            payload: id
-        })
+            payload: engineer_id
+        });
     } catch (error) {
         dispatch({
-            type: ENGINEER_ERROR,
+            type: DELETE_ENGINEER_ERROR,
             payload: error
-        })
+        });
     }
 }

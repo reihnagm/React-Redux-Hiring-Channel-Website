@@ -1,19 +1,23 @@
 import {
 	GET_ENGINEERS,
+	GET_ENGINEERS_ERROR,
 	GET_CURRENT_PROFILE_ENGINEER,
+	GET_CURRENT_PROFILE_ENGINEER_ERROR,
 	UPDATE_PROFILE_ENGINEER,
-	ENGINEER_ERROR,
-	DELETE_ENGINEER
+	UPDATE_PROFILE_ENGINEER_ERROR,
+	DELETE_ENGINEER,
+	DELETE_ENGINEER_ERROR
 } from '../actions/types'
 const initialState = {
-	engineers: [],
+	engineers: {},
 	engineer: {},
-	search: '',
-	sortBy: 'date_updated',
-	sort: 'ASC',
-	limit: '5',
+	error: {},
 	loading: true,
-	error: {}
+	search: '',
+	sort: 'DESC',
+	sortBy: 'date_updated',
+	limit: '10',
+	page: '1'
 }
 export default function (state = initialState, action) {
 	const { type, payload } = action;
@@ -21,32 +25,42 @@ export default function (state = initialState, action) {
 		case GET_ENGINEERS:
 			return {
 				...state,
-				engineers: payload,
-				loading: false
+				engineers: payload
+			}
+		case GET_ENGINEERS_ERROR:
+			return {
+				...state,
+				error: payload
 			}
 		case GET_CURRENT_PROFILE_ENGINEER:
 			return {
 				...state,
-				engineer: payload,
-				loading: false
+				engineer: payload
+			}
+		case GET_CURRENT_PROFILE_ENGINEER_ERROR:
+			return {
+				...state,
+				error: payload
 			}
 		case UPDATE_PROFILE_ENGINEER:
 	      	return {
 	        	...state,
-	        	engineers: [payload, ...state.engineers],
-	        	loading: false
-	      	}
+	        	engineers: state.engineers.concat(payload)
+			}
+		case UPDATE_PROFILE_ENGINEER_ERROR:
+			return {
+				...state,
+				error: payload
+			}
 		case DELETE_ENGINEER:
 			return {
 				...state,
-				engineers: state.engineers.filter(engineer => engineer.id !== payload),
-				loading: false
+				engineers: state.engineers.filter(engineer => engineer.id !== payload)
 			}
-		case ENGINEER_ERROR:
+		case DELETE_ENGINEER_ERROR:
 			return {
 				...state,
-				engineers: payload,
-				loading: false
+				error: payload
 			}
 		default:
 			return state

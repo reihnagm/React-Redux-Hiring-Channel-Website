@@ -2,96 +2,86 @@ import axios from 'axios'
 import { setAlert } from './alert';
 import {
     GET_COMPANIES,
-    GET_COMPANY,
-    ADD_COMPANY,
+    GET_COMPANIES_ERROR,
+    GET_CURRENT_PROFILE_COMPANY,
+    GET_CURRENT_PROFILE_COMPANY_ERROR,
+    UPDATE_PROFILE_COMPANY,
+    UPDATE_PROFILE_COMPANY_ERROR,
     DELETE_COMPANY,
-    UPDATE_COMPANY,
-    COMPANY_ERROR
+    DELETE_COMPANY_ERROR
 } from './types'
-
-export const getCompanies = () => async dispatch => {
+export const getCompanies = (search = '',sort = 'DESC',sortBy = 'date_updated',limit = '10',page = '1') => async dispatch => {
     try {
-        const response = await axios.get(process.env.REACT_APP_GET_LOCAL_COMPANIES)
+        const response = await axios.get(`http://localhost:5000/api/v1/companies?search=${search}&sort=${sort}&sortBy=${sortBy}&limit=${limit}&page=${page}`)
         dispatch({
             type: GET_COMPANIES,
             payload: response.data
         })
     } catch (error) {
         dispatch({
-            type: COMPANY_ERROR,
+            type: GET_COMPANIES_ERROR,
             payload: error
         })
     }
 }
-export const getCompany = (id) => async dispatch => {
-    try {
-        const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}/${id}`)
-        dispatch({
-            type: GET_COMPANY,
-            payload: response.data[0]
-        })
+export const getCurrentProfileCompany = () => async dispatch => {
+    let payload;
+    let data;
+    let user_id;
+    const token = localStorage.token;
+    if(token)  {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        payload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        data = JSON.parse(payload);
+        user_id = data.user.id;
     }
-    catch (error)
-    {
-        dispatch({
-            type: COMPANY_ERROR
-        })
-    }
-}
-export const addCompany = (formData) => async dispatch => {
     try {
-        const response = await axios.post(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}`, formData)
+        const response = await axios.post(`http://localhost:5000/api/v1/company/profile`,
+            {
+                user_id
+            });
         dispatch({
-            type: ADD_COMPANY,
+            type: GET_CURRENT_PROFILE_COMPANY,
             payload: response.data
-        })
-        dispatch(setAlert('Company created', 'success'))
-    }
-    catch (error)
-    {
-        const errors = error.response.data.errors
-        if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
-        }
+        });
+    } catch (error) {
         dispatch({
-            type: COMPANY_ERROR
-        })
+            type: GET_CURRENT_PROFILE_COMPANY_ERROR,
+            payload: error
+        });
     }
 }
-
-export const updateCompany = (id, formData) => async dispatch => {
+export const updateProfileCompany = (id, data) => async dispatch => {
+    let company_id = id;
     try {
-        const response = await axios.patch(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}/${id}`, formData)
+        const response = await axios.patch(`http://localhost:5000/api/v1/engineers/${company_id}`, data);
         dispatch({
-            type: UPDATE_COMPANY,
-            payload: response.data
-        })
-        dispatch(setAlert('Company updated', 'success'))
-    }
-    catch (error)
-    {
-        const errors = error.response.data.errors
-        if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
-        }
+            type: UPDATE_PROFILE_COMPANY,
+            payload: data
+        });
+    } catch (error) {
         dispatch({
-            type: COMPANY_ERROR
-        })
+            type: UPDATE_PROFILE_COMPANY_ERROR,
+            payload: error
+        });
     }
 }
-
-export const deleteCompany = (id, history) => async dispatch => {
+export const deleteProfileCompany = (id) => async dispatch => {
+    const company_id = id
     try {
-        await axios.delete(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}/${id}`)
+        await axios.delete(`http://localhost:5000/api/v1/engineers/${engineer_id}`)
         dispatch({
             type: DELETE_COMPANY,
-            payload: id
+            payload: company_id
         })
     }
-    catch (error)
-    {
+    catch (error) {
         dispatch({
-            type: COMPANY_ERROR
+            type: DELETE_COMPANY_ERROR,
+            payload: error
         })
     }
 }
