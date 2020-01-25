@@ -5,6 +5,8 @@ import {
     GET_COMPANIES_ERROR,
     GET_CURRENT_PROFILE_COMPANY,
     GET_CURRENT_PROFILE_COMPANY_ERROR,
+    GET_PROFILE_COMPANY_BY_SLUG,
+    GET_PROFILE_COMPANY_BY_SLUG_ERROR,
     UPDATE_PROFILE_COMPANY,
     UPDATE_PROFILE_COMPANY_ERROR,
     DELETE_COMPANY,
@@ -52,6 +54,20 @@ export const getCurrentProfileCompany = () => async dispatch => {
             type: GET_CURRENT_PROFILE_COMPANY_ERROR,
             payload: error
         });
+    }
+}
+export const getProfileCompanyBySlug = (slug) => async dispatch => {
+    try {
+        const response = await axios.get(`http://localhost:5000/api/v1/companies/profile/${slug}`)
+        dispatch({
+            type: GET_PROFILE_COMPANY_BY_SLUG,
+            payload: response.data.data
+        })
+    } catch (error) {
+        dispatch({
+            type: GET_PROFILE_COMPANY_BY_SLUG_ERROR,
+            payload: error
+        })
     }
 }
 export const updateProfileCompany = (id, data) => async dispatch => {

@@ -7,6 +7,8 @@ import {
     GET_ENGINEERS_ERROR,
     GET_CURRENT_PROFILE_ENGINEER,
     GET_CURRENT_PROFILE_ENGINEER_ERROR,
+    GET_PROFILE_ENGINEER_BY_SLUG,
+    GET_PROFILE_ENGINEER_BY_SLUG_ERROR,
     UPDATE_PROFILE_ENGINEER,
     UPDATE_PROFILE_ENGINEER_ERROR,
     DELETE_ENGINEER,
@@ -52,6 +54,20 @@ export const getCurrentProfileEngineer = () => async dispatch => {
     } catch (error) {
         dispatch({
             type: GET_CURRENT_PROFILE_ENGINEER_ERROR,
+            payload: error
+        });
+    }
+}
+export const getProfileEngineerBySlug = (slug) => async dispatch => {
+    try {
+        const response = await axios.get(`http://localhost:5000/api/v1/engineers/profile/${slug}`);
+        dispatch({
+            type: GET_PROFILE_ENGINEER_BY_SLUG,
+            payload: response.data.data
+        });
+    } catch (error) {
+        dispatch({
+            type: GET_PROFILE_ENGINEER_BY_SLUG_ERROR,
             payload: error
         });
     }

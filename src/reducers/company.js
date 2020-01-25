@@ -3,6 +3,8 @@ import {
 	GET_COMPANIES_ERROR,
 	GET_CURRENT_PROFILE_COMPANY,
 	GET_CURRENT_PROFILE_COMPANY_ERROR,
+	GET_PROFILE_COMPANY_BY_SLUG,
+	GET_PROFILE_COMPANY_BY_SLUG_ERROR,
 	UPDATE_PROFILE_COMPANY,
 	UPDATE_PROFILE_COMPANY_ERROR,
 	DELETE_COMPANY,
@@ -38,6 +40,16 @@ export default function (state = initialState, action) {
 				company: payload
 			}
 		case GET_CURRENT_PROFILE_COMPANY_ERROR:
+			return {
+				...state,
+				error: payload
+			}
+		case GET_PROFILE_COMPANY_BY_SLUG:
+			return {
+				...state,
+				company: payload
+			}
+		case GET_PROFILE_COMPANY_BY_SLUG_ERROR:
 			return {
 				...state,
 				error: payload

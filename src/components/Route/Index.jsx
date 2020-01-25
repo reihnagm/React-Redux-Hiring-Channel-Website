@@ -5,9 +5,11 @@ import Login from '../Auth/Login';
 import NotFound from '../layouts/NotFound';
 import Engineer from '../Engineer/Index';
 import EngineerProfile from '../Engineer/EngineerProfile/Index';
+import EngineerProfileShow from '../Engineer/EngineerProfile/ProfileShow/Index';
 import EngineerProfileEdit from '../Engineer/EngineerProfile/ProfileEdit/Index';
 import Company from '../Company/Index';
 import CompanyProfile from '../Company/CompanyProfile/Index';
+import CompanyProfileShow from '../Company/CompanyProfile/ProfileShow/Index';
 import CompanyProfileEdit from '../Company/CompanyProfile/ProfileEdit/Index';
 import Private from './Private/Index';
 const Routes = () => {
@@ -16,10 +18,12 @@ const Routes = () => {
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/companies' component={Company} />
-            <Route exact path='/company/profile' component={CompanyProfile} />
-            <Route exact path='/company/profile/edit' component={CompanyProfileEdit} />
+            <Private exact path='/company/profile' component={CompanyProfile} />
+            <Route exact path='/company/profile/:slug' component={CompanyProfileShow} />
+            <Private exact path='/company/profile/edit' component={CompanyProfileEdit} />
             <Route exact path='/engineers' component={Engineer} />
             <Private exact path='/engineer/profile' component={EngineerProfile} />
+            <Route exact path='/engineer/profile/:slug' component={EngineerProfileShow} />
             <Private exact path='/engineer/profile/edit' component={EngineerProfileEdit} />
             <Route component={NotFound} />
         </Switch>

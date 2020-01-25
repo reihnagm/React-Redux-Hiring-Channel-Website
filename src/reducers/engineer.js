@@ -3,6 +3,8 @@ import {
 	GET_ENGINEERS_ERROR,
 	GET_CURRENT_PROFILE_ENGINEER,
 	GET_CURRENT_PROFILE_ENGINEER_ERROR,
+	GET_PROFILE_ENGINEER_BY_SLUG,
+	GET_PROFILE_ENGINEER_BY_SLUG_ERROR,
 	UPDATE_PROFILE_ENGINEER,
 	UPDATE_PROFILE_ENGINEER_ERROR,
 	DELETE_ENGINEER,
@@ -38,6 +40,16 @@ export default function (state = initialState, action) {
 				engineer: payload
 			}
 		case GET_CURRENT_PROFILE_ENGINEER_ERROR:
+			return {
+				...state,
+				error: payload
+			}
+		case GET_PROFILE_ENGINEER_BY_SLUG:
+			return {
+				...state,
+				engineer: payload
+			}
+		case GET_PROFILE_ENGINEER_BY_SLUG_ERROR:
 			return {
 				...state,
 				error: payload
