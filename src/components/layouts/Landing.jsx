@@ -1,38 +1,15 @@
-import React, { Fragment } from 'react'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { logout } from '../../actions/auth'
-const Landing = ({ isAuthenticated, logout }) => {
-    const authLinks = (
-        <Fragment>
-            <Link to='/engineers'>Engineers</Link> |
-            <Link to='/companies'>Companies</Link> |
-            <a onClick={logout}>Logout</a>
-        </Fragment>
-    )
-    const guestLinks = (
-        <Fragment>
-            <Link to='/engineers'>Engineers</Link> |
-            <Link href='/companies'>Companies</Link> |
-            <Link to='/register'>Register</Link> |
-            <Link to='/login'>Login</Link>
-        </Fragment>
-    )
+import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logout } from '../../actions/auth';
+import Header from './Header';
+import Footer from './Footer';
+const Landing = () => {
     return (
-        <div className='container'>
-            <header className='navbar has-small-vm'>
-                <div className='column'>
-                    <img src='' alt="" id='logo' className='img-brand'/>
-                </div>
-                <div id='navbar' className='column is-half'>
-                    <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
-                </div>
-            </header>
-            <div className='hero is-center has-small-vm'></div>
-        </div>
+        <Fragment>
+            <Header />
+            <Footer />
+        </Fragment>
     )
 }
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-})
-export default connect(mapStateToProps, { logout })(Landing)
+export default Landing;

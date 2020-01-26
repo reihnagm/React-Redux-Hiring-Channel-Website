@@ -1,8 +1,5 @@
-#header {
-    border-bottom: 2px solid #eee;
-    box-shadow: 2px 2px 2px #eee;
-    height: 80px;
-    line-height: 80px;
+#root {
+    height: 100% !important;
 }
 #container-pagination {
     display: flex;
@@ -28,27 +25,37 @@
 }
 #search-header {
     background: rgba(0,0,0,0.1);
-    padding: 8px 12px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 5px;
 }
 #cover-background-login {
-    background: linear-gradient(to top right, #cc66ff 0%, #ffffff 100%);
+    background: linear-gradient(to top right, rgb(200, 115, 242) 0%, rgb(240, 193, 228) 100%);
 }
 #cover-login {
     background-image: url('../../assets/cover/cover_login.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
-    height: 521px;
+    height: 500px;
+}
+#cover-landing {
+    background-image: url('../../assets/cover/cover_landing.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center left;
+    height: 400px;
+    margin-left: 20px;
+    margin-top: 20px;
+    position: relative;
 }
 #top-screen {
-    background: #db96e1;
+    background-color: rgb(225, 168, 230);
     max-height: 250px;
     position: relative;
 }
 #box-profile-container {
     margin-left: 20px;
-    padding-top: 180px;
+    padding-top: 100px;
     width: 80%;
     display: flex;
     align-items: center;
@@ -65,18 +72,18 @@
     font-size: 20px;
 }
 #profile-avatar {
-    width: 300px !important;
+    width: 200px !important;
     border-radius: 20px;
 }
 #profile-logo {
-    width: 300px !important;
+    width: 200px !important;
     border-radius: 20px;
 }
 #profile-phone {
     text-align: center;
     font-weight: lighter;
     color: #000;
-    margin-top: 20px;
+    margin-top: 12px;
     text-align: center;
     font-size: 16px;
 }
@@ -94,6 +101,14 @@
     margin: 14px auto 14px auto;
 }
 #profile-location {
+    text-align: center;
+    font-weight: lighter;
+    color: #000;
+    margin-top: 12px;
+    text-align: center;
+    font-size: 16px;
+}
+#profile-birthdate {
     text-align: center;
     font-weight: lighter;
     color: #000;
@@ -142,13 +157,9 @@
 #avatar-image {
     border-radius: 20px;
 }
-#title-cover-login {
-    font-size: 23px;
-    font-weight: bold;
-}
 #sub-title-cover-login {
-    font-size: 17px;
     text-align: justify;
+    font-size: 16px;
     width: 480px;
     line-height: 24px;
     margin-top: 10px;
@@ -184,28 +195,6 @@
     color: #000000;
     margin-bottom: 10px;
 }
-#login-form {
-    margin-top: 90px;
-}
-#container-login-register {
-    margin-top: 50px;
-}
-#btn-login {
-    color:  rgb(213,130,255);
-    border: 1px solid rgb(213,130,255);
-}
-#btn-register {
-    color: rgb(213,130,255);
-    border: 1px solid rgb(213,130,255);
-}
-#btn-login:hover {
-    color: #ffffff;
-    background-color: rgb(213,130,255);
-}
-#btn-register:hover {
-    color: #ffffff;
-    background-color: rgb(213,130,255);
-}
 #title-content-login {
     font-size: 27px;
     color: #000000;
@@ -223,22 +212,16 @@
     color: #000000;
     margin-right: 10px;
 }
-#logo {
-    height: 50px;
-}
-#header-menu li {
-    font-size: 16px;
-    display: inline-block;
+#header-menu {
     position: relative;
 }
-#header-menu li:hover #sub-header-menu {
-    opacity: 1;
-    visibility: visible;
+#header-menu li a {
+    color: #000000;
+    font-weight: bold;
+    text-decoration: none
 }
-#sub-header-menu {
-    visibility: hidden;
+#dropdown-header {
     position: absolute;
-    opacity: 0;
     z-index: 1;
     transition: all .25s ease;
     top: 100%;
@@ -246,42 +229,19 @@
     width: 250px;
     background: #ffffff;
     border: 1px solid #eeeeee;
+    box-shadow: 1px 1px 1px #eeeeee;
     border-bottom-left-radius: 10px;
-    box-shadow: 5px 5px 5px #eeeeee;
     border-bottom-right-radius: 10px;
 }
-#sub-header-menu li {
+#dropdown-header li {
     display: block;
     border-bottom: 1px solid #eeeeee;
 }
-#sub-header-menu li a {
+#dropdown-header li a {
     color: #000000;
     margin-left: 20px;
 }
-#display-username {
-    font-weight: bold;
-    position: relative;
-}
-#username-link {
-    color: #999999 !important;
-    margin-left: 70px;
-}
-#small-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    position: absolute;
-    top: 24px;
-    left: 24px;
-}
-#header-menu li a {
-    color: #000000;
-    font-weight: bold;
-    text-decoration: none
-}
 #masonry {
-    padding-top: 30px;
-    padding-bottom: 20px;
     column-count: 4;
     column-gap: 1em;
 }
@@ -293,7 +253,7 @@
 #description-engineer {
     position: absolute;
     bottom: 0;
-    padding: 10px 20px;
+    padding: 8px 15px;
     border-radius: 20px;
     background-color: rgba(0,0,0, 0.7);
     width: 100%;
@@ -301,7 +261,7 @@
 #description-company {
     position: absolute;
     bottom: 0;
-    padding: 10px 20px;
+    padding: 8px 15px;
     border-radius: 20px;
     background-color: rgba(0,0,0, 0.7);
     width: 100%;

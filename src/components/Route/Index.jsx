@@ -20,11 +20,11 @@ const Routes = () => {
             <Route exact path='/companies' component={Company} />
             <Private exact path='/company/profile' component={CompanyProfile} />
             <Route exact path='/company/profile/:slug' component={CompanyProfileShow} />
-            <Private exact path='/company/profile/edit' component={CompanyProfileEdit} />
+            <Private exact path='/company/profile/me/edit' component={CompanyProfileEdit} />
             <Route exact path='/engineers' component={Engineer} />
             <Private exact path='/engineer/profile' component={EngineerProfile} />
             <Route exact path='/engineer/profile/:slug' component={EngineerProfileShow} />
-            <Private exact path='/engineer/profile/edit' component={EngineerProfileEdit} />
+            <Private exact path='/engineer/profile/me/edit' component={EngineerProfileEdit} />
             <Route component={NotFound} />
         </Switch>
     )

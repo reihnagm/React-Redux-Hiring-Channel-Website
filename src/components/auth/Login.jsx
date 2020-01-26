@@ -47,37 +47,37 @@ const Login = ({ login, isAuthenticated }) => {
     }
     return (
         <Fragment>
-            <div className='columns'>
-                <div id='cover-background-login' className='column is-marginless'>
+            <div className='columns is-items-center is-justify-center'>
+                <div id='cover-background-login' className='column is-marginless is-min-h-screen'>
                     <div id='cover-login'></div>
-                    <h2 id='title-cover-login'>Hire expert freelancers for any job, online</h2>
+                    <h2>Hire expert freelancers for any job, online</h2>
                     <p id='sub-title-cover-login'>Millions of small businesses use Frelancer to turn their ideas into reality.</p>
                 </div>
-                <div id='content-login' className='column is-marginless'>
-                    <h2 id='title-content-login'>Login</h2>
-                    <form onSubmit={e => onSubmit(e)}>
-                        <div id='login-form' className='columns is-direction-column'>
-                            <Alert />
-                            <div className='column is-marginless'>
-                                <div className='field'>
-                                    <label id='label-email'>Email</label>
-                                    <input id='input-email' onChange={e => onChange(e)} value={email} type='text' name='email'/>
-                                </div>
-                            </div>
-                            <div className='column is-marginless'>
-                                <div className='field'>
-                                    <label id='label-password'>Password</label>
-                                    <input id='input-password' onChange={e => onChange(e)} value={password} type='password' name='password'/>
-                                </div>
-                            </div>
-                            <div id='container-login-register' className='columns is-direction-column'>
-                                <div className='column is-marginless'>
-                                    <button id='btn-login' type='submit' className='button is-block is-fullwidth is-rounded'>Login</button>
-                                </div>
+                <form className='column is-marginless' onSubmit={e => onSubmit(e)}>
+                    <div className='columns is-direction-column'>
+                        <Alert />
+                        <div className='column is-marginless'>
+                            <div className='field'>
+                                <label id='label-email'>Email</label>
+                                <input id='input-email' onChange={e => onChange(e)} value={email} type='text' name='email'/>
                             </div>
                         </div>
-                    </form>
-                </div>
+                        <div className='column is-marginless'>
+                            <div className='field'>
+                                <label id='label-password'>Password</label>
+                                <input id='input-password' onChange={e => onChange(e)} value={password} type='password' name='password'/>
+                            </div>
+                        </div>
+                        <div className='columns is-direction-column'>
+                            <div className='column is-marginless'>
+                                <button type='submit' className='button is-block is-fullwidth is-rounded'>Login</button>
+                            </div>
+                            <div className='column is-marginless'>
+                                <Link to='/' className='button is-block is-fullwidth is-center is-rounded'>Back</Link>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </Fragment>
     )

@@ -3,9 +3,13 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../../../actions/alert';
 import { getCurrentProfileEngineer, updateProfileEngineer } from '../../../../actions/engineer';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  DatePicker,
+  MuiPickersUtilsProvider
+} from '@material-ui/pickers'
 import InputMask from 'react-input-mask';
 import Alert from '../../../Alert/Index';
-import DatePicker from 'react-datepicker';
 import Moment from 'react-moment';
 import Spinner from '../../../Spinner/Index';
 import defaultImage from '../../../../images/default.png';
@@ -16,6 +20,7 @@ const ProfileEdit = ({
     engineer: { engineer, loading },
     auth: { user },
     history }) => {
+    const [selectedDate, handleDateChange] = useState(new Date());
     const [loadingMask, setLoading] = useState(loading);
     let idProps = engineer.data && engineer.data.id;
     let avatarProps = engineer.data && engineer.data.avatar;
@@ -23,6 +28,7 @@ const ProfileEdit = ({
     let emailProps = engineer.data && engineer.data.email;
     let descriptionProps = engineer.data && engineer.data.description;
     let skillProps = engineer.data && engineer.data.skill;
+    let birthdateProps = engineer.data && engineer.data.birthdate;
     let telephoneProps = engineer.data && engineer.data.telephone;
     let showcaseProps = engineer.data && engineer.data.showcase;
     let salaryProps = engineer.data && engineer.data.salary;
@@ -66,9 +72,8 @@ const ProfileEdit = ({
     const handleAvatar = (e) => {
         let error = false;
         if(e.target.files) {
-            let file = e.target.files[0];
-            let size = file.size;
-            let extension = file.name.split('.')[1];
+            let size = e.target.files[0].size;
+            let extension = e.target.files[0].name.split('.')[1];
             try {
                 if(size > 1024000) {
                     error = true;
@@ -104,6 +109,7 @@ const ProfileEdit = ({
     const { id, name, email, description, skill, showcase, telephone, salary, location, redirect } = formData;
     let imageSource = avatar ? `http://localhost:5000/images/engineer/${avatar}` : defaultImage;
     const submitProfile = (e) => {
+         let date = selectedDate.getUTCFullYear() + '-' + ('00' + (selectedDate.getUTCMonth()+1)).slice(-2) + '-' + ('00' + selectedDate.getUTCDate()).slice(-2);
         e.preventDefault();
         let error = false;
         try {
@@ -134,6 +140,7 @@ const ProfileEdit = ({
                 data.set('avatar', avatar ? avatar : '');
                 data.set('name', name ? name : '');
                 data.set('email', email ? email: '');
+                data.set('birthdate', date ? date : birthdateProps);
                 data.set('description', description ? description : '');
                 data.set('skill', skill ? skill : '');
                 data.set('showcase', showcase ? showcase : '');
@@ -208,7 +215,9 @@ const ProfileEdit = ({
                        </div>
                        <div className='field'>
                             <label> Birthdate </label>
-                            <DatePicker dateFormat='yyyy-MM-dd' />
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <DatePicker value={selectedDate} onChange={handleDateChange} />
+                            </MuiPickersUtilsProvider>
                        </div>
                        <div className='field'>
                             <label> Showcase </label>
@@ -247,14 +256,14 @@ const ProfileEdit = ({
                        <div className='field'>
                            <button
                                type='submit'
-                               className='is-block is-rounded is-padding-small button is-info is-fullwidth'>
+                               className='is-block is-rounded button is-fullwidth'>
                                Save
                            </button>
                        </div>
                        <div className='field'>
                            <Link
                                to='/engineers'
-                               className='is-block is-center is-rounded is-padding-small button is-danger is-fullwidth'>
+                               className='is-block is-center button is-rounded is-fullwidth'>
                                Back
                            </Link>
                        </div>

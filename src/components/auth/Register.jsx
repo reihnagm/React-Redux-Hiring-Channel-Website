@@ -74,60 +74,59 @@ const Register = ({ register, isAuthenticated, history }) => {
     }
     return (
         <Fragment>
-            <div className='columns'>
-                <div id='cover-background-login' className='column is-marginless'>
+            <div className='columns is-items-center is-justify-center'>
+                <div id='cover-background-login' className='column is-marginless is-min-h-screen'>
                     <div id='cover-login'></div>
-                    <h2 id='title-cover-login'>Hire expert freelancers for any job, online</h2>
+                    <h2>Hire expert freelancers for any job, online</h2>
                     <p id='sub-title-cover-login'>Millions of small businesses use Frelancer to turn their ideas into reality.</p>
                 </div>
-                <div id='content-login' className='column is-marginless'>
-                    <h2 id='title-content-login'>Register</h2>
-                <form onSubmit={e => onSubmit(e)}>
-                    <div id='login-form' className='columns is-direction-column'>
-                        <Alert />
-                        <div className='column is-marginless'>
-                            <div className='field'>
-                                <label id='label-name'>Name</label>
-                                <input id='input-name' onChange={e => onChange(e)} value={name} type='name' name='name'/>
-                            </div>
-                        </div>
-                        <div className='column is-marginless'>
-                            <div className='field'>
-                                <label id='label-email'>Email</label>
-                                <input id='input-email' onChange={e => onChange(e)} value={email} type='text' name='email'/>
-                            </div>
-                        </div>
-                        <div className='column is-marginless'>
-                            <div className='field'>
-                                <label id='label-password'>Password</label>
-                                <input id='input-password' onChange={e => onChange(e)} value={password} type='password' name='password'/>
-                            </div>
-                        </div>
-                        <div className='column is-marginless'>
-                            <div className='field'>
-                                <label id='label-role'>Role</label>
-                                <Dropdown options={optionsRole} value={role} placeholder='Select your Role' onChange={e => onChangeRole(e)} />
-                            </div>
-                        </div>
-                        <div className='columns is-direction-column'>
+                <div className='column is-marginless'>
+                    <h2>Register</h2>
+                    <form onSubmit={e => onSubmit(e)}>
+                        <div id='login-form' className='columns is-direction-column'>
+                            <Alert />
                             <div className='column is-marginless'>
-                                <button id='btn-register' type='submit' className='button is-block is-fullwidth is-rounded'>Register</button>
+                                <div className='field'>
+                                    <label id='label-name'>Name</label>
+                                    <input id='input-name' onChange={e => onChange(e)} value={name} type='text' name='name'/>
+                                </div>
+                            </div>
+                            <div className='column is-marginless'>
+                                <div className='field'>
+                                    <label id='label-email'>Email</label>
+                                    <input id='input-email' onChange={e => onChange(e)} value={email} type='text' name='email'/>
+                                </div>
+                            </div>
+                            <div className='column is-marginless'>
+                                <div className='field'>
+                                    <label id='label-password'>Password</label>
+                                    <input id='input-password' onChange={e => onChange(e)} value={password} type='password' name='password'/>
+                                </div>
+                            </div>
+                            <div className='column is-marginless'>
+                                <div className='field'>
+                                    <label id='label-role'>Role</label>
+                                    <Dropdown options={optionsRole} value={role} placeholder='Select your Role' onChange={e => onChangeRole(e)} />
+                                </div>
+                            </div>
+                            <div className='columns is-direction-column'>
+                                <div className='column is-marginless'>
+                                    <button type='submit' className='button is-block is-fullwidth is-rounded'>Register</button>
+                                </div>
+                                <div className='column is-marginless'>
+                                    <Link to='/' className='button is-center is-block is-fullwidth is-rounded'>Back</Link>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-
+                    </form>
                 </div>
             </div>
         </Fragment>
     )
-
 }
-
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 })
-
 export default connect(
     mapStateToProps,
     { register }

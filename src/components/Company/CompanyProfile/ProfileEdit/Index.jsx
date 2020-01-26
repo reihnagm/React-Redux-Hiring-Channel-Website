@@ -55,9 +55,8 @@ const ProfileEdit = ({
     const handleLogo = (e) => {
         let error = false
         if(e.target.files) {
-            let file = e.target.files[0]
-            let size = file.size
-            let extension = file.name.split('.')[1]
+            let size = e.target.files[0].size
+            let extension = e.target.files[0].name.split('.')[1]
             try {
                 if(size > 1024000) {
                     error = true;
@@ -200,14 +199,14 @@ const ProfileEdit = ({
                        <div className='field'>
                            <button
                                type='submit'
-                               className='is-block is-rounded is-padding-small button is-info is-fullwidth'>
+                               className='is-block is-center is-rounded button is-fullwidth'>
                                Save
                            </button>
                         </div>
                        <div className='field'>
                            <Link
                                to='/companies'
-                               className='is-block is-center is-rounded is-padding-small button is-danger is-fullwidth'>
+                               className='is-block is-center is-rounded button is-fullwidth'>
                                Back
                            </Link>
                        </div>

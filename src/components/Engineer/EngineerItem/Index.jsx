@@ -6,8 +6,8 @@ const EngineerItem = ({ engineer }) => {
     return  (
         <Fragment>
             <div>
-                <Link style={{ color: '#ffffff' }} to={`engineer/profile/${engineer.slug}`}>
-                    <img id='avatar-image' src={avatar} />
+                <Link className='text-white' to={`engineer/profile/${engineer.slug}`}>
+                    <img className='is-image-medium is-rounded' src={avatar} />
                     <div id='description-engineer'>
                         <p id='text-name'>{engineer.name}</p>
                         <div id='email-and-salary-container'>

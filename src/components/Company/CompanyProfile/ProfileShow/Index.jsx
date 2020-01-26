@@ -28,7 +28,7 @@ const ProfileShow= ({ getProfileCompanyBySlug, company, loading, match  }) => {
                     <h2 id="profile-email"> { email } </h2>
                     <h3 id="profile-phone"> { phone } </h3>
                     <h4 id="profile-location"> { location } </h4>
-                    <Link className="is-block is-center is-rounded is-padding-small button is-info is-fullwidth mt-15" to="/companies"> Back </Link>
+                    <Link className="is-block is-center is-rounded button is-fullwidth mt-15" to="/companies"> Back </Link>
                 </div>
                 <div id="box-profile-name">
                     <h3 id="profile-name"> { name } </h3>

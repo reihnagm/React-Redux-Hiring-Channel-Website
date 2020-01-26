@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import defaultImage from '../../../images/default.png';
 const CompanyItem = ({ company }) => {
-    console.log(company)
     let logo = company.logo ? `http://localhost:5000/images/company/${company.logo}` : defaultImage;
     return  (
         <Fragment>
