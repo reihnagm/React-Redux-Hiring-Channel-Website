@@ -14,6 +14,12 @@ $ git clone https://github.com/reihnagm/React-Redux-Hiring-Channel-Website.git
 $ cd React-Redux-Hiring-Channel-Website
 $ npm install
 ```
+
+---
+## Prerequiste
+- The backend for this project based on my project on [RESTful-API-Node-JS-Express](https://github.com/reihnagm/RESTful-API-Node-JS-Express)
+---
+
 ---
 ### Start Development Server
 ```bash
