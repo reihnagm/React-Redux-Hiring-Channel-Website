@@ -5,7 +5,7 @@ This is an open-source project using ReactJS and Redux, this project is not for 
 
 ---
 ## Prerequiste
- The backend for this project related on my project [RESTful-API-Node-JS-Express](https://github.com/reihnagm/RESTful-API-Node-JS-Express)
+- The backend for this project related on my project [RESTful-API-Node-JS-Express](https://github.com/reihnagm/RESTful-API-Node-JS-Express)
 ---
 
 
