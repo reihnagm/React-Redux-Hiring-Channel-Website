@@ -17,7 +17,7 @@ $ npm install
 
 ---
 ## Prerequiste
-- The backend for this project based on my project on [RESTful-API-Node-JS-Express](https://github.com/reihnagm/RESTful-API-Node-JS-Express)
+- The backend for this project related on my project [RESTful-API-Node-JS-Express](https://github.com/reihnagm/RESTful-API-Node-JS-Express)
 ---
 
 ---
@@ -25,5 +25,3 @@ $ npm install
 ```bash
 $ npm run start
 ```
----
-
