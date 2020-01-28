@@ -8,7 +8,6 @@ This is an open-source project using ReactJS and Redux, this project is not for 
 - The backend for this project related on my project [RESTful-API-Node-JS-Express](https://github.com/reihnagm/RESTful-API-Node-JS-Express)
 ---
 
-
 ## Installation
 
 ### Clone
@@ -17,7 +16,13 @@ $ git clone https://github.com/reihnagm/React-Redux-Hiring-Channel-Website.git
 $ cd React-Redux-Hiring-Channel-Website
 $ npm install or yarn install
 ```
----
+
+### Create Environment Variable
+```bash
+$ cp .env.example .env
+$ nano .env
+```
+
 ### Start Development Server
 ```bash
 $ npm run start
