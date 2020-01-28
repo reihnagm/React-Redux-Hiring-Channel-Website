@@ -16,13 +16,16 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
     let showcase =  engineer.showcase;
     let birthdate = engineer.birthdate;
     let phone = engineer.telephone;
+    let slug = match.params.slug;
     useEffect(() => {
-        const _fetchData = async () => {
-            await getProfileEngineerBySlug(match.params.slug);
-            setLoading(false);
+        const _fetchData = async (slug) => {
+            await getProfileEngineerBySlug(slug);
+            setTimeout(() => {
+                setLoading(false);
+            }, 800)
         }
-        _fetchData();
-    }, [getProfileEngineerBySlug]);
+        _fetchData(slug);
+    }, [getProfileEngineerBySlug, slug]);
     let n = new Date(birthdate);
     let y = n.getUTCFullYear();
     let d = n.getUTCDate()+1;
@@ -45,13 +48,16 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
                     <h4 id="profile-location"> { location } </h4>
                     <h4 id="profile-birthdate"> {  displayDate }</h4>
                     <h4 id="profile-showcase"> { showcase } </h4>
-                    <Link className="is-block is-center is-rounded button is-fullwidth mt-15" to="/engineers"> Back </Link>
+                    <Link className="is-block is-center is-rounded button is-fullwidth mt-5" to="/engineers"> Back </Link>
                 </div>
                 <div id="box-profile-name">
                     <h3 id="profile-name"> { name } </h3>
                     <p id="profile-desc">{ desc }</p>
                     <ul id="profile-skill">
-                        <li id="profile-list"> <span style={{ fontWeight: 'bold' }}> Skills: </span> { skill } </li>
+                        <li id="profile-list">
+                            <span className='is-bold'> Skills: </span> 
+                            { skill }
+                        </li>
                     </ul>
                 </div>
             </div>

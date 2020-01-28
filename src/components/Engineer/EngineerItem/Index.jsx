@@ -7,11 +7,11 @@ const EngineerItem = ({ engineer }) => {
         <Fragment>
             <div>
                 <Link className='text-white' to={`engineer/profile/${engineer.slug}`}>
-                    <img className='is-image-medium is-rounded' src={avatar} />
+                    <img className='is-image is-rounded' src={avatar} />
                     <div id='description-engineer'>
-                        <p id='text-name'>{engineer.name}</p>
+                        <p className='mb-3 sub-title'>{engineer.name}</p>
                         <div id='email-and-salary-container'>
-                            <p id='text-email'>{engineer.email}</p>
+                            <p className='mb-3'>{engineer.email}</p>
                             <p id='text-salary'>Expected Salary:
                                 <span style={{ display: 'inline-block', marginLeft: '10px' }}> {engineer.salary} </span>
                             </p>

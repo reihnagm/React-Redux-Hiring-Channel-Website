@@ -1,13 +1,22 @@
 import React, { Fragment, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Swal from 'sweetalert2';
 import { register } from '../../actions/auth';
-import Alert from '../Alert/Index';
-import store from '../../store';
-import { setAlert } from '../../actions/alert';
 import 'react-dropdown/style.css';
 import Dropdown from 'react-dropdown';
 const Register = ({ register, isAuthenticated, history }) => {
+    const Toast = Swal.mixin({
+        position: 'top-end',
+        toast: true,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: false,
+        onOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -62,7 +71,10 @@ const Register = ({ register, isAuthenticated, history }) => {
                 register(name, email, password, role);
             }
         } catch(error) {
-            store.dispatch(setAlert(error.message,'danger'))
+            Toast.fire({
+                icon: 'error',
+                title: error.message
+            });
         }
     }
     const optionsRole = [
@@ -74,51 +86,66 @@ const Register = ({ register, isAuthenticated, history }) => {
     }
     return (
         <Fragment>
-            <div className='columns is-items-center is-justify-center'>
-                <div id='cover-background-login' className='column is-marginless is-min-h-screen'>
-                    <div id='cover-login'></div>
-                    <h2>Hire expert freelancers for any job, online</h2>
-                    <p id='sub-title-cover-login'>Millions of small businesses use Frelancer to turn their ideas into reality.</p>
+            <div className='columns is-justify-center is-min-h-screen'>
+                <div className='column is-marginless' id='cover-background-register'>
+                    <div id='cover-register'></div>
+                    <h2 className='title mb-5'>Hire expert freelancers for any job, online</h2>
+                    <h3 className='sub-title'>Millions of small businesses use Frelancer to turn their ideas into reality.</h3>
                 </div>
-                <div className='column is-marginless'>
-                    <h2>Register</h2>
-                    <form onSubmit={e => onSubmit(e)}>
-                        <div id='login-form' className='columns is-direction-column'>
-                            <Alert />
-                            <div className='column is-marginless'>
-                                <div className='field'>
-                                    <label id='label-name'>Name</label>
-                                    <input id='input-name' onChange={e => onChange(e)} value={name} type='text' name='name'/>
-                                </div>
-                            </div>
-                            <div className='column is-marginless'>
-                                <div className='field'>
-                                    <label id='label-email'>Email</label>
-                                    <input id='input-email' onChange={e => onChange(e)} value={email} type='text' name='email'/>
-                                </div>
-                            </div>
-                            <div className='column is-marginless'>
-                                <div className='field'>
-                                    <label id='label-password'>Password</label>
-                                    <input id='input-password' onChange={e => onChange(e)} value={password} type='password' name='password'/>
-                                </div>
-                            </div>
-                            <div className='column is-marginless'>
-                                <div className='field'>
-                                    <label id='label-role'>Role</label>
-                                    <Dropdown options={optionsRole} value={role} placeholder='Select your Role' onChange={e => onChangeRole(e)} />
-                                </div>
-                            </div>
-                            <div className='columns is-direction-column'>
-                                <div className='column is-marginless'>
-                                    <button type='submit' className='button is-block is-fullwidth is-rounded'>Register</button>
-                                </div>
-                                <div className='column is-marginless'>
-                                    <Link to='/' className='button is-center is-block is-fullwidth is-rounded'>Back</Link>
-                                </div>
-                            </div>
+                <div className='column'>
+                    <div className='columns is-direction-column'>
+                        <div className='column'>
+                            <h2 className='text-black is-bold is-size-30'>Register</h2>
                         </div>
-                    </form>
+                        <div className='column mt-10'>
+                            <form className='columns is-direction-column' onSubmit={e => onSubmit(e)}>
+                                <div className='column'>
+                                    <div className='field'>
+                                        <label>Name</label>
+                                        <input onChange={e => onChange(e)} value={name} type='text' name='name'/>
+                                    </div>
+                                </div>
+                                <div className='column'>
+                                    <div className='field'>
+                                        <label>Email</label>
+                                        <input
+                                            onChange={e => onChange(e)}
+                                            value={email}
+                                            type='text'
+                                            name='email'/>
+                                    </div>
+                                </div>
+                                <div className='column'>
+                                    <div className='field'>
+                                        <label>Password</label>
+                                        <input
+                                            onChange={e => onChange(e)}
+                                            value={password}
+                                            type='password'
+                                            name='password'/>
+                                    </div>
+                                </div>
+                                <div className='column'>
+                                    <div className='field'>
+                                        <label>Role</label>
+                                        <Dropdown
+                                            options={optionsRole}
+                                            value={role}
+                                            placeholder='Select your Role'
+                                            onChange={e => onChangeRole(e)} />
+                                    </div>
+                                </div>
+                                <div className='columns is-direction-column'>
+                                    <div className='column'>
+                                        <button type='submit' className='button is-block is-fullwidth is-rounded'>Register</button>
+                                    </div>
+                                    <div className='column'>
+                                        <Link to='/' className='button is-center is-block is-fullwidth is-rounded'>Back</Link>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </Fragment>

@@ -19,7 +19,9 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
     useEffect(() => {
         const _fetchData = async () => {
             await getCurrentProfileEngineer();
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 800);
         }
         _fetchData();
     }, [getCurrentProfileEngineer]);
@@ -51,8 +53,8 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
                     <h4 id="profile-location"> { location } </h4>
                     <h4 id="profile-birthdate"> { displayDate }</h4>
                     <h4 id="profile-showcase"> { showcase } </h4>
-                    <a className="is-block is-center is-rounded button is-fullwidth mt-15" onClick={e => deleteProfileAccount(e)} href="javascript:void(0)"> Delete Account </a>
-                    <Link className="is-block is-center is-rounded button is-fullwidth mt-15" to="/engineers"> Back </Link>
+                    <a className="is-block mt-5 is-center is-rounded button is-fullwidth" onClick={e => deleteProfileAccount(e)} href="javascript:void(0)"> Delete Account </a>
+                    <Link className="is-block  mt-5 is-center is-rounded button is-fullwidth" to="/engineers"> Back </Link>
                 </div>
                 <div id="box-profile-name">
                     <h3 id="profile-name"> { name } </h3>

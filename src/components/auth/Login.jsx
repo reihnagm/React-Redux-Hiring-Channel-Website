@@ -1,11 +1,22 @@
 import React, { Fragment, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import Alert from '../Alert/Index';
+import Swal from 'sweetalert2';
 import store from '../../store';
 import { setAlert } from '../../actions/alert'
 import { connect } from 'react-redux';
 import { login } from '../../actions/auth';
 const Login = ({ login, isAuthenticated }) => {
+    const Toast = Swal.mixin({
+        position: 'top-end',
+        toast: true,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: false,
+        onOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -36,10 +47,17 @@ const Login = ({ login, isAuthenticated }) => {
                 throw new Error('Password Minimum 6 Character.')
             }
             if(error === false) {
-                login(email, password)
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Login successfully'
+                });
+                login(email, password);
             }
         } catch(error) {
-            store.dispatch(setAlert(error.message, 'danger'))
+            Toast.fire({
+                icon: 'error',
+                title: error.message
+            });
         }
     }
     if (isAuthenticated) {
@@ -47,37 +65,43 @@ const Login = ({ login, isAuthenticated }) => {
     }
     return (
         <Fragment>
-            <div className='columns is-items-center is-justify-center'>
-                <div id='cover-background-login' className='column is-marginless is-min-h-screen'>
+            <div className='columns is-justify-center is-min-h-screen'>
+                <div className='column is-marginless' id='cover-background-login'>
                     <div id='cover-login'></div>
-                    <h2>Hire expert freelancers for any job, online</h2>
-                    <p id='sub-title-cover-login'>Millions of small businesses use Frelancer to turn their ideas into reality.</p>
+                    <h2 className='title mb-5'>Hire expert freelancers for any job, online</h2>
+                    <h3 className='sub-title'>Millions of small businesses use Frelancer to turn their ideas into reality.</h3>
                 </div>
-                <form className='column is-marginless' onSubmit={e => onSubmit(e)}>
+                <div className='column'>
                     <div className='columns is-direction-column'>
-                        <Alert />
-                        <div className='column is-marginless'>
-                            <div className='field'>
-                                <label id='label-email'>Email</label>
-                                <input id='input-email' onChange={e => onChange(e)} value={email} type='text' name='email'/>
-                            </div>
+                        <div className='column'>
+                            <h2 className='text-black is-bold is-size-30'> Login </h2>
                         </div>
-                        <div className='column is-marginless'>
-                            <div className='field'>
-                                <label id='label-password'>Password</label>
-                                <input id='input-password' onChange={e => onChange(e)} value={password} type='password' name='password'/>
-                            </div>
-                        </div>
-                        <div className='columns is-direction-column'>
-                            <div className='column is-marginless'>
-                                <button type='submit' className='button is-block is-fullwidth is-rounded'>Login</button>
-                            </div>
-                            <div className='column is-marginless'>
-                                <Link to='/' className='button is-block is-fullwidth is-center is-rounded'>Back</Link>
-                            </div>
+                        <div className='column mt-20'>
+                            <form className='columns is-direction-column' onSubmit={e => onSubmit(e)}>
+                                <div className='column'>
+                                    <div className='field'>
+                                        <label>Email</label>
+                                        <input onChange={e => onChange(e)} value={email} type='text' name='email'/>
+                                    </div>
+                                </div>
+                                <div className='column'>
+                                    <div className='field'>
+                                        <label>Password</label>
+                                        <input onChange={e => onChange(e)} value={password} type='password' name='password'/>
+                                    </div>
+                                </div>
+                                <div className='columns is-direction-column'>
+                                    <div className='column'>
+                                        <button type='submit' className='button is-block is-fullwidth is-rounded'>Login</button>
+                                    </div>
+                                    <div className='column'>
+                                        <Link to='/' className='button is-block is-fullwidth is-center is-rounded'>Back</Link>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </Fragment>
     )

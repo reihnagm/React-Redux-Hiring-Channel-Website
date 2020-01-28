@@ -6,11 +6,11 @@ const CompanyItem = ({ company }) => {
     return  (
         <Fragment>
             <div>
-                <Link style={{ color: '#ffffff' }} to={`company/profile/${company.slug}`}>
-                    <img id='avatar-image' src={logo} />
+                <Link className='text-white' to={`company/profile/${company.slug}`}>
+                    <img className='is-image is-rounded' src={logo} />
                     <div id='description-company'>
-                        <p id='text-name'>{company.name}</p>
-                        <p id='text-email'>{company.email}</p>
+                        <p className='mb-3 sub-title'>{company.name}</p>
+                        <p className='mb-3'>{company.email}</p>
                         <p id='text-location'>{company.location}</p>
                         <p id='text-description'>{ company.description ? company.description.substring(0, 150) + '...' : '' } </p>
                     </div>

@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
 import { getEngineers } from '../../actions/engineer';
+import ReactPaginate from 'react-paginate';
 import Header from '../layouts/Header';
 import HeaderFilter from '../layouts/HeaderFilter';
 import Spinner from '../Spinner/Index';
@@ -17,11 +18,13 @@ class Engineer extends Component {
             page: props.page
         }
     }
-    async UNSAFE_componentWillMount() {
+    async componentDidMount() {
         await this.props.getEngineers();
-        this.setState({
-            loading: false
-        });
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+        }, 800);
     }
     handleSort = async (e) => {
         this.setState({
