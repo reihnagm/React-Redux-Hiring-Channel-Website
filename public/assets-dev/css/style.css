@@ -228,6 +228,8 @@
     bottom: 0;
     padding: 8px 15px;
     border-radius: 20px;
+    height: 50%;
+    overflow-y: scroll;
     background-color: rgba(0,0,0, 0.6);
     width: 100%;
 }

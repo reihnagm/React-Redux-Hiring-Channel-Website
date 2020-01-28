@@ -1,12 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
-import { setAlert } from '../../../../actions/alert';
 import { getCurrentProfileEngineer, updateProfileEngineer } from '../../../../actions/engineer';
 import DateFnsUtils from '@date-io/date-fns';
 import {
-  DatePicker,
-  MuiPickersUtilsProvider
+    DatePicker,
+    MuiPickersUtilsProvider
 } from '@material-ui/pickers'
 import InputMask from 'react-input-mask';
 import Alert from '../../../Alert/Index';
@@ -20,6 +20,17 @@ const ProfileEdit = ({
     engineer: { engineer, loading },
     auth: { user },
     history }) => {
+    const Toast = Swal.mixin({
+        position: 'top-end',
+        toast: true,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: false,
+        onOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
     const [selectedDate, handleDateChange] = useState(new Date());
     const [loadingMask, setLoading] = useState(loading);
     let idProps = engineer.data && engineer.data.id;
@@ -46,11 +57,13 @@ const ProfileEdit = ({
         salary: '',
         location: '',
     });
-    const [avatar, setAvatar] = useState('')
+    const [avatar, setAvatar] = useState('');
     useEffect(() => {
         const _fetchData = async () => {
             await getCurrentProfileEngineer();
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 800);
         }
         _fetchData();
         setFormData({
@@ -89,7 +102,10 @@ const ProfileEdit = ({
                     setAvatar(e.target.files[0]);
                 }
             } catch(error) {
-                store.dispatch(setAlert(error.message, 'danger'));
+                Toast.fire({
+                    icon: 'error',
+                    title: error.message
+                });
             }
             function isImage(extension) {
                 switch (extension) {
@@ -150,10 +166,17 @@ const ProfileEdit = ({
                 updateProfileEngineer(id, data);
                 setTimeout(() => {
                     history.push('/engineers');
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Yay !, Profile Updated.'
+                    });
                 }, 800);
             }
         } catch (error) {
-            store.dispatch(setAlert(error.message, 'danger'));
+            Toast.fire({
+                icon: 'error',
+                title: error.message
+            });
         }
     }
     return loadingMask ? ( <Spinner /> ) : (
@@ -277,4 +300,4 @@ const mapStateToProps = state => ({
     engineer: state.engineer,
     auth: state.auth
 })
-export default connect(mapStateToProps, { getCurrentProfileEngineer, updateProfileEngineer, setAlert })(withRouter(ProfileEdit))
+export default connect(mapStateToProps, { getCurrentProfileEngineer, updateProfileEngineer })(withRouter(ProfileEdit))

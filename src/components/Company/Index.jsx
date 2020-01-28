@@ -17,11 +17,13 @@ class Company extends Component {
             page: props.page
         }
     }
-    async UNSAFE_componentWillMount() {
+    async componentDidMount() {
         await this.props.getCompanies();
-        this.setState({
-            loading: false,
-        });
+        setTimeout(() => {
+            this.setState({
+                loading: false,
+            });
+        }, 800);
     }
     handleSort = async (e) => {
         this.setState({
@@ -29,9 +31,11 @@ class Company extends Component {
             sort: e.value
         });
         await this.props.getCompanies(this.state.search, e.value, this.state.sortBy, this.state.limit, this.state.page);
-        this.setState({
-            loading: false
-        });
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+        }, 800);
     }
     handleSortBy = async (e) => {
         this.setState({
@@ -39,9 +43,11 @@ class Company extends Component {
             sortBy: e.value
         });
         await this.props.getCompanies(this.state.search, this.state.sort, e.value, this.state.limit, this.state.page);
-        this.setState({
-            loading: false
-        });
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+        }, 800);
     }
     handleLimit = async (e) => {
         this.setState({
@@ -49,9 +55,11 @@ class Company extends Component {
             limit: e.value
         });
         await this.props.getCompanies(this.state.search, this.state.sort, this.state.sortBy, e.value, this.state.page);
-        this.setState({
-            loading: false
-        });
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+        }, 800);
     }
     handleSearch = async (e) => {
         this.setState({
@@ -69,16 +77,18 @@ class Company extends Component {
             page: url
         });
         await this.props.getCompanies(this.state.search, this.state.sort, this.state.sortBy, this.state.limit, url);
-        this.setState({
-            loading: false
-        });
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+        }, 800);
     }
     render() {
         return  (
             <Fragment>
                 <Header
-                    handleSearch={this.handleSearch}
-                    search={this.state.search}
+                    handleSearchCompany={this.handleSearch}
+                    searchCompany={this.state.search}
                 />
                 <HeaderFilter
                     handleSort={this.handleSort}

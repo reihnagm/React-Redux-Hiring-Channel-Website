@@ -16,16 +16,15 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
     let showcase =  engineer.showcase;
     let birthdate = engineer.birthdate;
     let phone = engineer.telephone;
-    let slug = match.params.slug;
     useEffect(() => {
-        const _fetchData = async (slug) => {
-            await getProfileEngineerBySlug(slug);
+        const _fetchData = async () => {
+            await getProfileEngineerBySlug(match.params.slug);
             setTimeout(() => {
                 setLoading(false);
             }, 800)
         }
-        _fetchData(slug);
-    }, [getProfileEngineerBySlug, slug]);
+        _fetchData();
+    }, [getProfileEngineerBySlug]);
     let n = new Date(birthdate);
     let y = n.getUTCFullYear();
     let d = n.getUTCDate()+1;
@@ -55,7 +54,7 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
                     <p id="profile-desc">{ desc }</p>
                     <ul id="profile-skill">
                         <li id="profile-list">
-                            <span className='is-bold'> Skills: </span> 
+                            <span className='is-bold'> Skills: </span>
                             { skill }
                         </li>
                     </ul>

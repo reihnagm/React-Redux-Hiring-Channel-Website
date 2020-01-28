@@ -16,7 +16,9 @@ const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { co
     useEffect(() => {
         const _fetchData = async () => {
             await getCurrentProfileCompany();
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 800);
         }
         _fetchData();
     }, [getCurrentProfileCompany]);

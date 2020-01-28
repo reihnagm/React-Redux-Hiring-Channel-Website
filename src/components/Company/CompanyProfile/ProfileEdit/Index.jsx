@@ -1,21 +1,31 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setAlert } from '../../../../actions/alert';
 import { getCurrentProfileCompany, updateProfileCompany } from '../../../../actions/company';
+import Swal from 'sweetalert2';
 import InputMask from 'react-input-mask';
 import Alert from '../../../Alert/Index';
 import DatePicker from 'react-datepicker';
 import Moment from 'react-moment';
 import Spinner from '../../../Spinner/Index';
 import defaultImage from '../../../../images/default.png';
-import store from '../../../../store';
 const ProfileEdit = ({
     getCurrentProfileCompany,
     updateProfileCompany,
     company: { company, loading },
     auth: { user },
     history }) => {
+    const Toast = Swal.mixin({
+        position: 'top-end',
+        toast: true,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: false,
+        onOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
     const [loadingMask, setLoading] = useState(loading);
     let idProps = company.data && company.data.id;
     let nameProps = company.data && company.data.name;
@@ -37,7 +47,9 @@ const ProfileEdit = ({
     useEffect(() => {
         const _fetchData = async () => {
             await getCurrentProfileCompany();
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 800);
         }
         _fetchData();
         setFormData({
@@ -72,7 +84,10 @@ const ProfileEdit = ({
                     setLogo(e.target.files[0]);
                 }
             } catch(error) {
-                store.dispatch(setAlert(error.message, 'danger'));
+                Toast.fire({
+                    icon: 'error',
+                    title: error.message
+                });
             }
             function isImage(extension) {
                 switch (extension) {
@@ -129,10 +144,17 @@ const ProfileEdit = ({
                 updateProfileCompany(id, data);
                 setTimeout(() => {
                     history.push('/companies');
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Yay !, Profile Updated.'
+                    });
                 }, 800);
             }
         } catch (error) {
-            store.dispatch(setAlert(error.message, 'danger'));
+            Toast.fire({
+                icon: 'error',
+                title: error.message
+            });
         }
     }
     return loadingMask ? ( <Spinner /> ) : (
@@ -222,5 +244,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
     mapStateToProps,
-    { getCurrentProfileCompany, updateProfileCompany, setAlert }
+    { getCurrentProfileCompany, updateProfileCompany }
 )(withRouter(ProfileEdit));

@@ -16,7 +16,9 @@ const ProfileShow= ({ getProfileCompanyBySlug, company, loading, match  }) => {
     useEffect(() => {
         const _fetchData = async () => {
             await getProfileCompanyBySlug(match.params.slug);
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 800);
         }
         _fetchData();
     }, [getProfileCompanyBySlug]);

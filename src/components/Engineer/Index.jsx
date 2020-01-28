@@ -42,9 +42,11 @@ class Engineer extends Component {
             sortBy: e.value
         });
         await this.props.getEngineers(this.state.search, this.state.sort, e.value, this.state.limit, this.state.page);
-        this.setState({
-            loading: false
-        });
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+        }, 800);
     }
     handleLimit = async (e) => {
         this.setState({
@@ -52,9 +54,11 @@ class Engineer extends Component {
             limit: e.value
         });
         await this.props.getEngineers(this.state.search, this.state.sort, this.state.sortBy, e.value, this.state.page);
-        this.setState({
-            loading: false
-        });
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+        }, 800);
     }
     handleSearch = async (e) => {
         this.setState({
@@ -62,9 +66,11 @@ class Engineer extends Component {
             search: e.target.value
         });
         await this.props.getEngineers(e.target.value, this.state.sort, this.state.sortBy, this.state.limit, this.state.page);
-        this.setState({
-            loading: false
-        });
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+        }, 800);
     }
     handlePagination = async (url) => {
         this.setState({
@@ -72,16 +78,18 @@ class Engineer extends Component {
             page: url
         });
         await this.props.getEngineers(this.state.search, this.state.sort, this.state.sortBy, this.state.limit, url);
-        this.setState({
-            loading: false
-        });
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+        }, 800);
     }
     render() {
         return  (
             <Fragment>
                 <Header
-                    handleSearch={this.handleSearch}
-                    search={this.state.search}
+                    handleSearchEngineer={this.handleSearch}
+                    searchEngineer={this.state.search}
                 />
                 <HeaderFilter
                     handleSort={this.handleSort}

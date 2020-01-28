@@ -1,8 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import store from '../../store';
-import { setAlert } from '../../actions/alert'
 import { connect } from 'react-redux';
 import { login } from '../../actions/auth';
 const Login = ({ login, isAuthenticated }) => {
