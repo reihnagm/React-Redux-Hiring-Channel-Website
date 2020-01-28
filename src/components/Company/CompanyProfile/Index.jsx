@@ -31,8 +31,8 @@ const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { co
                     <h2 id="profile-email"> { email } </h2>
                     <h3 id="profile-phone"> { phone } </h3>
                     <h4 id="profile-location"> { location } </h4>
-                    <a className="is-block is-center is-rounded button is-fullwidth mt-15" onClick={e => deleteProfileAccount(e)} href="javascript:void(0)"> Delete Account </a>
-                    <Link className="is-block is-center is-rounded button is-fullwidth mt-15" to="/companies"> Back </Link>
+                    <a className="is-block is-center is-rounded button is-fullwidth mt-5" onClick={e => deleteProfileAccount(e)} href="javascript:void(0)"> Delete Account </a>
+                    <Link className="is-block is-center is-rounded button is-fullwidth mt-5" to="/companies"> Back </Link>
                 </div>
                 <div id="box-profile-name">
                     <h3 id="profile-name"> { name } </h3>
