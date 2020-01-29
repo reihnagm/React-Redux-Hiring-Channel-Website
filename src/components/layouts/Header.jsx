@@ -76,49 +76,48 @@ const Header = ({
                 }
             </Fragment>
         )
-        const Search = () => {
-            if(check_role_id === 1 && location.pathname === "/engineers") {
-                 return (
-                    <div className='column is-half'>
-                        <div className='field'>
-                            <input
-                                onChange={e => handleSearchEngineer(e)}
-                                value={searchEngineer}
-                                id='search-header'
-                                placeholder='Search by Skill and Name here...'
-                                name='search'
-                                type='text'
-                            />
-                        </div>
-                    </div>
-                )
-            } else {
-                return (
-                    <div className='column is-half'>
-                        <div className='field'>
-                            <input
-                                onChange={e => handleSearchCompany(e)}
-                                value={searchCompany}
-                                id='search-header'
-                                placeholder='Search by Name and Location here...'
-                                name='search'
-                                type='text'
-                            />
-                        </div>
-                    </div>
-                )
-            }
-        }
         const authLinks = (
             <header className='navbar is-shadow'>
                 <img src={logo} alt='Logo' />
+                { location.pathname === "/" &&
+                    <div className='column is-half'></div>
+                }
                 { location.pathname !== "/" &&
-                    <Search />
+                    <Fragment>
+                         { location.pathname === "/engineers" &&
+                            <div className='column is-half'>
+                                <div className='field'>
+                                    <input
+                                        onChange={e => handleSearchEngineer(e)}
+                                        value={searchEngineer}
+                                        id='search-header'
+                                        placeholder='Search by Skill and Name here...'
+                                        name='search'
+                                        type='text'
+                                    />
+                                </div>
+                            </div>
+                        }
+                        { location.pathname === "/companies" &&
+                            <div className='column is-half'>
+                                <div className='field'>
+                                    <input
+                                        onChange={e => handleSearchCompany(e)}
+                                        value={searchCompany}
+                                        id='search-header'
+                                        placeholder='Search by Name and Location here...'
+                                        name='search'
+                                        type='text'
+                                    />
+                                </div>
+                            </div>
+                        }
+                    </Fragment>
                 }
                 <ul className='is-relative'>
                     <li className='is-flex is-items-center'>
                         <span className='mx-10'> <Link className='text-black' to='/'>Home</Link> </span>
-                        { user && user.data && user.data.role_id === 2 ? CompaniesMenu : EngineersMenu }
+                        { check_role_id === 2 ? CompaniesMenu : EngineersMenu }
                     </li>
                 </ul>
             </header>
@@ -126,8 +125,40 @@ const Header = ({
         const guestLinks = (
             <header className='navbar is-shadow'>
                 <img src={logo} alt='Logo' />
+                { location.pathname === "/" &&
+                    <div className='column is-half'></div>
+                }
                 { location.pathname !== "/" &&
-                    <Search />
+                    <Fragment>
+                         { location.pathname === "/engineers" &&
+                            <div className='column is-half'>
+                                <div className='field'>
+                                    <input
+                                        onChange={e => handleSearchEngineer(e)}
+                                        value={searchEngineer}
+                                        id='search-header'
+                                        placeholder='Search by Skill and Name here...'
+                                        name='search'
+                                        type='text'
+                                    />
+                                </div>
+                            </div>
+                        }
+                        { location.pathname === "/companies" &&
+                            <div className='column is-half'>
+                                <div className='field'>
+                                    <input
+                                        onChange={e => handleSearchCompany(e)}
+                                        value={searchCompany}
+                                        id='search-header'
+                                        placeholder='Search by Name and Location here...'
+                                        name='search'
+                                        type='text'
+                                    />
+                                </div>
+                            </div>
+                        }
+                    </Fragment>
                 }
                 <ul className='is-relative'>
                     <li className='is-flex is-items-center'>

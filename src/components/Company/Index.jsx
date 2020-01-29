@@ -63,13 +63,9 @@ class Company extends Component {
     }
     handleSearch = async (e) => {
         this.setState({
-            loading: true,
             search: e.target.value
         });
         await this.props.getCompanies(e.target.value, this.state.sort, this.state.sortBy, this.state.limit, this.state.page);
-        this.setState({
-            loading: false
-        });
     }
     handlePagination = async (url) => {
         this.setState({
