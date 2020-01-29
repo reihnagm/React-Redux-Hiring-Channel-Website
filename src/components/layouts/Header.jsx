@@ -21,10 +21,6 @@ const Header = ({
         user
     }) => {
         const [visible, setVisible] = useState(false);
-        const [nameEngineer, setNameEngineer] = useState('');
-        const [avatarEngineer, setAvatarEngineer] = useState('');
-        const [nameCompany, setNameCompany] = useState('');
-        const [logoCompany, setLogoCompany] = useState('');
         let name_engineer = engineer && engineer.data && engineer.data.name;
         let avatar_engineer = engineer && engineer.data && engineer.data.avatar;
         let name_company = company && company.data && company.data.name;
@@ -35,21 +31,18 @@ const Header = ({
                 await getCurrentProfileCompany();
             }
             _fetchData();
-            setNameEngineer(name_engineer);
-            setAvatarEngineer(avatar_engineer);
-            setNameCompany(name_company);
-            setLogoCompany(logo_company);
+
         },[getCurrentProfileEngineer, getCurrentProfileCompany, name_engineer, name_company, avatar_engineer, logo_company]);
         const dropdownBtn = () => {
             setVisible(!visible)
         }
-        let engineer_imageSource = avatarEngineer ? `http://localhost:5000/images/engineer/${avatarEngineer}`: defaultImage;
-        let company_imageSource = logoCompany ? `http://localhost:5000/images/company/${logoCompany}`: defaultImage;
+        let engineer_imageSource = avatar_engineer ? `http://localhost:5000/images/engineer/${avatar_engineer}`: defaultImage;
+        let company_imageSource = logo_company ? `http://localhost:5000/images/company/${logo_company}`: defaultImage;
         let check_role_id = user && user.data && user.data.role_id;
         const CompaniesMenu = (
             <Fragment>
-                <span className='mx-10'>  <img className='is-avatar' src={company_imageSource} alt={nameCompany} /> </span>
-                <span className='text-black text-black mx-10 cursor-pointer' onClick={(e) => dropdownBtn(e)}>{ nameCompany }</span>
+                <span className='mx-10'>  <img className='is-avatar' src={company_imageSource} alt={name_company} /> </span>
+                <span className='text-black text-black mx-10 cursor-pointer' onClick={(e) => dropdownBtn(e)}>{ name_company }</span>
                 { visible &&
                     <ul id="dropdown-header">
                         <li><Link to={`companies`}>Companies</Link></li>
@@ -63,8 +56,8 @@ const Header = ({
         )
         const EngineersMenu = (
             <Fragment>
-                <span className='mx-10'> <img className='is-avatar' src={engineer_imageSource} alt={nameEngineer} /> </span>
-                <span className='mx-10 text-black cursor-pointer' onClick={(e) => dropdownBtn(e)}>  { nameEngineer } </span>
+                <span className='mx-10'> <img className='is-avatar' src={engineer_imageSource} alt={name_engineer} /> </span>
+                <span className='mx-10 text-black cursor-pointer' onClick={(e) => dropdownBtn(e)}>  { name_engineer } </span>
                 { visible &&
                     <ul id='dropdown-header'>
                         <li><Link to={`companies`}>Companies</Link></li>

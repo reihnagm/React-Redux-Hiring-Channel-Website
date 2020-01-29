@@ -26,6 +26,7 @@ const ProfileEdit = ({
     const [loadingMask, setLoading] = useState(loading);
     let idProps = company.data && company.data.id;
     let nameProps = company.data && company.data.name;
+    let logoProps = company.data && company.data.logo;
     let locationProps = company.data && company.data.location;
     let descriptionProps = company.data && company.data.description;
     let emailProps = company.data && company.data.email;
@@ -128,7 +129,7 @@ const ProfileEdit = ({
                 data.set('user_id', user_id);
                 data.set('name', name ? name : '');
                 data.append('logo', logo ? logo : '');
-                data.set('logo', logo ? logo : '');
+                data.set('logo', logoProps ? logoProps : '');
                 data.set('location', location ? location : '');
                 data.set('description', description ? description : '');
                 data.set('email', email ? email: '');
