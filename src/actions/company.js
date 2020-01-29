@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { setAlert } from './alert';
 import {
     GET_COMPANIES,
     GET_COMPANIES_ERROR,
@@ -73,7 +72,7 @@ export const getProfileCompanyBySlug = (slug) => async dispatch => {
 export const updateProfileCompany = (id, data) => async dispatch => {
     let company_id = id;
     try {
-        const response = await axios.patch(`http://localhost:5000/api/v1/companies/${company_id}`, data);
+        await axios.patch(`http://localhost:5000/api/v1/companies/${company_id}`, data);
         dispatch({
             type: UPDATE_PROFILE_COMPANY,
             payload: data

@@ -24,7 +24,7 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
             }, 800)
         }
         _fetchData();
-    }, [getProfileEngineerBySlug]);
+    }, [getProfileEngineerBySlug, match.params.slug]);
     let n = new Date(birthdate);
     let y = n.getUTCFullYear();
     let d = n.getUTCDate()+1;

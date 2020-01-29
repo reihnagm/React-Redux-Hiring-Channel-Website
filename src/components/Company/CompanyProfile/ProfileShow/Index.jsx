@@ -21,7 +21,7 @@ const ProfileShow= ({ getProfileCompanyBySlug, company, loading, match  }) => {
             }, 800);
         }
         _fetchData();
-    }, [getProfileCompanyBySlug]);
+    }, [getProfileCompanyBySlug, match.params.slug]);
     return loadingMask ? ( <Spinner /> ) : (
         <div id="top-screen">
             <div id="box-profile-container">

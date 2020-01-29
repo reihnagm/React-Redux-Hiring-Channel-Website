@@ -1,8 +1,5 @@
 import axios from 'axios';
 import {
-    setAlert
-} from './alert';
-import {
     GET_ENGINEERS,
     GET_ENGINEERS_ERROR,
     GET_CURRENT_PROFILE_ENGINEER,
@@ -75,7 +72,7 @@ export const getProfileEngineerBySlug = (slug) => async dispatch => {
 export const updateProfileEngineer = (id, data) => async dispatch => {
     let engineer_id = id;
     try {
-        const response = await axios.patch(`http://localhost:5000/api/v1/engineers/${engineer_id}`, data);
+        await axios.patch(`http://localhost:5000/api/v1/engineers/${engineer_id}`, data);
         dispatch({
             type: UPDATE_PROFILE_ENGINEER,
             payload: data
