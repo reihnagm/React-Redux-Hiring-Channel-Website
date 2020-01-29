@@ -29,7 +29,6 @@ const ProfileEdit = ({
         }
     });
     const [selectedDate, handleDateChange] = useState(new Date());
-    const [loadingMask, setLoading] = useState(loading);
     let idProps = engineer.data && engineer.data.id;
     let avatarProps = engineer.data && engineer.data.avatar;
     let nameProps = engineer.data && engineer.data.name;
@@ -58,9 +57,6 @@ const ProfileEdit = ({
     useEffect(() => {
         const _fetchData = async () => {
             await getCurrentProfileEngineer();
-            setTimeout(() => {
-                setLoading(false);
-            }, 800);
         }
         _fetchData();
         setFormData({
@@ -173,7 +169,7 @@ const ProfileEdit = ({
             });
         }
     }
-    return loadingMask ? ( <Spinner /> ) : (
+    return loading ? ( <Spinner /> ) : (
         <div className='columns is-justify-center'>
            <div className='column is-half'>
                 <Alert />

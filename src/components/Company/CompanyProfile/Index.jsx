@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import defaultImage from '../../../images/default.png';
 import Spinner from '../../Spinner/Index';
 import { getCurrentProfileCompany, deleteProfileCompany } from '../../../actions/company';
 const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { company, loading } }) => {
-    const [loadingMask, setLoading] = useState(loading);
     let id = company.data && company.data.id;
     let name = company.data && company.data.name;
     let logo = company.data && company.data.logo ? `http://localhost:5000/images/company/${company.data.logo}` : defaultImage;
@@ -16,16 +15,13 @@ const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { co
     useEffect(() => {
         const _fetchData = async () => {
             await getCurrentProfileCompany();
-            setTimeout(() => {
-                setLoading(false);
-            }, 800);
         }
         _fetchData();
     }, [getCurrentProfileCompany]);
     const deleteProfileAccount = () => {
         deleteProfileCompany(id);
     }
-    return loadingMask ? ( <Spinner /> ) : (
+    return loading ? ( <Spinner /> ) : (
         <div id="top-screen">
             <div id="box-profile-container">
                 <div id="box-profile-logo">

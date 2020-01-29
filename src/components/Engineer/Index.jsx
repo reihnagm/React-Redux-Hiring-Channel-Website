@@ -9,7 +9,6 @@ class Engineer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: props.loading,
             search: props.search,
             sort: props.sort,
             sortBy: props.sortBy,
@@ -19,69 +18,42 @@ class Engineer extends Component {
     }
     async componentDidMount() {
         await this.props.getEngineers();
-        setTimeout(() => {
-            this.setState({
-                loading: false
-            });
-        }, 800);
     }
     handleSort = async (e) => {
         this.setState({
-            loading: true,
             sort: e.value
         });
         await this.props.getEngineers(this.state.search, e.value, this.state.sortBy, this.state.limit, this.state.page);
+    }
+    handleSortBy = async (e) => {
+        this.setState({
+            sortBy: e.value
+        });
+        await this.props.getEngineers(this.state.search, this.state.sort, e.value, this.state.limit, this.state.page);
+    }
+    handleLimit = async (e) => {
+        this.setState({
+            limit: e.value
+        });
+        await this.props.getEngineers(this.state.search, this.state.sort, this.state.sortBy, e.value, this.state.page);
         this.setState({
             loading: false
         });
     }
-    handleSortBy = async (e) => {
-        this.setState({
-            loading: true,
-            sortBy: e.value
-        });
-        await this.props.getEngineers(this.state.search, this.state.sort, e.value, this.state.limit, this.state.page);
-        setTimeout(() => {
-            this.setState({
-                loading: false
-            });
-        }, 800);
-    }
-    handleLimit = async (e) => {
-        this.setState({
-            loading: true,
-            limit: e.value
-        });
-        await this.props.getEngineers(this.state.search, this.state.sort, this.state.sortBy, e.value, this.state.page);
-        setTimeout(() => {
-            this.setState({
-                loading: false
-            });
-        }, 800);
-    }
     handleSearch = async (e) => {
         this.setState({
-            loading: true,
             search: e.target.value
         });
         await this.props.getEngineers(e.target.value, this.state.sort, this.state.sortBy, this.state.limit, this.state.page);
-        setTimeout(() => {
-            this.setState({
-                loading: false
-            })
-        }, 800)
+        this.setState({
+            loading: false
+        });
     }
     handlePagination = async (url) => {
         this.setState({
-            loading: true,
             page: url
         });
         await this.props.getEngineers(this.state.search, this.state.sort, this.state.sortBy, this.state.limit, url);
-        setTimeout(() => {
-            this.setState({
-                loading: false
-            });
-        }, 800);
     }
     render() {
         return  (
@@ -98,7 +70,7 @@ class Engineer extends Component {
                     sortBy={this.state.sortBy}
                     limit={this.state.limit}
                 />
-                {this.state.loading ? (<Spinner />) : (
+                {this.props.loading ? (<Spinner />) : (
                     <EngineerList
                         engineers={this.props.engineers && this.props.engineers.data}
                         handlePagination={this.handlePagination}

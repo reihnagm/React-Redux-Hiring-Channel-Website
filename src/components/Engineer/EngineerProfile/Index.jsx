@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import defaultImage from '../../../images/default.png';
 import Spinner from '../../Spinner/Index';
 import { getCurrentProfileEngineer, deleteProfileEngineer } from '../../../actions/engineer';
 const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: { engineer, loading }, history }) => {
-    const [loadingMask, setLoading] = useState(loading);
     let avatar = engineer.data && engineer.data.avatar ? `http://localhost:5000/images/engineer/${engineer.data.avatar}` : defaultImage;
     let id = engineer.data && engineer.data.id;
     let name = engineer.data && engineer.data.name;
@@ -19,9 +18,6 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
     useEffect(() => {
         const _fetchData = async () => {
             await getCurrentProfileEngineer();
-            setTimeout(() => {
-                setLoading(false);
-            }, 800);
         }
         _fetchData();
     }, [getCurrentProfileEngineer]);
@@ -43,7 +39,7 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
         thisMonth = '';
     }
     let displayDate = d +' '+ thisMonth +' '+ y ;
-    return loadingMask ? ( <Spinner /> ) : (
+    return loading ? ( <Spinner /> ) : (
         <div id="top-screen">
             <div id="box-profile-container">
                 <div id="box-profile-avatar">

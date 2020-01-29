@@ -1,5 +1,7 @@
 import axios from 'axios';
 import {
+    LOADING,
+    LOADED,
     GET_ENGINEERS,
     GET_ENGINEERS_ERROR,
     GET_CURRENT_PROFILE_ENGINEER,
@@ -13,11 +15,19 @@ import {
 } from './types'
 export const getEngineers = (search = '',sort = 'DESC',sortBy = 'date_updated',limit = '10',page = '1') => async dispatch => {
     try {
+        dispatch({
+            type: LOADING
+        });
         const response = await axios.get(`http://localhost:5000/api/v1/engineers?search=${search}&sort=${sort}&sortBy=${sortBy}&limit=${limit}&page=${page}`);
         dispatch({
             type: GET_ENGINEERS,
             payload: response.data
         });
+        setTimeout(() => {
+            dispatch({
+                type: LOADED
+            });
+        }, 800);
     } catch (error) {
         dispatch({
             type: GET_ENGINEERS_ERROR,
@@ -40,6 +50,9 @@ export const getCurrentProfileEngineer = () => async dispatch => {
         user_id = data.user.id;
     }
     try {
+        dispatch({
+            type: LOADING
+        });
         const response = await axios.post(`http://localhost:5000/api/v1/engineers/profile`,
             {
                 user_id
@@ -48,6 +61,11 @@ export const getCurrentProfileEngineer = () => async dispatch => {
             type: GET_CURRENT_PROFILE_ENGINEER,
             payload: response.data
         });
+        setTimeout(() => {
+            dispatch({
+                type: LOADED
+            });
+        }, 800);
     } catch (error) {
         dispatch({
             type: GET_CURRENT_PROFILE_ENGINEER_ERROR,
@@ -57,11 +75,19 @@ export const getCurrentProfileEngineer = () => async dispatch => {
 }
 export const getProfileEngineerBySlug = (slug) => async dispatch => {
     try {
+        dispatch({
+            type: LOADING
+        });
         const response = await axios.get(`http://localhost:5000/api/v1/engineers/profile/${slug}`);
         dispatch({
             type: GET_PROFILE_ENGINEER_BY_SLUG,
             payload: response.data.data
         });
+        setTimeout(() => {
+            dispatch({
+                type: LOADED
+            });
+        }, 800);
     } catch (error) {
         dispatch({
             type: GET_PROFILE_ENGINEER_BY_SLUG_ERROR,

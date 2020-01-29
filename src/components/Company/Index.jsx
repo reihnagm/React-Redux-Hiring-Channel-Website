@@ -9,7 +9,6 @@ class Company extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: props.loading,
             search: props.search,
             sort: props.sort,
             sortBy: props.sortBy,
@@ -19,71 +18,36 @@ class Company extends Component {
     }
     async componentDidMount() {
         await this.props.getCompanies();
-        setTimeout(() => {
-            this.setState({
-                loading: false,
-            });
-        }, 800);
     }
     handleSort = async (e) => {
         this.setState({
-            loading: true,
             sort: e.value
         });
         await this.props.getCompanies(this.state.search, e.value, this.state.sortBy, this.state.limit, this.state.page);
-        setTimeout(() => {
-            this.setState({
-                loading: false
-            });
-        }, 800);
     }
     handleSortBy = async (e) => {
         this.setState({
-            loading: true,
             sortBy: e.value
         });
         await this.props.getCompanies(this.state.search, this.state.sort, e.value, this.state.limit, this.state.page);
-        setTimeout(() => {
-            this.setState({
-                loading: false
-            });
-        }, 800);
     }
     handleLimit = async (e) => {
         this.setState({
-            loading: true,
             limit: e.value
         });
         await this.props.getCompanies(this.state.search, this.state.sort, this.state.sortBy, e.value, this.state.page);
-        setTimeout(() => {
-            this.setState({
-                loading: false
-            });
-        }, 800);
     }
     handleSearch = async (e) => {
         this.setState({
-            loading: true,
             search: e.target.value
         });
         await this.props.getCompanies(e.target.value, this.state.sort, this.state.sortBy, this.state.limit, this.state.page);
-        setTimeout(() => {
-            this.setState({
-                loading: false
-            })
-        }, 800);
     }
     handlePagination = async (url) => {
         this.setState({
-            loading: true,
             page: url
         });
         await this.props.getCompanies(this.state.search, this.state.sort, this.state.sortBy, this.state.limit, url);
-        setTimeout(() => {
-            this.setState({
-                loading: false
-            });
-        }, 800);
     }
     render() {
         return  (
@@ -100,7 +64,7 @@ class Company extends Component {
                     sortBy={this.state.sortBy}
                     limit={this.state.limit}
                 />
-                {this.state.loading ? (<Spinner />) : (
+                {this.props.loading ? (<Spinner />) : (
                     <CompanyList
                         companies={this.props.companies && this.props.companies.data}
                         handlePagination={this.handlePagination}

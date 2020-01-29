@@ -1,5 +1,7 @@
 import axios from 'axios'
 import {
+    LOADING,
+    LOADED,
     GET_COMPANIES,
     GET_COMPANIES_ERROR,
     GET_CURRENT_PROFILE_COMPANY,
@@ -13,11 +15,19 @@ import {
 } from './types'
 export const getCompanies = (search = '',sort = 'DESC',sortBy = 'date_updated',limit = '10',page = '1') => async dispatch => {
     try {
+        dispatch({
+            type: LOADING
+        });
         const response = await axios.get(`http://localhost:5000/api/v1/companies?search=${search}&sort=${sort}&sortBy=${sortBy}&limit=${limit}&page=${page}`)
         dispatch({
             type: GET_COMPANIES,
             payload: response.data
-        })
+        });
+        setTimeout(() => {
+            dispatch({
+                type: LOADED
+            });
+        }, 800);
     } catch (error) {
         dispatch({
             type: GET_COMPANIES_ERROR,
@@ -40,6 +50,9 @@ export const getCurrentProfileCompany = () => async dispatch => {
         user_id = data.user.id;
     }
     try {
+        dispatch({
+            type: LOADING
+        });
         const response = await axios.post(`http://localhost:5000/api/v1/companies/profile`,
             {
                 user_id
@@ -48,6 +61,11 @@ export const getCurrentProfileCompany = () => async dispatch => {
             type: GET_CURRENT_PROFILE_COMPANY,
             payload: response.data
         });
+        setTimeout(() => {
+            dispatch({
+                type: LOADED
+            });
+        }, 800);
     } catch (error) {
         dispatch({
             type: GET_CURRENT_PROFILE_COMPANY_ERROR,
@@ -57,11 +75,19 @@ export const getCurrentProfileCompany = () => async dispatch => {
 }
 export const getProfileCompanyBySlug = (slug) => async dispatch => {
     try {
+        dispatch({
+            type: LOADING
+        });
         const response = await axios.get(`http://localhost:5000/api/v1/companies/profile/${slug}`)
         dispatch({
             type: GET_PROFILE_COMPANY_BY_SLUG,
             payload: response.data.data
-        })
+        });
+        setTimeout(() => {
+            dispatch({
+                type: LOADED
+            });
+        }, 800);
     } catch (error) {
         dispatch({
             type: GET_PROFILE_COMPANY_BY_SLUG_ERROR,
@@ -72,11 +98,19 @@ export const getProfileCompanyBySlug = (slug) => async dispatch => {
 export const updateProfileCompany = (id, data) => async dispatch => {
     let company_id = id;
     try {
+        dispatch({
+            type: LOADING
+        });
         await axios.patch(`http://localhost:5000/api/v1/companies/${company_id}`, data);
         dispatch({
             type: UPDATE_PROFILE_COMPANY,
             payload: data
         });
+        setTimeout(() => {
+            dispatch({
+                type: LOADED
+            });
+        }, 800);
     } catch (error) {
         dispatch({
             type: UPDATE_PROFILE_COMPANY_ERROR,

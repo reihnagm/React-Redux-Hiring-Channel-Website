@@ -23,7 +23,6 @@ const ProfileEdit = ({
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     });
-    const [loadingMask, setLoading] = useState(loading);
     let idProps = company.data && company.data.id;
     let nameProps = company.data && company.data.name;
     let logoProps = company.data && company.data.logo;
@@ -44,9 +43,6 @@ const ProfileEdit = ({
     useEffect(() => {
         const _fetchData = async () => {
             await getCurrentProfileCompany();
-            setTimeout(() => {
-                setLoading(false);
-            }, 800);
         }
         _fetchData();
         setFormData({
@@ -150,7 +146,7 @@ const ProfileEdit = ({
             });
         }
     }
-    return loadingMask ? ( <Spinner /> ) : (
+    return loading ? ( <Spinner /> ) : (
         <div className='columns is-justify-center'>
            <div className='column is-half'>
                 <Alert />

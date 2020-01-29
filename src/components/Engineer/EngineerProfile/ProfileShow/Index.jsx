@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import defaultImage from '../../../../images/default.png';
 import Spinner from '../../../Spinner/Index';
 import { getProfileEngineerBySlug } from '../../../../actions/engineer';
 const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => {
-    const [loadingMask, setLoading] = useState(loading);
     let avatar = engineer.avatar ? `http://localhost:5000/images/engineer/${engineer.avatar}` : defaultImage;
     let name = engineer.name;
     let email = engineer.email;
@@ -18,9 +17,6 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
     useEffect(() => {
         const _fetchData = async () => {
             await getProfileEngineerBySlug(match.params.slug);
-            setTimeout(() => {
-                setLoading(false);
-            }, 800)
         }
         _fetchData();
     }, [getProfileEngineerBySlug, match.params.slug]);
@@ -36,7 +32,7 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
         thisMonth = '';
     }
     let displayDate = d +' '+ thisMonth +' '+ y ;
-    return loadingMask ? ( <Spinner /> ) : (
+    return loading ? ( <Spinner /> ) : (
         <div id="top-screen">
             <div id="box-profile-container">
                 <div id="box-profile-avatar">

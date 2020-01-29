@@ -1,4 +1,6 @@
 import {
+	LOADING,
+	LOADED,
 	GET_COMPANIES,
 	GET_COMPANIES_ERROR,
 	GET_CURRENT_PROFILE_COMPANY,
@@ -24,6 +26,16 @@ const initialState = {
 export default function (state = initialState, action) {
 	const { type, payload } = action;
 	switch (type) {
+		case LOADING:
+			return {
+				...state,
+				loading: true
+			}
+		case LOADED:
+			return {
+				...state,
+				loading: false
+			}
 		case GET_COMPANIES:
 			return {
 				...state,
