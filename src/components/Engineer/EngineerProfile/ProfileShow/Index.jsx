@@ -7,7 +7,6 @@ import { getProfileEngineerBySlug } from '../../../../actions/engineer';
 const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => {
     const [loadingMask, setLoading] = useState(loading);
     let avatar = engineer.avatar ? `http://localhost:5000/images/engineer/${engineer.avatar}` : defaultImage;
-    let id = engineer.id;
     let name = engineer.name;
     let email = engineer.email;
     let desc =  engineer.description;
@@ -41,7 +40,7 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
         <div id="top-screen">
             <div id="box-profile-container">
                 <div id="box-profile-avatar">
-                    <img id="profile-avatar" src={ avatar }/>
+                    <img id="profile-avatar" src={ avatar } alt={ name }/>
                     <h2 id="profile-email"> { email } </h2>
                     <h3 id="profile-phone"> { phone } </h3>
                     <h4 id="profile-location"> { location } </h4>

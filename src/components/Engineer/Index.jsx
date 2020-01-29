@@ -1,7 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
 import { getEngineers } from '../../actions/engineer';
-import ReactPaginate from 'react-paginate';
 import Header from '../layouts/Header';
 import HeaderFilter from '../layouts/HeaderFilter';
 import Spinner from '../Spinner/Index';
@@ -62,9 +61,15 @@ class Engineer extends Component {
     }
     handleSearch = async (e) => {
         this.setState({
+            loading: true,
             search: e.target.value
         });
         await this.props.getEngineers(e.target.value, this.state.sort, this.state.sortBy, this.state.limit, this.state.page);
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            })
+        }, 800)
     }
     handlePagination = async (url) => {
         this.setState({

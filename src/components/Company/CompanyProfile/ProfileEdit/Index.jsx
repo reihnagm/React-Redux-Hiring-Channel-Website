@@ -1,14 +1,11 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getCurrentProfileCompany, updateProfileCompany } from '../../../../actions/company';
 import Swal from 'sweetalert2';
 import InputMask from 'react-input-mask';
 import Alert from '../../../Alert/Index';
-import DatePicker from 'react-datepicker';
-import Moment from 'react-moment';
 import Spinner from '../../../Spinner/Index';
-import defaultImage from '../../../../images/default.png';
 const ProfileEdit = ({
     getCurrentProfileCompany,
     updateProfileCompany,
@@ -29,7 +26,6 @@ const ProfileEdit = ({
     const [loadingMask, setLoading] = useState(loading);
     let idProps = company.data && company.data.id;
     let nameProps = company.data && company.data.name;
-    let logoProps = company.data && company.data.logo;
     let locationProps = company.data && company.data.location;
     let descriptionProps = company.data && company.data.description;
     let emailProps = company.data && company.data.email;
@@ -73,12 +69,10 @@ const ProfileEdit = ({
                 if(size > 1024000) {
                     error = true;
                     throw new Error('File size cannot larger than 1MB.');
-                    document.getElementById('logo').value = '';
                 }
                 if(!isImage(extension)) {
                     error = true;
                     throw new Error('File type allowed: PNG, JPG, JPEG, GIF, SVG, BMP.');
-                    document.getElementById('logo').value = '';
                 }
                 if(error === false) {
                     setLogo(e.target.files[0]);
@@ -105,7 +99,6 @@ const ProfileEdit = ({
         }
     }
     const { id, name, location, description, email, telephone} = formData;
-    let imageSource = logo ? `http://localhost:5000/images/company/${logo}` : defaultImage;
     const submitProfile = (e) => {
         e.preventDefault();
         let error = false;
@@ -132,7 +125,6 @@ const ProfileEdit = ({
             }
             if(error === false) {
                 let data = new FormData();
-                console.log(logo)
                 data.set('user_id', user_id);
                 data.set('name', name ? name : '');
                 data.append('logo', logo ? logo : '');

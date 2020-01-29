@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import defaultImage from '../../../images/default.png';
 const EngineerItem = ({ engineer }) => {
@@ -7,7 +7,7 @@ const EngineerItem = ({ engineer }) => {
         <Fragment>
             <div>
                 <Link className='text-white' to={`engineer/profile/${engineer.slug}`}>
-                    <img className='is-image is-rounded' src={avatar} />
+                    <img className='is-image is-rounded' src={avatar} alt={engineer.name} />
                     <div id='description-engineer'>
                         <p className='mb-3 sub-title'>{engineer.name}</p>
                         <div id='email-and-salary-container'>

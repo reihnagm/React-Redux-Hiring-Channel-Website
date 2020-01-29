@@ -43,42 +43,42 @@ const Header = ({
         const dropdownBtn = () => {
             setVisible(!visible)
         }
-        let engineer_imageSource = avatar_engineer ? `http://localhost:5000/images/engineer/${avatar_engineer}`: defaultImage;
-        let company_imageSource = logo_company ? `http://localhost:5000/images/company/${logo_company}`: defaultImage;
+        let engineer_imageSource = avatarEngineer ? `http://localhost:5000/images/engineer/${avatarEngineer}`: defaultImage;
+        let company_imageSource = logoCompany ? `http://localhost:5000/images/company/${logoCompany}`: defaultImage;
         let check_role_id = user && user.data && user.data.role_id;
         const CompaniesMenu = (
             <Fragment>
-                <span className='mx-10'>  <img className='is-avatar' src={company_imageSource} /> </span>
-                <span className='mx-10' onClick={(e) => dropdownBtn(e)}><a className='text-black' href='javascript:void(0);'> { nameCompany } </a></span>
+                <span className='mx-10'>  <img className='is-avatar' src={company_imageSource} alt={nameCompany} /> </span>
+                <span className='text-black text-black mx-10 cursor-pointer' onClick={(e) => dropdownBtn(e)}>{ nameCompany }</span>
                 { visible &&
                     <ul id="dropdown-header">
                         <li><Link to={`companies`}>Companies</Link></li>
                         <li><Link to={`engineers`}>Engineers</Link></li>
                         <li><Link to={`company/profile`}>Profile</Link></li>
                         <li><Link to={`company/profile/me/edit`}>Edit Profile</Link></li>
-                        <li><a onClick={logout} href="javascript:void(0);">Logout</a></li>
+                        <li><span className='text-black cursor-pointer ml-5' onClick={logout}>Logout</span></li>
                     </ul>
                 }
             </Fragment>
         )
         const EngineersMenu = (
             <Fragment>
-                <span className='mx-10'> <img className='is-avatar' src={engineer_imageSource} /> </span>
-                <span className='mx-10' onClick={(e) => dropdownBtn(e)}> <a className='text-black' href='javascript:void(0);'> { nameEngineer } </a> </span>
+                <span className='mx-10'> <img className='is-avatar' src={engineer_imageSource} alt={nameEngineer} /> </span>
+                <span className='mx-10 text-black cursor-pointer' onClick={(e) => dropdownBtn(e)}>  { nameEngineer } </span>
                 { visible &&
                     <ul id='dropdown-header'>
                         <li><Link to={`companies`}>Companies</Link></li>
                         <li><Link to={`engineers`}>Engineers</Link></li>
                         <li><Link to={`engineer/profile`}>Profile</Link></li>
                         <li><Link to={`engineer/profile/me/edit`}>Edit Profile</Link></li>
-                        <li><a onClick={logout} href="javascript:void(0);">Logout</a></li>
+                        <li><span className='text-black cursor-pointer ml-5' onClick={logout}>Logout</span></li>
                     </ul>
                 }
             </Fragment>
         )
         const authLinks = (
             <header className='navbar is-shadow'>
-                <img src={logo} alt='Logo' />
+                <img src={logo} alt="Logo" />
                 { location.pathname === "/" &&
                     <div className='column is-half'></div>
                 }
@@ -165,7 +165,7 @@ const Header = ({
                         <span className='mx-10'> <Link className='text-black'to='/'>Home</Link> </span>
                         <span className='mx-10'> <Link className='text-black'to='/companies'>Companies</Link> </span>
                         <span className='mx-10'> <Link className='text-black'to='/engineers'>Engineers</Link> </span>
-                        <span className='mx-10' onClick={(e) => dropdownBtn(e)}> <a className='text-black' href="javascript:void(0);">Guest</a> </span>
+                        <span className='mx-10 text-black cursor-pointer' onClick={(e) => dropdownBtn(e)}> Guest </span>
                     </li>
                     { visible &&
                         <ul id="dropdown-header">

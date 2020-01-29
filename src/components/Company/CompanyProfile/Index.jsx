@@ -29,11 +29,11 @@ const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { co
         <div id="top-screen">
             <div id="box-profile-container">
                 <div id="box-profile-logo">
-                    <img id="profile-logo" src={ logo }/>
+                    <img id="profile-logo" src={ logo } alt={ name }/>
                     <h2 id="profile-email"> { email } </h2>
                     <h3 id="profile-phone"> { phone } </h3>
                     <h4 id="profile-location"> { location } </h4>
-                    <a className="is-block is-center is-rounded button is-fullwidth mt-5" onClick={e => deleteProfileAccount(e)} href="javascript:void(0)"> Delete Account </a>
+                    <span className="is-block is-center is-rounded button is-fullwidth mt-5" onClick={e => deleteProfileAccount(e)}> Delete Account </span>
                     <Link className="is-block is-center is-rounded button is-fullwidth mt-5" to="/companies"> Back </Link>
                 </div>
                 <div id="box-profile-name">

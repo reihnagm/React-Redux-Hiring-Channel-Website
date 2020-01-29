@@ -47,13 +47,13 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
         <div id="top-screen">
             <div id="box-profile-container">
                 <div id="box-profile-avatar">
-                    <img id="profile-avatar" src={ avatar }/>
+                    <img id="profile-avatar" src={ avatar } alt={name}/>
                     <h2 id="profile-email"> { email } </h2>
                     <h3 id="profile-phone"> { phone } </h3>
                     <h4 id="profile-location"> { location } </h4>
                     <h4 id="profile-birthdate"> { displayDate }</h4>
                     <h4 id="profile-showcase"> { showcase } </h4>
-                    <a className="is-block mt-5 is-center is-rounded button is-fullwidth" onClick={e => deleteProfileAccount(e)} href="javascript:void(0)"> Delete Account </a>
+                    <span className="is-block mt-5 is-center is-rounded button is-fullwidth" onClick={e => deleteProfileAccount(e)}> Delete Account </span>
                     <Link className="is-block  mt-5 is-center is-rounded button is-fullwidth" to="/engineers"> Back </Link>
                 </div>
                 <div id="box-profile-name">

@@ -7,7 +7,6 @@ import { getProfileCompanyBySlug } from '../../../../actions/company';
 const ProfileShow= ({ getProfileCompanyBySlug, company, loading, match  }) => {
     const [loadingMask, setLoading] = useState(loading);
     let logo = company.logo ? `http://localhost:5000/images/company/${company.logo}` : defaultImage;
-    let id = company.id;
     let name = company.name;
     let email = company.email;
     let description =  company.description;
@@ -26,7 +25,7 @@ const ProfileShow= ({ getProfileCompanyBySlug, company, loading, match  }) => {
         <div id="top-screen">
             <div id="box-profile-container">
                 <div id="box-profile-logo">
-                    <img id="profile-logo" src={ logo }/>
+                    <img id="profile-logo" src={ logo } alt={ name }/>
                     <h2 id="profile-email"> { email } </h2>
                     <h3 id="profile-phone"> { phone } </h3>
                     <h4 id="profile-location"> { location } </h4>

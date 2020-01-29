@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
@@ -10,10 +10,7 @@ import {
 } from '@material-ui/pickers'
 import InputMask from 'react-input-mask';
 import Alert from '../../../Alert/Index';
-import Moment from 'react-moment';
 import Spinner from '../../../Spinner/Index';
-import defaultImage from '../../../../images/default.png';
-import store from '../../../../store';
 const ProfileEdit = ({
     getCurrentProfileEngineer,
     updateProfileEngineer,
@@ -78,7 +75,7 @@ const ProfileEdit = ({
             salary: salaryProps,
         });
         setAvatar(avatarProps);
-    },[getCurrentProfileEngineer, idProps, avatarProps, nameProps, emailProps, descriptionProps, skillProps, locationProps, showcaseProps, telephoneProps, salaryProps, locationProps]);
+    },[getCurrentProfileEngineer, idProps, avatarProps, nameProps, emailProps, descriptionProps, skillProps, locationProps, showcaseProps, telephoneProps, salaryProps]);
     const onChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -91,12 +88,10 @@ const ProfileEdit = ({
                 if(size > 1024000) {
                     error = true;
                     throw new Error('File size cannot larger than 1MB.');
-                    document.getElementById('avatar').value = '';
                 }
                 if(!isImage(extension)) {
                     error = true;
                     throw new Error('File type allowed: PNG, JPG, JPEG, GIF, SVG, BMP.');
-                    document.getElementById('avatar').value = '';
                 }
                 if(error === false) {
                     setAvatar(e.target.files[0]);
@@ -122,8 +117,7 @@ const ProfileEdit = ({
             }
         }
     }
-    const { id, name, email, description, skill, showcase, telephone, salary, location, redirect } = formData;
-    let imageSource = avatar ? `http://localhost:5000/images/engineer/${avatar}` : defaultImage;
+    const { id, name, email, description, skill, showcase, telephone, salary, location } = formData;
     const submitProfile = (e) => {
          let date = selectedDate.getUTCFullYear() + '-' + ('00' + (selectedDate.getUTCMonth()+1)).slice(-2) + '-' + ('00' + selectedDate.getUTCDate()).slice(-2);
         e.preventDefault();

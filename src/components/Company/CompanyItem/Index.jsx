@@ -7,7 +7,7 @@ const CompanyItem = ({ company }) => {
         <Fragment>
             <div>
                 <Link className='text-white' to={`company/profile/${company.slug}`}>
-                    <img className='is-image is-rounded' src={logo} />
+                    <img className='is-image is-rounded' src={logo} alt={ company.name } />
                     <div id='description-company'>
                         <p className='mb-3 sub-title'>{company.name}</p>
                         <p className='mb-3'>{company.email}</p>
