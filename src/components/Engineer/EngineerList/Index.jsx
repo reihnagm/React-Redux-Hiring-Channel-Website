@@ -5,7 +5,7 @@ const EngineerList = ({ engineers, handlePagination, nextPage, prevPage }) => {
         <Fragment>
             <div className='container'>
                 <div id='masonry'>
-                    {engineers && engineers.map(engineer => (
+                    { engineers && engineers.map(engineer => (
                         <div id='item' key={engineer.id}>
                             <EngineerItem engineer={engineer} />
                         </div>
