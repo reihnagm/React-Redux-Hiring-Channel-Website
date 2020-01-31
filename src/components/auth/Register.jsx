@@ -33,49 +33,7 @@ const Register = ({ register, isAuthenticated, history }) => {
     }
     const onSubmit = event => {
         event.preventDefault()
-        let error = false;
-        try {
-            if(name.trim() === "") {
-                error = true;
-                throw new Error('Name Required.');
-            }
-            if(email.trim() === "") {
-                error = true;
-                throw new Error('Email Required.');
-            }
-            let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
-            let checkEmail = regexp.test(email)
-            if(checkEmail) {
-                error = false
-            } else {
-                throw new Error('Invalid Email. e.g : johndoe@gmail.com')
-            }
-            if(password.trim() === "") {
-                error = true;
-                throw new Error('Password Required.');
-            }
-            if(password.length < 6) {
-                error = true;
-                throw new Error('Password Minimum 6 Character.');
-            }
-            if(typeof role === "undefined") {
-                throw new Error('Role Required.')
-            }
-            if(error === false) {
-                if(role.value === 1) {
-                    history.push("/engineers");
-                }
-                if(role.value === 2) {
-                    history.push("/companies");
-                }
-                register(name, email, password, role);
-            }
-        } catch(error) {
-            Toast.fire({
-                icon: 'error',
-                title: error.message
-            });
-        }
+        register(name, email, password, role, history);
     }
     const optionsRole = [
         { value: 1, label: 'Engineer'},

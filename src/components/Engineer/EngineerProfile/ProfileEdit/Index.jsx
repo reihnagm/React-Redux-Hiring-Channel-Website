@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import * as moment from 'moment';
 import { connect } from 'react-redux';
 import { getCurrentProfileEngineer, updateProfileEngineer } from '../../../../actions/engineer';
 import DateFnsUtils from '@date-io/date-fns';
@@ -28,14 +29,14 @@ const ProfileEdit = ({
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     });
-    const [selectedDate, handleDateChange] = useState(new Date());
+    let birthdate = engineer.data && engineer.data.birthdate;
+    const [selectedDate, setSelectedDate] = useState();
     let idProps = engineer.data && engineer.data.id;
     let avatarProps = engineer.data && engineer.data.avatar;
     let nameProps = engineer.data && engineer.data.name;
     let emailProps = engineer.data && engineer.data.email;
     let descriptionProps = engineer.data && engineer.data.description;
     let skillProps = engineer.data && engineer.data.skill;
-    let birthdateProps = engineer.data && engineer.data.birthdate;
     let telephoneProps = engineer.data && engineer.data.telephone;
     let showcaseProps = engineer.data && engineer.data.showcase;
     let salaryProps = engineer.data && engineer.data.salary;
@@ -71,9 +72,22 @@ const ProfileEdit = ({
             salary: salaryProps,
         });
         setAvatar(avatarProps);
-    },[getCurrentProfileEngineer, idProps, avatarProps, nameProps, emailProps, descriptionProps, skillProps, locationProps, showcaseProps, telephoneProps, salaryProps]);
+        const _checkBirthdate = (birthdate) => {
+            if(typeof birthdate === "undefined") {
+                return false;
+            } else {
+                let convertDate = moment(birthdate).format('YYYY-MM-D');
+                setSelectedDate(convertDate);
+            }
+        }
+        _checkBirthdate(birthdate);
+    },[getCurrentProfileEngineer, idProps, birthdate, avatarProps, nameProps, emailProps, descriptionProps, skillProps, locationProps, showcaseProps, telephoneProps, salaryProps]);
     const onChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
+    const handleDate = (value) => {
+        let convertDate = moment(value).format('YYYY-MM-D');
+        setSelectedDate(convertDate);
     }
     const handleAvatar = (e) => {
         let error = false;
@@ -115,7 +129,6 @@ const ProfileEdit = ({
     }
     const { id, name, email, description, skill, showcase, telephone, salary, location } = formData;
     const submitProfile = (e) => {
-         let date = selectedDate.getUTCFullYear() + '-' + ('00' + (selectedDate.getUTCMonth()+1)).slice(-2) + '-' + ('00' + selectedDate.getUTCDate()).slice(-2);
         e.preventDefault();
         let error = false;
         try {
@@ -146,7 +159,7 @@ const ProfileEdit = ({
                 data.set('avatar', avatar ? avatar : '');
                 data.set('name', name ? name : '');
                 data.set('email', email ? email: '');
-                data.set('birthdate', date ? date : birthdateProps);
+                data.set('birthdate', selectedDate);
                 data.set('description', description ? description : '');
                 data.set('skill', skill ? skill : '');
                 data.set('showcase', showcase ? showcase : '');
@@ -229,7 +242,7 @@ const ProfileEdit = ({
                        <div className='field'>
                             <label> Birthdate </label>
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <DatePicker value={selectedDate} onChange={handleDateChange} />
+                                <DatePicker value={selectedDate} onChange={handleDate} />
                             </MuiPickersUtilsProvider>
                        </div>
                        <div className='field'>

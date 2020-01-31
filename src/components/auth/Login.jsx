@@ -1,20 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
 import { login } from '../../actions/auth';
-const Login = ({ login, isAuthenticated }) => {
-    const Toast = Swal.mixin({
-        position: 'top-end',
-        toast: true,
-        timer: 3000,
-        showConfirmButton: false,
-        timerProgressBar: false,
-        onOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    });
+const Login = ({ login, isAuthenticated, history }) => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -22,41 +10,8 @@ const Login = ({ login, isAuthenticated }) => {
     const { email, password } = formData
     const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
     const onSubmit = event => {
-        event.preventDefault()
-        let error = false
-        try {
-            if(email.trim() === '') {
-                error = true
-                throw new Error('Email Required.')
-            }
-            let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
-            let checkEmail = regexp.test(email)
-            if(checkEmail) {
-                error = false
-            } else {
-                throw new Error('Invalid Email. e.g : johndoe@gmail.com')
-            }
-            if(password.trim() === '') {
-                error = true
-                throw new Error('Password Required.')
-            }
-            if(password.length < 6) {
-                error = true
-                throw new Error('Password Minimum 6 Character.')
-            }
-            if(error === false) {
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Login successfully'
-                });
-                login(email, password);
-            }
-        } catch(error) {
-            Toast.fire({
-                icon: 'error',
-                title: error.message
-            });
-        }
+        event.preventDefault();
+        login(email, password);
     }
     if (isAuthenticated) {
         return <Redirect to='/' />

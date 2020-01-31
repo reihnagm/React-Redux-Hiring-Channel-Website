@@ -21,8 +21,8 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
         _fetchData();
     }, [getProfileEngineerBySlug, match.params.slug]);
     let n = new Date(birthdate);
-    let y = n.getUTCFullYear();
-    let d = n.getUTCDate()+1;
+    let y = n.getFullYear();
+    let d = n.getDate();
     let m = n.getUTCMonth()+1;
     let months = ["January","Februari","Maret","April","Mei","Juni",'Juli',"Agustus","September","Oktober","November","Desember"];
     let thisMonth  = months[m-1];

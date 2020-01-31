@@ -28,10 +28,10 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
         }, 800)
     }
     let n = new Date(birthdate);
-    let y = n.getUTCFullYear();
-    let d = n.getUTCDate()+1;
-    let m = n.getUTCMonth()+1;
-    let months = ["January","Februari","Maret","April","Mei","Juni",'Juli',"Agustus","September","Oktober","November","Desember"];
+    let y = n.getFullYear();
+    let d = n.getDate();
+    let m = n.getMonth()+1;
+    let months = ["January","February","March","April","May","June",'July',"August","September","October","November","December"];
     let thisMonth  = months[m-1];
     if(isNaN(y) || isNaN(d) || typeof y === "undefined") {
         y = '';
