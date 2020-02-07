@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react'
-import EngineerItem from '../EngineerItem/Index'
+import React, { Fragment } from 'react';
+import EngineerItem from '../EngineerItem/Index';
 const EngineerList = ({ engineers, handlePagination, nextPage, prevPage }) => {
     return (
         <Fragment>
@@ -7,7 +7,9 @@ const EngineerList = ({ engineers, handlePagination, nextPage, prevPage }) => {
                 <div id='masonry'>
                     { engineers && engineers.map(engineer => (
                         <div id='item' key={engineer.id}>
-                            <EngineerItem engineer={engineer} />
+                            <EngineerItem
+                                item={engineer}
+                            />
                         </div>
                     ))}
                 </div>

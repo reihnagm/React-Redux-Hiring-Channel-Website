@@ -9,7 +9,7 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
     let name = engineer.name;
     let email = engineer.email;
     let desc =  engineer.description;
-    let skill = engineer.skill;
+    let skills = engineer.skills;
     let location = engineer.location;
     let showcase =  engineer.showcase;
     let birthdate = engineer.birthdate;
@@ -50,7 +50,7 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
                     <ul id="profile-skill">
                         <li id="profile-list">
                             <span className='is-bold'> Skills: </span>
-                            { skill }
+                            { skills }
                         </li>
                     </ul>
                 </div>

@@ -1,21 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import {
+    CssBaseline,
+    Container,
+    Grid,
+    Button,
+    TextField
+} from '@material-ui/core';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
 import * as moment from 'moment';
 import { connect } from 'react-redux';
-import { getCurrentProfileEngineer, updateProfileEngineer } from '../../../../actions/engineer';
-import DateFnsUtils from '@date-io/date-fns';
 import {
-    DatePicker,
-    MuiPickersUtilsProvider
-} from '@material-ui/pickers'
-import InputMask from 'react-input-mask';
-import Alert from '../../../Alert/Index';
+    getCurrentProfileEngineer,
+    getSkills,
+    getSkillsBasedOnProfileEngineer,
+    updateProfileEngineer } from '../../../../actions/engineer';
 import Spinner from '../../../Spinner/Index';
+// import { useForm } from 'react-hook-form'; belum nyoba pake
 const ProfileEdit = ({
+    getSkills,
+    getSkillsBasedOnProfileEngineer,
+    deleteSkillId,
     getCurrentProfileEngineer,
     updateProfileEngineer,
-    engineer: { engineer, loading },
+    engineer: { engineer, skills, skills_engineer, loading },
     auth: { user },
     history }) => {
     const Toast = Swal.mixin({
@@ -30,13 +45,11 @@ const ProfileEdit = ({
         }
     });
     let birthdate = engineer.data && engineer.data.birthdate;
-    const [selectedDate, setSelectedDate] = useState();
     let idProps = engineer.data && engineer.data.id;
     let avatarProps = engineer.data && engineer.data.avatar;
     let nameProps = engineer.data && engineer.data.name;
     let emailProps = engineer.data && engineer.data.email;
     let descriptionProps = engineer.data && engineer.data.description;
-    let skillProps = engineer.data && engineer.data.skill;
     let telephoneProps = engineer.data && engineer.data.telephone;
     let showcaseProps = engineer.data && engineer.data.showcase;
     let salaryProps = engineer.data && engineer.data.salary;
@@ -48,24 +61,37 @@ const ProfileEdit = ({
         name: '',
         email: '',
         description: '',
-        skill: '',
         showcase: '',
         telephone: '',
         salary: '',
         location: '',
     });
+    const [skillsMask, setSkills] = useState([]);
+    const [selectedDate, setSelectedDate] = useState('');
     const [avatar, setAvatar] = useState('');
     useEffect(() => {
+        // register({ name: "array" });
         const _fetchData = async () => {
             await getCurrentProfileEngineer();
         }
+        const _fetchSkills = async () => {
+            await getSkills();
+        }
+        const _fetchSkillsBasedOnProfileEngineer = async () => {
+            if(typeof idProps === "undefined") {
+                return false;
+            } else {
+                await getSkillsBasedOnProfileEngineer(idProps);
+            }
+        }
+        _fetchSkillsBasedOnProfileEngineer();
+        _fetchSkills();
         _fetchData();
         setFormData({
             id: idProps,
             name: nameProps,
             email: emailProps,
             description: descriptionProps,
-            skill: skillProps,
             location: locationProps,
             showcase: showcaseProps,
             telephone: telephoneProps,
@@ -81,14 +107,28 @@ const ProfileEdit = ({
             }
         }
         _checkBirthdate(birthdate);
-    },[getCurrentProfileEngineer, idProps, birthdate, avatarProps, nameProps, emailProps, descriptionProps, skillProps, locationProps, showcaseProps, telephoneProps, salaryProps]);
-    const onChange = e => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    },[getCurrentProfileEngineer, getSkills, getSkillsBasedOnProfileEngineer, idProps, birthdate, avatarProps, nameProps, emailProps, descriptionProps, locationProps, showcaseProps, telephoneProps, salaryProps]);
+    const onChange = event => {
+        setFormData({ ...formData, [event.target.name]: event.target.value });
     }
     const handleDate = (value) => {
         let convertDate = moment(value).format('YYYY-MM-D');
         setSelectedDate(convertDate);
     }
+    // const valHtml = val.map((option, index) => {
+    //     return (
+    //         <Chip
+    //             key={option.id}
+    //             label={option.name}
+    //             onDelete={() => {
+    //                 setVal(val.filter(entry => entry !== option))
+    //                 let engineer_id = id;
+    //                 let skill_id = option.id;
+    //                 deleteSkillId(skill_id, engineer_id);
+    //             }}
+    //         />
+    //     )
+    // }) // jadi chipnya disini di forloop
     const handleAvatar = (e) => {
         let error = false;
         if(e.target.files) {
@@ -127,54 +167,50 @@ const ProfileEdit = ({
             }
         }
     }
-    const { id, name, email, description, skill, showcase, telephone, salary, location } = formData;
-    const submitProfile = (e) => {
-        e.preventDefault();
-        let error = false;
+    const { id, name, email, description, showcase, telephone, salary, location } = formData;
+    const onSubmit = (event) => {
+        event.preventDefault();
         try {
             if(name === null || name.trim() === "") {
-                error = true;
-                throw new Error('Name Required.');
+                throw new Error('name required.');
             }
             if(description === null || description.trim() === "") {
-                error = true;
-                throw new Error('Description Required.');
+                throw new Error('description required.');
             }
             if(name) {
                 if(name.length < 3) {
-                    error = true;
-                    throw new Error('Name Minimum 3 Character.');
+                    throw new Error('name minimum 3 character length.');
                 }
             }
-            if(description) {
-                if(description.length < 10) {
-                    error = true;
-                    throw new Error('Description Minimum 10 Character.');
-                }
-            }
-            if(error === false) {
-                let data = new FormData();
-                data.set('user_id', user_id);
-                data.append('avatar', avatar ? avatar : '');
-                data.set('avatar', avatar ? avatar : '');
-                data.set('name', name ? name : '');
-                data.set('email', email ? email: '');
-                data.set('birthdate', selectedDate);
-                data.set('description', description ? description : '');
-                data.set('skill', skill ? skill : '');
-                data.set('showcase', showcase ? showcase : '');
-                data.set('telephone', telephone ? telephone : '');
-                data.set('salary', salary ? salary : '');
-                data.set('location', location ? location : '');
-                updateProfileEngineer(id, data);
-                setTimeout(() => {
-                    history.push('/engineers');
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Yay !, Profile Updated.'
-                    });
-                }, 800);
-            }
+            // if(description) {
+            //     if(description.length > 200) {
+            //         throw new Error('description maximum 200 character length.');
+            //     }
+            // }
+            let data = new FormData();
+            data.set('user_id', user_id);
+            data.append('avatar', avatar ? avatar : '');
+            data.set('avatar', avatar ? avatar : '');
+            data.set('name', name ? name : '');
+            data.set('email', email ? email: '');
+            data.set('birthdate', selectedDate);
+            data.set('description', description ? description : '');
+            data.set('skills', skillsMask.length === 0 ? JSON.stringify(skills_engineer) : JSON.stringify(skillsMask));
+            // pake JSON.stringify ngatasin biar ngga [object object] datanya
+            // ntar di JSON.parse di backend
+            // kalo cek array pake 0 bukan null
+            data.set('showcase', showcase ? showcase : '');
+            data.set('telephone', telephone ? telephone : '');
+            data.set('salary', salary ? salary : '');
+            data.set('location', location ? location : '');
+            updateProfileEngineer(id, data);
+            setTimeout(() => {
+                history.push('/engineers');
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Yay ! Profile Updated.'
+                });
+            }, 1000);
         } catch (error) {
             Toast.fire({
                 icon: 'error',
@@ -183,124 +219,145 @@ const ProfileEdit = ({
         }
     }
     return loading ? ( <Spinner /> ) : (
-        <div className='columns is-justify-center'>
-           <div className='column is-half'>
-                <Alert />
-                <br />
-               <div className='cards'>
-                   <h3 id='title-edit-engineer'>Edit Profile</h3>
-                   <form onSubmit={e => submitProfile(e)}>
-                       <div className='field'>
-                           <label> Name </label>
-                           <input
-                                onChange={e => onChange(e)}
+        <>
+            <Container fixed>
+                <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                >
+                    <Grid
+                        container
+                        md={8}
+                        xs={12}
+                    >
+                        <form onSubmit={(event) => onSubmit(event)}>
+                           <TextField
+                                onChange={onChange}
                                 value={name}
-                                type='text'
-                                name='name'
-                                placeholder='Name'>
-                           </input>
-                       </div>
-                       <div className='field'>
-                           <label> E-mail Address </label>
-                           <input
-                                disabled
+                                name="name"
+                                margin="normal"
+                                variant="outlined"
+                                label="Name"
+                                fullWidth
+                            />
+                            <TextField
+                                onChange={onChange}
                                 value={email}
-                                name='email'
-                                type='text'
-                                placeholder='E-mail Address'>
-                           </input>
-                       </div>
-                       <div className='field'>
-                           <label> Description </label>
-                           <textarea
-                                onChange={e => onChange(e)}
+                                name="email"
+                                margin="normal"
+                                variant="outlined"
+                                label="E-mail Address"
+                                fullWidth
+                             />
+                            <TextField
+                                onChange={onChange}
                                 value={description}
-                                name='description'
-                                placeholder='Description'>
-                           </textarea>
-                       </div>
-                       <div className='field'>
-                           <label> Skill </label>
-                           <input
-                                onChange={e => onChange(e)}
-                                value={skill}
-                                type='text'
-                                name='skill'
-                                placeholder='Skill'>
-                           </input>
-                       </div>
-                       <div className='field'>
-                           <label> Location </label>
-                           <input
+                                multiline
+                                rows="4"
+                                name="description"
+                                margin="normal"
+                                variant="outlined"
+                                label="Description"
+                                fullWidth
+                            />
+                            <Autocomplete
+                                multiple
+                                filterSelectedOptions
+                                defaultValue={skills_engineer}
+                                options={skills}
+                                onChange={(event, getSkills) => {
+                                    setSkills(getSkills);
+                                }}
+                                getOptionLabel={skills => skills.name}
+                                getOptionSelected={(option, value) => {
+                                    return option.id === value.id
+                                }}
+                                renderInput={params => (
+                                    <TextField
+                                        {...params}
+                                        margin="normal"
+                                        variant="outlined"
+                                        label="Skills"
+                                        fullWidth
+                                    />
+                                )}
+                            />
+                            <TextField
                                 onChange={e => onChange(e)}
                                 value={location}
-                                type='text'
-                                name='location'
-                                placeholder='Location'>
-                           </input>
-                       </div>
-                       <div className='field'>
-                            <label> Birthdate </label>
+                                name="location"
+                                margin="normal"
+                                variant="outlined"
+                                label="Location"
+                                fullWidth
+                            />
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <DatePicker value={selectedDate} onChange={handleDate} />
+                                <KeyboardDatePicker
+                                    margin="normal"
+                                    id="date-picker-dialog"
+                                    variant="outlined"
+                                    format="yyyy/MM/dd"
+                                    value={selectedDate}
+                                    onChange={handleDate}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
                             </MuiPickersUtilsProvider>
-                       </div>
-                       <div className='field'>
-                            <label> Showcase </label>
-                            <input
+                            <TextField
                                 onChange={e => onChange(e)}
                                 value={showcase}
-                                type='text'
-                                name='showcase'
-                                placeholder='http://johndoe.com/showcase'>
-                           </input>
-                       </div>
-                       <div className='field'>
-                            <label> Telephone </label>
-                            <InputMask
+                                name="showcase"
+                                margin="normal"
+                                variant="outlined"
+                                label="Showcase"
+                                fullWidth
+                            />
+                            <TextField
                                 onChange={e => onChange(e)}
                                 value={telephone}
-                                type='text'
-                                name='telephone'
-                                placeholder='Enter phone number'
-                           />
-                       </div>
-                        <div className='field'>
-                            <label> Avatar </label>
-                            <input id='avatar' type='file' onChange={e => handleAvatar(e)}/>
-                       </div>
-                       <div className='field'>
-                           <label> Salary </label>
-                           <InputMask
+                                name="telephone"
+                                margin="normal"
+                                variant="outlined"
+                                label="Telephone"
+                                fullWidth
+                            />
+                            <TextField
                                 onChange={e => onChange(e)}
                                 value={salary}
-                                type='text'
-                                name='salary'
-                                placeholder='Salary'
-                           />
-                       </div>
-                       <div className='field'>
-                           <button
-                               type='submit'
-                               className='is-block is-rounded button is-fullwidth'>
-                               Save
-                           </button>
-                       </div>
-                       <div className='field'>
-                           <Link
-                               to='/engineers'
-                               className='is-block is-center button is-rounded is-fullwidth'>
-                               Back
-                           </Link>
-                       </div>
-                   </form>
-               </div>
-           </div>
-       </div>
+                                name="salary"
+                                margin="normal"
+                                variant="outlined"
+                                label="Salary"
+                                fullWidth
+                            />
+                            <Grid
+                                container
+                                direction="row"
+                                justify="center"
+                                alignItems="center"
+                            >
+                                <Button type="button" variant="contained" color="primary" component={ Link } to="/engineers">
+                                    Back
+                                </Button>
+                                <Button type="submit" variant="contained" color="primary">
+                                    Save
+                                </Button>
+                            </Grid>
+                        </form>
+                    </Grid>
+                </Grid>
+            </Container>
+        </>
     )
 }
 const mapStateToProps = state => ({
     engineer: state.engineer,
     auth: state.auth
-})
-export default connect(mapStateToProps, { getCurrentProfileEngineer, updateProfileEngineer })(withRouter(ProfileEdit))
+});
+export default connect(
+    mapStateToProps,
+    { getCurrentProfileEngineer, getSkills, getSkillsBasedOnProfileEngineer, updateProfileEngineer }
+)(withRouter(ProfileEdit));

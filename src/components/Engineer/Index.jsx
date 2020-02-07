@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
-import { connect } from 'react-redux';
 import { getEngineers } from '../../actions/engineer';
+import {connect} from 'react-redux';
 import Header from '../layouts/Header';
 import HeaderFilter from '../layouts/HeaderFilter';
 import Spinner from '../Spinner/Index';
@@ -73,6 +73,7 @@ class Engineer extends Component {
                 {this.props.loading ? (<Spinner />) : (
                     <EngineerList
                         engineers={this.props.engineers && this.props.engineers.data}
+                        skills_engineer={this.props.skills_engineer}
                         handlePagination={this.handlePagination}
                         nextPage={this.props.engineers && this.props.engineers.pageDetail && this.props.engineers.pageDetail.next_page}
                         prevPage={this.props.engineers && this.props.engineers.pageDetail && this.props.engineers.pageDetail.prev_page}
@@ -84,6 +85,8 @@ class Engineer extends Component {
 }
 const mapStateToProps = state => ({
     engineers: state.engineer.engineers,
+    engineer: state.engineer.engineer,
+    skills_engineer: state.engineer.skills_engineer,
     loading: state.engineer.loading,
     search: state.engineer.search,
     sort: state.engineer.sort,
@@ -92,7 +95,7 @@ const mapStateToProps = state => ({
     page: state.engineer.page,
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user
-})
+});
 export default connect(
     mapStateToProps,
     { getEngineers }

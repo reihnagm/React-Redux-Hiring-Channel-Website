@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import Header from './Header';
-import Footer from './Footer';
 const Landing = () => {
     return (
         <Fragment>
@@ -14,7 +13,6 @@ const Landing = () => {
                         <p className='sub-title text-black'>Want to find a job ? or looking for employees ? </p>
                     </div>
                 </div>
-            <Footer />
         </Fragment>
     )
 }

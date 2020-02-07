@@ -1,22 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Swal from 'sweetalert2';
 import { register } from '../../actions/auth';
 import 'react-dropdown/style.css';
 import Dropdown from 'react-dropdown';
 const Register = ({ register, isAuthenticated, history }) => {
-    const Toast = Swal.mixin({
-        position: 'top-end',
-        toast: true,
-        timer: 3000,
-        showConfirmButton: false,
-        timerProgressBar: false,
-        onOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    });
     const [formData, setFormData] = useState({
         name: '',
         email: '',

@@ -135,6 +135,6 @@ export const register = (name, email, password, role, history) => async dispatch
         });
     }
 }
-export const logout = () => dispatch => {
+export const logout = () => async dispatch => {
     dispatch({ type: LOGOUT });
 }

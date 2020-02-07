@@ -14,7 +14,7 @@ import CompanyProfileEdit from '../Company/CompanyProfile/ProfileEdit/Index';
 import Private from './Private/Index';
 const Routes = () => {
     return (
-        <Switch>
+        <Switch>    
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/companies' component={Company} />

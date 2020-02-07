@@ -1,6 +1,10 @@
 import {
 	LOADING,
 	LOADED,
+	GET_SKILLS,
+	GET_SKILLS_ERROR,
+	GET_SKILLS_ENGINEER,
+	GET_SKILLS_ENGINEER_ERROR,
 	GET_ENGINEERS,
 	GET_ENGINEERS_ERROR,
 	GET_CURRENT_PROFILE_ENGINEER,
@@ -14,6 +18,8 @@ import {
 } from '../actions/types'
 const initialState = {
 	engineers: {},
+	skills: {},
+	skills_engineer: [], // harus array autocomplete nya
 	engineer: {},
 	error: {},
 	loading: true,
@@ -35,6 +41,26 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				loading: false
+			}
+		case GET_SKILLS:
+			return {
+				...state,
+				skills: payload
+			}
+		case GET_SKILLS_ERROR:
+			return {
+				...state,
+				error: payload
+			}
+		case GET_SKILLS_ENGINEER:
+			return {
+				...state,
+				skills_engineer: payload
+			}
+		case GET_SKILLS_ENGINEER_ERROR:
+			return {
+				...state,
+				error: payload
 			}
 		case GET_ENGINEERS:
 			return {
