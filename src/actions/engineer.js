@@ -46,7 +46,7 @@ export const getSkills = () => async dispatch => {
         const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/skills`);
         dispatch({
             type: GET_SKILLS,
-            payload: response.data.data
+            payload: response.data
         });
     } catch (error) {
         dispatch({
@@ -60,7 +60,7 @@ export const getSkillsBasedOnProfileEngineer = (engineer_id) => async dispatch =
         const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/skills-engineer/${engineer_id}`);
         dispatch({
             type: GET_SKILLS_ENGINEER,
-            payload: response.data.data
+            payload: response.data
         });
     } catch (error) {
         dispatch({

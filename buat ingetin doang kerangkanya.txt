@@ -1,0 +1,36 @@
+    {/*<div className='field'>
+                            <Autocomplete
+                                multiple
+                                freeSolo
+                                filterSelectedOptions
+                                getOptionSelected={(option, value) => {
+                                    return option.id === value.id
+                                }}
+                                options={skills}
+                                onChange={(e, newValue) => setSkills(newValue)}
+                                getOptionLabel={option => option.name}
+                                value={skillsMask}
+                                renderTags={() => (
+                                    skillsMask.map((option, index) => (
+                                        <Chip
+                                            key={option.id}
+                                            label={option.name}
+                                            onDelete={() => {
+                                                setSkills(skillsMask.filter(entry => entry !== option))
+                                                let engineer_id = id;
+                                                let skill_id = option.id;
+                                                deleteSkillId(skill_id, engineer_id);
+                                            }}
+                                        />
+                                    ))
+                                )}
+                                renderInput={params => (
+                                    <TextField
+                                        {...params}
+                                        variant="outlined"
+                                        label="Skills"
+                                        fullWidth
+                                    />
+                            )}
+                        />
+                        </div> */}

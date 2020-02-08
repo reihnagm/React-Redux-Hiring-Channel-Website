@@ -19,7 +19,7 @@ import {
 const initialState = {
 	engineers: {},
 	skills: {},
-	skills_engineer: [], // harus array autocomplete nya
+	skills_engineer: {},
 	engineer: {},
 	error: {},
 	loading: true,
@@ -95,7 +95,7 @@ export default function (state = initialState, action) {
 		case UPDATE_PROFILE_ENGINEER:
 	      	return {
 	        	...state,
-	        	engineers: state.engineers.concat(payload)
+	        	engineers: payload
 			}
 		case UPDATE_PROFILE_ENGINEER_ERROR:
 			return {

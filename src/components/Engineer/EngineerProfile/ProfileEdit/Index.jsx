@@ -7,13 +7,19 @@ import {
     Container,
     Grid,
     Button,
+    Input,
+    InputLabel,
+    FormControl,
     TextField
 } from '@material-ui/core';
+import Cleave from 'cleave.js';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
 import 'date-fns';
+import MaskedInput from 'react-text-mask';
+import NumberFormat from 'react-number-format';
 import DateFnsUtils from '@date-io/date-fns';
 import * as moment from 'moment';
 import { connect } from 'react-redux';
@@ -62,30 +68,56 @@ const ProfileEdit = ({
         email: '',
         description: '',
         showcase: '',
-        telephone: '',
         salary: '',
+        telephone: '',
         location: '',
     });
-    const [skillsMask, setSkills] = useState([]);
+    function phoneMask(props) {
+        const { inputRef, ...other } = props;
+        return (
+            <MaskedInput
+                {...other}
+                ref={ref => {
+                    inputRef(ref ? ref.inputElement : null);
+                }}
+                onChange={() => {}} /* bug, event onChange harus digunakan, jika tidak nilai tidak bisa dihapus */
+                mask={['(',/[1-9]/,/\d/,/\d/,')',' ',/\d/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]} /* [1-9] mulai dari mana angka pertamanya */
+                placeholderChar={'_'}
+                showMask
+            />
+        );
+    }
+    function moneyMask(props) {
+        const { inputRef, onChange, ...other } = props;
+        return (
+            <NumberFormat
+                {...other}
+                getInputRef={inputRef}
+                onValueChange={values => {
+                    onChange(values)
+                }}
+                thousandSeparator
+                isNumericString={true}
+                prefix="$"
+            />
+        );
+    }
+    const [value, setValue] = useState();
+    const [skillsMask, setSkills] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [avatar, setAvatar] = useState('');
     useEffect(() => {
         // register({ name: "array" });
+
         const _fetchData = async () => {
             await getCurrentProfileEngineer();
-        }
-        const _fetchSkills = async () => {
             await getSkills();
-        }
-        const _fetchSkillsBasedOnProfileEngineer = async () => {
             if(typeof idProps === "undefined") {
                 return false;
             } else {
                 await getSkillsBasedOnProfileEngineer(idProps);
             }
         }
-        _fetchSkillsBasedOnProfileEngineer();
-        _fetchSkills();
         _fetchData();
         setFormData({
             id: idProps,
@@ -94,8 +126,8 @@ const ProfileEdit = ({
             description: descriptionProps,
             location: locationProps,
             showcase: showcaseProps,
-            telephone: telephoneProps,
             salary: salaryProps,
+            telephone: telephoneProps
         });
         setAvatar(avatarProps);
         const _checkBirthdate = (birthdate) => {
@@ -107,7 +139,7 @@ const ProfileEdit = ({
             }
         }
         _checkBirthdate(birthdate);
-    },[getCurrentProfileEngineer, getSkills, getSkillsBasedOnProfileEngineer, idProps, birthdate, avatarProps, nameProps, emailProps, descriptionProps, locationProps, showcaseProps, telephoneProps, salaryProps]);
+    },[getCurrentProfileEngineer, getSkills, getSkillsBasedOnProfileEngineer, idProps, birthdate, avatarProps, nameProps, emailProps, descriptionProps, locationProps, showcaseProps, salaryProps, telephoneProps]);
     const onChange = event => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     }
@@ -195,7 +227,7 @@ const ProfileEdit = ({
             data.set('email', email ? email: '');
             data.set('birthdate', selectedDate);
             data.set('description', description ? description : '');
-            data.set('skills', skillsMask.length === 0 ? JSON.stringify(skills_engineer) : JSON.stringify(skillsMask));
+            data.set('skills', skillsMask.length === 0 ? JSON.stringify(skills_engineer.data) : JSON.stringify(skillsMask));
             // pake JSON.stringify ngatasin biar ngga [object object] datanya
             // ntar di JSON.parse di backend
             // kalo cek array pake 0 bukan null
@@ -228,7 +260,7 @@ const ProfileEdit = ({
                     alignItems="center"
                 >
                     <Grid
-                        container
+                        item
                         md={8}
                         xs={12}
                     >
@@ -265,8 +297,8 @@ const ProfileEdit = ({
                             <Autocomplete
                                 multiple
                                 filterSelectedOptions
-                                defaultValue={skills_engineer}
-                                options={skills}
+                                defaultValue={skills_engineer.length !== 0 && skills_engineer.data}
+                                options={skills.length !== 0 && skills.data}
                                 onChange={(event, getSkills) => {
                                     setSkills(getSkills);
                                 }}
@@ -296,14 +328,11 @@ const ProfileEdit = ({
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <KeyboardDatePicker
                                     margin="normal"
-                                    id="date-picker-dialog"
+                                    id="birthdate"
                                     variant="outlined"
                                     format="yyyy/MM/dd"
                                     value={selectedDate}
                                     onChange={handleDate}
-                                    KeyboardButtonProps={{
-                                        'aria-label': 'change date',
-                                    }}
                                 />
                             </MuiPickersUtilsProvider>
                             <TextField
@@ -323,14 +352,23 @@ const ProfileEdit = ({
                                 variant="outlined"
                                 label="Telephone"
                                 fullWidth
+                                InputProps={{
+                                    inputComponent: phoneMask
+                                }}
                             />
-                            <TextField
-                                onChange={e => onChange(e)}
+                            <NumberFormat
+                                onChange={(e) => onChange(e)}
                                 value={salary}
                                 name="salary"
                                 margin="normal"
                                 variant="outlined"
-                                label="Salary"
+                                label="salary"
+                                decimalScale={3}
+                                fixedDecimalScale={true}
+                                allowNegative={false}
+                                thousandSeparator={true}
+                                prefix={"Rp "}
+                                customInput={TextField}
                                 fullWidth
                             />
                             <Grid
@@ -343,7 +381,7 @@ const ProfileEdit = ({
                                     Back
                                 </Button>
                                 <Button type="submit" variant="contained" color="primary">
-                                    Save
+                                    Update Profile
                                 </Button>
                             </Grid>
                         </form>
