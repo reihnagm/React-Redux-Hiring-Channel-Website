@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import SkillsComponent from './Skills/Index';
 import {
-    CssBaseline,
     Container,
     Grid,
     Button,
-    Input,
-    InputLabel,
-    FormControl,
     TextField
 } from '@material-ui/core';
-import Cleave from 'cleave.js';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
@@ -29,16 +24,15 @@ import {
     getSkillsBasedOnProfileEngineer,
     updateProfileEngineer } from '../../../../actions/engineer';
 import Spinner from '../../../Spinner/Index';
-// import { useForm } from 'react-hook-form'; belum nyoba pake
 const ProfileEdit = ({
     getSkills,
     getSkillsBasedOnProfileEngineer,
-    deleteSkillId,
     getCurrentProfileEngineer,
     updateProfileEngineer,
     engineer: { engineer, skills, skills_engineer, loading },
     auth: { user },
-    history }) => {
+    history
+    }) => {
     const Toast = Swal.mixin({
         position: 'top-end',
         toast: true,
@@ -50,7 +44,6 @@ const ProfileEdit = ({
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     });
-    let birthdate = engineer.data && engineer.data.birthdate;
     let idProps = engineer.data && engineer.data.id;
     let avatarProps = engineer.data && engineer.data.avatar;
     let nameProps = engineer.data && engineer.data.name;
@@ -61,6 +54,7 @@ const ProfileEdit = ({
     let salaryProps = engineer.data && engineer.data.salary;
     let locationProps = engineer.data && engineer.data.location;
     let user_id = user.data && user.data.id;
+    let birthdate = engineer.data && engineer.data.birthdate
     const [formData, setFormData] = useState({
         id: '',
         user_id: '',
@@ -80,36 +74,17 @@ const ProfileEdit = ({
                 ref={ref => {
                     inputRef(ref ? ref.inputElement : null);
                 }}
-                onChange={() => {}} /* bug, event onChange harus digunakan, jika tidak nilai tidak bisa dihapus */
-                mask={['(',/[1-9]/,/\d/,/\d/,')',' ',/\d/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]} /* [1-9] mulai dari mana angka pertamanya */
+                mask={['(',/[1-9]/,/\d/,/\d/,')',' ',/\d/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
                 placeholderChar={'_'}
                 showMask
             />
         );
     }
-    function moneyMask(props) {
-        const { inputRef, onChange, ...other } = props;
-        return (
-            <NumberFormat
-                {...other}
-                getInputRef={inputRef}
-                onValueChange={values => {
-                    onChange(values)
-                }}
-                thousandSeparator
-                isNumericString={true}
-                prefix="$"
-            />
-        );
-    }
-    const [value, setValue] = useState();
-    const [skillsMask, setSkills] = useState('');
-    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [avatar, setAvatar] = useState('');
+    const [skillsMask, setSkills] = useState([]);
     useEffect(() => {
-        // register({ name: "array" });
-
-        const _fetchData = async () => {
+        const fetchData = async () => {
             await getCurrentProfileEngineer();
             await getSkills();
             if(typeof idProps === "undefined") {
@@ -118,7 +93,7 @@ const ProfileEdit = ({
                 await getSkillsBasedOnProfileEngineer(idProps);
             }
         }
-        _fetchData();
+        fetchData();
         setFormData({
             id: idProps,
             name: nameProps,
@@ -130,16 +105,13 @@ const ProfileEdit = ({
             telephone: telephoneProps
         });
         setAvatar(avatarProps);
-        const _checkBirthdate = (birthdate) => {
-            if(typeof birthdate === "undefined") {
-                return false;
-            } else {
-                let convertDate = moment(birthdate).format('YYYY-MM-D');
-                setSelectedDate(convertDate);
-            }
+        if(typeof birthdate === "undefined" || birthdate === "0000-00-00") {
+            setSelectedDate(new Date());
+        } else {
+            setSelectedDate(new Date(birthdate));
         }
-        _checkBirthdate(birthdate);
-    },[getCurrentProfileEngineer, getSkills, getSkillsBasedOnProfileEngineer, idProps, birthdate, avatarProps, nameProps, emailProps, descriptionProps, locationProps, showcaseProps, salaryProps, telephoneProps]);
+    },[getCurrentProfileEngineer, getSkills, getSkillsBasedOnProfileEngineer, idProps, avatarProps, nameProps, emailProps, descriptionProps, locationProps, showcaseProps, salaryProps, telephoneProps,
+    birthdate]);
     const onChange = event => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     }
@@ -147,20 +119,6 @@ const ProfileEdit = ({
         let convertDate = moment(value).format('YYYY-MM-D');
         setSelectedDate(convertDate);
     }
-    // const valHtml = val.map((option, index) => {
-    //     return (
-    //         <Chip
-    //             key={option.id}
-    //             label={option.name}
-    //             onDelete={() => {
-    //                 setVal(val.filter(entry => entry !== option))
-    //                 let engineer_id = id;
-    //                 let skill_id = option.id;
-    //                 deleteSkillId(skill_id, engineer_id);
-    //             }}
-    //         />
-    //     )
-    // }) // jadi chipnya disini di forloop
     const handleAvatar = (e) => {
         let error = false;
         if(e.target.files) {
@@ -203,22 +161,12 @@ const ProfileEdit = ({
     const onSubmit = (event) => {
         event.preventDefault();
         try {
-            if(name === null || name.trim() === "") {
-                throw new Error('name required.');
+            if(name.length < 3) {
+                throw new Error('Name Minimum 3 Character.');
             }
-            if(description === null || description.trim() === "") {
-                throw new Error('description required.');
+            if(description.length < 200) {
+                throw new Error('Description Minimum 200 Character.');
             }
-            if(name) {
-                if(name.length < 3) {
-                    throw new Error('name minimum 3 character length.');
-                }
-            }
-            // if(description) {
-            //     if(description.length > 200) {
-            //         throw new Error('description maximum 200 character length.');
-            //     }
-            // }
             let data = new FormData();
             data.set('user_id', user_id);
             data.append('avatar', avatar ? avatar : '');
@@ -227,7 +175,7 @@ const ProfileEdit = ({
             data.set('email', email ? email: '');
             data.set('birthdate', selectedDate);
             data.set('description', description ? description : '');
-            data.set('skills', skillsMask.length === 0 ? JSON.stringify(skills_engineer.data) : JSON.stringify(skillsMask));
+            data.set('skills', JSON.stringify(skillsMask));
             // pake JSON.stringify ngatasin biar ngga [object object] datanya
             // ntar di JSON.parse di backend
             // kalo cek array pake 0 bukan null
@@ -235,7 +183,8 @@ const ProfileEdit = ({
             data.set('telephone', telephone ? telephone : '');
             data.set('salary', salary ? salary : '');
             data.set('location', location ? location : '');
-            updateProfileEngineer(id, data);
+            const engineer_id = id;
+            updateProfileEngineer(engineer_id, data);
             setTimeout(() => {
                 history.push('/engineers');
                 Toast.fire({
@@ -282,6 +231,7 @@ const ProfileEdit = ({
                                 variant="outlined"
                                 label="E-mail Address"
                                 fullWidth
+                                disabled
                              />
                             <TextField
                                 onChange={onChange}
@@ -294,28 +244,7 @@ const ProfileEdit = ({
                                 label="Description"
                                 fullWidth
                             />
-                            <Autocomplete
-                                multiple
-                                filterSelectedOptions
-                                defaultValue={skills_engineer.length !== 0 && skills_engineer.data}
-                                options={skills.length !== 0 && skills.data}
-                                onChange={(event, getSkills) => {
-                                    setSkills(getSkills);
-                                }}
-                                getOptionLabel={skills => skills.name}
-                                getOptionSelected={(option, value) => {
-                                    return option.id === value.id
-                                }}
-                                renderInput={params => (
-                                    <TextField
-                                        {...params}
-                                        margin="normal"
-                                        variant="outlined"
-                                        label="Skills"
-                                        fullWidth
-                                    />
-                                )}
-                            />
+                            <SkillsComponent skills={skills} skills_engineer={skills_engineer} skillsMask={skillsMask} setSkills={setSkills} />
                             <TextField
                                 onChange={e => onChange(e)}
                                 value={location}
@@ -327,12 +256,13 @@ const ProfileEdit = ({
                             />
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <KeyboardDatePicker
-                                    margin="normal"
-                                    id="birthdate"
-                                    variant="outlined"
-                                    format="yyyy/MM/dd"
-                                    value={selectedDate}
                                     onChange={handleDate}
+                                    value={selectedDate}
+                                    margin="normal"
+                                    inputVariant="outlined"
+                                    label="Birthdate"
+                                    format="yyyy-MM-d"
+                                    fullWidth
                                 />
                             </MuiPickersUtilsProvider>
                             <TextField

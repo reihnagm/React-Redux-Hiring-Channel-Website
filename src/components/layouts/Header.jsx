@@ -5,12 +5,14 @@ import defaultImage from '../../images/default.png';
 import logo from '../../images/logo.png';
 import { logout } from '../../actions/auth';
 import { getCurrentProfileCompany } from '../../actions/company';
-import { getCurrentProfileEngineer } from '../../actions/engineer';
+import { getCurrentProfileEngineer,  getSkillsBasedOnProfileEngineer} from '../../actions/engineer';
 const Header = ({
         engineer,
+        skills_engineer,
         company,
         location,
         getCurrentProfileEngineer,
+        getSkillsBasedOnProfileEngineer,
         getCurrentProfileCompany,
         logout,
         handleSearchEngineer,
@@ -26,12 +28,11 @@ const Header = ({
         let name_company = company && company.data && company.data.name;
         let logo_company = company && company.data && company.data.logo;
         useEffect(() => {
-            const _fetchData = async () => {
+            const fetchData = async () => {
                 await getCurrentProfileEngineer();
                 await getCurrentProfileCompany();
             }
-            _fetchData();
-
+            fetchData();
         },[getCurrentProfileEngineer, getCurrentProfileCompany, name_engineer, name_company, avatar_engineer, logo_company]);
         const dropdownBtn = () => {
             setVisible(!visible)
@@ -177,11 +178,12 @@ const Header = ({
     }
 const mapStateToProps = state => ({
     engineer: state.engineer.engineer,
+    skills_engineer: state.engineer.skills_engineer,
     company: state.company.company,
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user
 });
 export default connect(
     mapStateToProps,
-    { getCurrentProfileEngineer, getCurrentProfileCompany, logout }
+    { getCurrentProfileEngineer, getCurrentProfileCompany, getSkillsBasedOnProfileEngineer, logout }
 )(withRouter(Header))

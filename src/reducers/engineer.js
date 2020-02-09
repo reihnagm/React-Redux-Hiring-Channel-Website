@@ -17,9 +17,9 @@ import {
 	DELETE_ENGINEER_ERROR
 } from '../actions/types'
 const initialState = {
-	engineers: {},
-	skills: {},
-	skills_engineer: {},
+	engineers: [],
+	skills: [],
+	skills_engineer: [],
 	engineer: {},
 	error: {},
 	loading: true,
@@ -95,7 +95,7 @@ export default function (state = initialState, action) {
 		case UPDATE_PROFILE_ENGINEER:
 	      	return {
 	        	...state,
-	        	engineers: payload
+	        	engineers: [...payload, state.engineers]
 			}
 		case UPDATE_PROFILE_ENGINEER_ERROR:
 			return {

@@ -56,6 +56,13 @@ class Engineer extends Component {
         await this.props.getEngineers(this.state.search, this.state.sort, this.state.sortBy, this.state.limit, url);
     }
     render() {
+        let engineers;
+        let data = this.props.engineers && this.props.engineers.length === 0
+        if(typeof this.props.engineers === "undefined" || data) {
+            return false;
+        } else {
+            engineers = this.props.engineers.data;
+        }
         return  (
             <Fragment>
                 <Header
@@ -72,8 +79,7 @@ class Engineer extends Component {
                 />
                 {this.props.loading ? (<Spinner />) : (
                     <EngineerList
-                        engineers={this.props.engineers && this.props.engineers.data}
-                        skills_engineer={this.props.skills_engineer}
+                        engineers={engineers}
                         handlePagination={this.handlePagination}
                         nextPage={this.props.engineers && this.props.engineers.pageDetail && this.props.engineers.pageDetail.next_page}
                         prevPage={this.props.engineers && this.props.engineers.pageDetail && this.props.engineers.pageDetail.prev_page}
@@ -86,7 +92,6 @@ class Engineer extends Component {
 const mapStateToProps = state => ({
     engineers: state.engineer.engineers,
     engineer: state.engineer.engineer,
-    skills_engineer: state.engineer.skills_engineer,
     loading: state.engineer.loading,
     search: state.engineer.search,
     sort: state.engineer.sort,
