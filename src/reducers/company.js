@@ -13,7 +13,7 @@ import {
 	DELETE_COMPANY_ERROR
 } from '../actions/types'
 const initialState = {
-	companies: {},
+	companies: [],
 	company: {},
 	error: {},
 	loading: true,

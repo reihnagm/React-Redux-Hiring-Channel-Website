@@ -1,30 +1,45 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import defaultImage from '../../../../images/default.png';
+import { Container, Grid, Paper, Button, Avatar, makeStyles } from '@material-ui/core';
+import Swal from 'sweetalert2';
 import Spinner from '../../../Spinner/Index';
+import defaultImage from '../../../../images/default.png';
 import { getProfileEngineerBySlug } from '../../../../actions/engineer';
-const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => {
-    let avatar = engineer.avatar ? `http://localhost:5000/images/engineer/${engineer.avatar}` : defaultImage;
+const Profile = ({ getProfileEngineerBySlug, engineer: { engineer, loading }, history, match }) => {
+    const useStyles = makeStyles(theme => ({
+        root: {
+            flexGrow: 1,
+        },
+        paper: {
+            padding: theme.spacing(2)
+        },
+        large: {
+            width: theme.spacing(10),
+            height: theme.spacing(10)
+        },
+    }));
+    const classes = useStyles();
+    let avatar = engineer.avatar;
     let name = engineer.name;
     let email = engineer.email;
-    let desc =  engineer.description;
+    let description =  engineer.description;
     let skills = engineer.skills;
     let location = engineer.location;
     let showcase =  engineer.showcase;
     let birthdate = engineer.birthdate;
-    let phone = engineer.telephone;
+    let telephone = engineer.telephone;
     useEffect(() => {
-        const _fetchData = async () => {
-            await getProfileEngineerBySlug(match.params.slug);
-        }
-        _fetchData();
-    }, [getProfileEngineerBySlug, match.params.slug]);
+       const _fetchData = async () => {
+           await getProfileEngineerBySlug(match.params.slug);
+       }
+       _fetchData();
+   }, [getProfileEngineerBySlug, match.params.slug]);
     let n = new Date(birthdate);
     let y = n.getFullYear();
     let d = n.getDate();
-    let m = n.getUTCMonth()+1;
-    let months = ["January","Februari","Maret","April","Mei","Juni",'Juli',"Agustus","September","Oktober","November","Desember"];
+    let m = n.getMonth()+1;
+    let months = ["January","February","March","April","May","June",'July',"August","September","October","November","December"];
     let thisMonth  = months[m-1];
     if(isNaN(y) || isNaN(d) || typeof y === "undefined") {
         y = '';
@@ -33,36 +48,60 @@ const ProfileShow= ({ getProfileEngineerBySlug, engineer, loading, match  }) => 
     }
     let displayDate = d +' '+ thisMonth +' '+ y ;
     return loading ? ( <Spinner /> ) : (
-        <div id="top-screen">
-            <div id="box-profile-container">
-                <div id="box-profile-avatar">
-                    <img id="profile-avatar" src={ avatar } alt={ name }/>
-                    <h2 id="profile-email"> { email } </h2>
-                    <h3 id="profile-phone"> { phone } </h3>
-                    <h4 id="profile-location"> { location } </h4>
-                    <h4 id="profile-birthdate"> {  displayDate }</h4>
-                    <h4 id="profile-showcase"> { showcase } </h4>
-                    <Link className="is-block is-center is-rounded button is-fullwidth mt-5" to="/engineers"> Back </Link>
-                </div>
-                <div id="box-profile-name">
-                    <h3 id="profile-name"> { name } </h3>
-                    <p id="profile-desc">{ desc }</p>
-                    <ul id="profile-skill">
-                        <li id="profile-list">
-                            <span className='is-bold'> Skills: </span>
-                            { skills }
-                        </li>
-                    </ul>
-                </div>
+        <>
+            <div style={{
+                background: '#ea80fc',
+                position:"absolute",
+                zIndex: -1,
+                width:'100%',
+                top: "0px",
+                left: "0px",
+                right: "0px",
+                height: "300px" }}>
             </div>
-        </div>
+            <Container className="mt-64" Fixed>
+                <div className={classes.root}>
+                    <Grid container spacing={8}>
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper}>
+                                <Avatar
+                                    className={classes.large}
+                                    src={avatar ? `http://localhost:5000/images/engineer/${avatar}` : ''} alt={name}
+                                />
+                                <p className="my-2"> {name} </p>
+                                <p className="my-2"> {email} </p>
+                                <p className="my-2"> {telephone} </p>
+                                <p className="my-2"> {showcase} </p>
+                                <Button
+                                    type="button"
+                                    variant="contained"
+                                    color="primary"
+                                    component={ Link } to="/engineers">
+                                    Back
+                                </Button>
+                            </Paper>
+                        </Grid>
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper}>
+                                <p> {description} </p>
+                            </Paper>
+                        </Grid>
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper}>
+                                <p className="mb-2">Skills</p>
+                                <p>{skills}</p>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </div>
+            </Container>
+        </>
     )
 }
 const mapStateToProps = state => ({
-    engineer: state.engineer.engineer,
-    loading: state.engineer.loading
+    engineer: state.engineer
 })
 export default connect(
     mapStateToProps,
     { getProfileEngineerBySlug }
-)(ProfileShow)
+)(Profile)

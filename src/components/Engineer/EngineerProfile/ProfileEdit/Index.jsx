@@ -6,8 +6,12 @@ import {
     Container,
     Grid,
     Button,
-    TextField
+    TextField,
+    Avatar,
+    Badge,
+    makeStyles
 } from '@material-ui/core';
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
@@ -21,15 +25,13 @@ import { connect } from 'react-redux';
 import {
     getCurrentProfileEngineer,
     getSkills,
-    getSkillsBasedOnProfileEngineer,
     updateProfileEngineer } from '../../../../actions/engineer';
 import Spinner from '../../../Spinner/Index';
 const ProfileEdit = ({
-    getSkills,
-    getSkillsBasedOnProfileEngineer,
     getCurrentProfileEngineer,
+    getSkills,
     updateProfileEngineer,
-    engineer: { engineer, skills, skills_engineer, loading },
+    engineer: { engineer, skills, loading },
     auth: { user },
     history
     }) => {
@@ -44,6 +46,19 @@ const ProfileEdit = ({
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     });
+    let dataSkillsEngineerArrayObject = [];
+    let datasSkillsEngineer = engineer && engineer.data && engineer.data.skills;
+    let datasSkillsIdEngineer = engineer && engineer.data && engineer.data.skills_id;
+    if(typeof datasSkillsEngineer !== "undefined" && datasSkillsEngineer !== null) {
+        let array_skills = datasSkillsEngineer.split(",");
+        let array_skills_id = datasSkillsIdEngineer.split(",");
+        for (let i = 0; i < array_skills.length; i++) {
+           dataSkillsEngineerArrayObject.push({
+               id: parseInt(array_skills_id[i]),
+               name: array_skills[i]
+           });
+       }
+    }
     let idProps = engineer.data && engineer.data.id;
     let avatarProps = engineer.data && engineer.data.avatar;
     let nameProps = engineer.data && engineer.data.name;
@@ -57,41 +72,42 @@ const ProfileEdit = ({
     let birthdate = engineer.data && engineer.data.birthdate
     const [formData, setFormData] = useState({
         id: '',
-        user_id: '',
         name: '',
         email: '',
         description: '',
+        location: '',
         showcase: '',
         salary: '',
-        telephone: '',
-        location: '',
+        telephone: ''
     });
-    function phoneMask(props) {
-        const { inputRef, ...other } = props;
-        return (
-            <MaskedInput
-                {...other}
-                ref={ref => {
-                    inputRef(ref ? ref.inputElement : null);
-                }}
-                mask={['(',/[1-9]/,/\d/,/\d/,')',' ',/\d/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
-                placeholderChar={'_'}
-                showMask
-            />
-        );
-    }
+    const useStyles = makeStyles(theme => ({
+        root: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            '& > *': {
+                margin: theme.spacing(1),
+            }
+        },
+        small: {
+            width: theme.spacing(3),
+            height: theme.spacing(3)
+        },
+        large: {
+            width: theme.spacing(10),
+            height: theme.spacing(10)
+        },
+    }));
+    const classes = useStyles();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [avatar, setAvatar] = useState('');
+    const [avatarNotEdited, setAvatarNotEdited] = useState('');
+    const [avatarDefault, setDefaultAvatar] = useState('');
+    const [avatarFile, setAvatarFile] = useState('');
     const [skillsMask, setSkills] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             await getCurrentProfileEngineer();
             await getSkills();
-            if(typeof idProps === "undefined") {
-                return false;
-            } else {
-                await getSkillsBasedOnProfileEngineer(idProps);
-            }
         }
         fetchData();
         setFormData({
@@ -104,14 +120,15 @@ const ProfileEdit = ({
             salary: salaryProps,
             telephone: telephoneProps
         });
-        setAvatar(avatarProps);
         if(typeof birthdate === "undefined" || birthdate === "0000-00-00") {
             setSelectedDate(new Date());
         } else {
             setSelectedDate(new Date(birthdate));
         }
-    },[getCurrentProfileEngineer, getSkills, getSkillsBasedOnProfileEngineer, idProps, avatarProps, nameProps, emailProps, descriptionProps, locationProps, showcaseProps, salaryProps, telephoneProps,
-    birthdate]);
+        setDefaultAvatar(`http://localhost:5000/images/engineer/${avatarProps}`);
+        setAvatarNotEdited(`${avatarProps}`);
+    },[getCurrentProfileEngineer, getSkills, idProps, avatarProps, nameProps, emailProps, descriptionProps, showcaseProps, salaryProps, telephoneProps, locationProps, birthdate]);
+    const { id, name, email, description, showcase, telephone, location, salary } = formData;
     const onChange = event => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     }
@@ -119,11 +136,16 @@ const ProfileEdit = ({
         let convertDate = moment(value).format('YYYY-MM-D');
         setSelectedDate(convertDate);
     }
-    const handleAvatar = (e) => {
-        let error = false;
-        if(e.target.files) {
-            let size = e.target.files[0].size;
-            let extension = e.target.files[0].name.split('.')[1];
+    let getFile;
+    const handleFile = (event) => {
+        getFile.click();
+    }
+    const handleAvatar = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            let error = false;
+            let size = event.target.files[0].size;
+            let extension = event.target.files[0].name.split('.')[1];
+            let reader = new FileReader();
             try {
                 if(size > 1024000) {
                     error = true;
@@ -134,7 +156,11 @@ const ProfileEdit = ({
                     throw new Error('File type allowed: PNG, JPG, JPEG, GIF, SVG, BMP.');
                 }
                 if(error === false) {
-                    setAvatar(e.target.files[0]);
+                    setAvatarFile(event.target.files[0]);
+                    reader.onload = (e) => {
+                        setDefaultAvatar(e.target.result);
+                    }
+                    reader.readAsDataURL(event.target.files[0])
                 }
             } catch(error) {
                 Toast.fire({
@@ -142,24 +168,30 @@ const ProfileEdit = ({
                     title: error.message
                 });
             }
-            function isImage(extension) {
-                switch (extension) {
-                    case 'png':
-                    case 'jpg':
-                    case 'jpeg':
-                    case 'gif':
-                    case 'svg':
-                    case 'bmp':
-                        return true;
-                    default:
-                }
-                return false;
-            }
         }
     }
-    const { id, name, email, description, showcase, telephone, salary, location } = formData;
+    const isImage = (extension) => {
+        switch (extension) {
+            case 'png':
+            case 'jpg':
+            case 'jpeg':
+            case 'gif':
+            case 'svg':
+            case 'bmp':
+                return true;
+            default:
+        }
+        return false;
+    }
     const onSubmit = (event) => {
         event.preventDefault();
+        console.log(skillsMask)
+        let avatar
+        if(avatarFile === "") {
+            avatar = avatarNotEdited;
+        } else {
+            avatar = avatarFile
+        }
         try {
             if(name.length < 3) {
                 throw new Error('Name Minimum 3 Character.');
@@ -169,8 +201,7 @@ const ProfileEdit = ({
             }
             let data = new FormData();
             data.set('user_id', user_id);
-            data.append('avatar', avatar ? avatar : '');
-            data.set('avatar', avatar ? avatar : '');
+            data.set('avatar', avatar);
             data.set('name', name ? name : '');
             data.set('email', email ? email: '');
             data.set('birthdate', selectedDate);
@@ -204,17 +235,52 @@ const ProfileEdit = ({
             <Container fixed>
                 <Grid
                     container
+                    className="my-5"
                     direction="row"
                     justify="center"
                     alignItems="center"
                 >
-                    <Grid
-                        item
-                        md={8}
-                        xs={12}
-                    >
+                    <Grid className="p-5 white rounded" item md={8} xs={12}>
                         <form onSubmit={(event) => onSubmit(event)}>
-                           <TextField
+                            <div className={classes.root}>
+                                <Badge
+                                    overlap="circle"
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'right',
+                                     }}
+                                        badgeContent={
+                                            <Grid
+                                                item
+                                                className="p-1 rounded"
+                                                style={{
+                                                    backgroundColor: '#ea80fc'
+                                                }}
+                                            >
+                                                <CreateOutlinedIcon
+                                                    onClick={handleFile}
+                                                    className="text-white"
+                                                    style={{
+                                                        cursor: 'pointer'
+                                                    }}
+                                                />
+                                                <input
+                                                    ref={input => getFile = input}
+                                                    onChange={handleAvatar}
+                                                    style={{ display: 'none' }}
+                                                    type="file"
+                                                />
+                                            </Grid>
+                                        }
+                                    >
+                                    <Avatar
+                                        className={classes.large}
+                                        alt={name}
+                                        src={`${avatarDefault}`}
+                                    />
+                                </Badge>
+                            </div>
+                            <TextField
                                 onChange={onChange}
                                 value={name}
                                 name="name"
@@ -244,7 +310,7 @@ const ProfileEdit = ({
                                 label="Description"
                                 fullWidth
                             />
-                            <SkillsComponent skills={skills} skills_engineer={skills_engineer} skillsMask={skillsMask} setSkills={setSkills} />
+                            <SkillsComponent skills={skills} dataSkillsEngineerArrayObject={dataSkillsEngineerArrayObject} skillsMask={skillsMask} setSkills={setSkills} />
                             <TextField
                                 onChange={e => onChange(e)}
                                 value={location}
@@ -274,16 +340,23 @@ const ProfileEdit = ({
                                 label="Showcase"
                                 fullWidth
                             />
-                            <TextField
+                            <MaskedInput
+                                mask={['(',/[1-9]/,/\d/,/\d/,')',' ',/\d/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
+                                placeholderChar={'_'}
                                 onChange={e => onChange(e)}
-                                value={telephone}
-                                name="telephone"
-                                margin="normal"
-                                variant="outlined"
-                                label="Telephone"
-                                fullWidth
-                                InputProps={{
-                                    inputComponent: phoneMask
+                                showMask
+                                render={(ref, props) => {
+                                    return (
+                                        <TextField
+                                            value={telephone}
+                                            name="telephone"
+                                            margin="normal"
+                                            variant="outlined"
+                                            fullWidth
+                                            inputRef={ref}
+                                            {...props}
+                                        />
+                                    )
                                 }}
                             />
                             <NumberFormat
@@ -293,11 +366,9 @@ const ProfileEdit = ({
                                 margin="normal"
                                 variant="outlined"
                                 label="salary"
-                                decimalScale={3}
-                                fixedDecimalScale={true}
-                                allowNegative={false}
-                                thousandSeparator={true}
-                                prefix={"Rp "}
+                                decimalSeparator=","
+                                thousandSeparator="."
+                                prefix="Rp "
                                 customInput={TextField}
                                 fullWidth
                             />
@@ -307,7 +378,11 @@ const ProfileEdit = ({
                                 justify="center"
                                 alignItems="center"
                             >
-                                <Button type="button" variant="contained" color="primary" component={ Link } to="/engineers">
+                                <Button
+                                    type="button"
+                                    variant="contained"
+                                    color="primary"
+                                    component={ Link } to="/engineers">
                                     Back
                                 </Button>
                                 <Button type="submit" variant="contained" color="primary">
@@ -318,6 +393,7 @@ const ProfileEdit = ({
                     </Grid>
                 </Grid>
             </Container>
+            <div className="backdrop"></div>
         </>
     )
 }
@@ -327,5 +403,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
     mapStateToProps,
-    { getCurrentProfileEngineer, getSkills, getSkillsBasedOnProfileEngineer, updateProfileEngineer }
+    { getCurrentProfileEngineer, getSkills, updateProfileEngineer }
 )(withRouter(ProfileEdit));

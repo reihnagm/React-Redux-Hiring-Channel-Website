@@ -1,24 +1,50 @@
-import React, { Fragment } from 'react'
-import CompanyItem from '../CompanyItem/Index'
-const CompanyList = ({ companies, handlePagination, nextPage, prevPage }) => {
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Container, Grid } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
+import defaultImage from '../../../images/default.png';
+const CompanyList = ({ companies, handlePage, currentPage, pageCount }) => {
+    const useStyles = makeStyles(theme => ({
+        root: {
+            '& > *': {
+                marginBottom: theme.spacing(8)
+            },
+        },
+    }));
+    const classes = useStyles();
     return (
-        <Fragment>
-            <div className='container'>
-                <div id='masonry'>
-                    {companies && companies.map(company => (
-                        <div id='item' key={company.id}>
-                            <CompanyItem company={company} />
-                        </div>
-                    ))}
-                </div>
-                <div className='is-justify-center is-flex has-margin-vm'>
-                    <ul id='container-pagination'>
-                        <li><span id='link-pagination' onClick={() => handlePagination(prevPage)}> Previous Page </span> </li>
-                        <li><span id='link-pagination' onClick={() => handlePagination(nextPage)}> Next Page </span> </li>
-                    </ul>
-                </div>
-            </div>
-        </Fragment>
+        <>
+            <Container fixed>
+                <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                >
+                    <div className="masonry-container">
+                        { companies && companies.map(company => (
+                            <div className="masonry-item" key={companies.id}>
+                                <Link className="text-white" to={`company/profile/${company.slug}`}>
+                                    <img className="image rounded" src={company.logo ? `http://localhost:5000/images/company/${company.logo}` : defaultImage} alt={company.name} />
+                                    <div className="masonry-description">
+                                        <p className="mb-1"> {company.name} </p>
+                                        <p className="mb-1">{company.description}</p>
+                                    </div>
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+                    <div className={classes.root}>
+                        <Pagination
+                            count={pageCount}
+                            onChange={(event, page) => handlePage(event, page)}
+                            page={currentPage}
+                        />
+                    </div>
+                </Grid>
+            </Container>
+        </>
     )
 }
 export default CompanyList

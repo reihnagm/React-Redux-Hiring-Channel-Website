@@ -1,39 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
+import { withRouter } from 'react-router-dom';
 import App from './components/App/Index';
-import purple from '@material-ui/core/colors/purple';
-import {
-    ThemeProvider,
-    createMuiTheme,
-    CssBaseline
-} from '@material-ui/core'
-const Main = () => {
-    const theme = createMuiTheme({
-        overrides: {
-            MuiContainer : {
-                root: {
-                    marginTop: "30px",
-                    marginBottom: "30px"
-                }
-            },
-            MuiButton: {
-                root: {
-                    margin: "10px"
-                }
-            }
-        },
-        palette: {
-            primary: {
-                main: purple['A100'],
-                contrastText: purple['50']
-            },
-        },
-    });
-    return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <App />
-        </ThemeProvider>
-    )
-}
-render(<Main />, document.getElementById('root'));
+import store, { history } from './store';
+const AppWithRouter = withRouter(App);
+render(
+    <Provider store={store}>
+        <ConnectedRouter history={history}>
+            <AppWithRouter />
+        </ConnectedRouter>
+    </Provider>
+    , document.getElementById('root'));

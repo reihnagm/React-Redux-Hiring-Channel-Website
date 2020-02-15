@@ -1,94 +1,102 @@
-import React, { Fragment, Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { getCompanies } from '../../actions/company';
+import { connect } from 'react-redux';
+import { changeQueryParam } from '../../actions/company-router';
+import { parse } from '../../lib/query-string';
 import Header from '../layouts/Header';
 import HeaderFilter from '../layouts/HeaderFilter';
 import Spinner from '../Spinner/Index';
 import CompanyList from './CompanyList/Index';
-class Company extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            search: props.search,
-            sort: props.sort,
-            sortBy: props.sortBy,
-            limit: props.limit,
-            page: props.page
+const Company = ({
+    getCompanies,
+    companies,
+    loading,
+    gettingQueryUrl,
+    changeQueryParam,
+    handleSearch,
+    handleSortBy,
+    handleSort,
+    handleLimit,
+    querySearch,
+    querySortBy,
+    querySort,
+    queryLimit
+ }) => {
+    useEffect(() => {
+        const fetchData = async () => {
+            if(gettingQueryUrl) {
+                await getCompanies(gettingQueryUrl);
+            } else {
+                await getCompanies();
+            }
         }
+        fetchData();
+    }, [getCompanies, gettingQueryUrl]);
+    const [sortBy, setSortBy] = useState([]);
+    const [sort, setSort] = useState([]);
+    const [limit, setLimit] = useState([]);
+    const getPageCount = (total, perPage) => {
+        return Math.ceil(total / perPage);
     }
-    async componentDidMount() {
-        await this.props.getCompanies();
+    const handlePage = (event, page) => {
+        changeQueryParam('page', page);
     }
-    handleSort = async (e) => {
-        this.setState({
-            sort: e.value
-        });
-        await this.props.getCompanies(this.state.search, e.value, this.state.sortBy, this.state.limit, this.state.page);
+    handleSearch = (search) => {
+        changeQueryParam('search', search);
     }
-    handleSortBy = async (e) => {
-        this.setState({
-            sortBy: e.value
-        });
-        await this.props.getCompanies(this.state.search, this.state.sort, e.value, this.state.limit, this.state.page);
+    handleSortBy = (sortBy) => {
+        setSortBy(sortBy);
+        changeQueryParam('sortBy', sortBy);
     }
-    handleLimit = async (e) => {
-        this.setState({
-            limit: e.value
-        });
-        await this.props.getCompanies(this.state.search, this.state.sort, this.state.sortBy, e.value, this.state.page);
+    handleSort = (sort) => {
+        setSort(sort);
+        changeQueryParam('sort', sort);
     }
-    handleSearch = async (e) => {
-        this.setState({
-            search: e.target.value
-        });
-        await this.props.getCompanies(e.target.value, this.state.sort, this.state.sortBy, this.state.limit, this.state.page);
+    handleLimit = (limit) => {
+        setLimit(limit);
+        changeQueryParam('limit', limit);
     }
-    handlePagination = async (url) => {
-        this.setState({
-            page: url
-        });
-        await this.props.getCompanies(this.state.search, this.state.sort, this.state.sortBy, this.state.limit, url);
-    }
-    render() {
-        return  (
-            <Fragment>
-                <Header
-                    handleSearchCompany={this.handleSearch}
-                    searchCompany={this.state.search}
+    return  (
+        <>
+            <Header
+                handleSearch={handleSearch}
+                querySearch={querySearch}
+            />
+            <HeaderFilter
+                handleSortBy={handleSortBy}
+                handleSort={handleSort}
+                handleLimit={handleLimit}
+                setSortBy={setSortBy}
+                setSort={setSort}
+                setLimit={setLimit}
+                sortByC={sortBy}
+                sortC={sort}
+                limitC={limit}
+            />
+            {loading ? (<Spinner />) : (
+                <CompanyList
+                    companies={companies && companies.data}
+                    handlePage={handlePage}
+                    pageCount={
+                        getPageCount( companies && companies.pageDetail && companies.pageDetail.total,
+                        companies && companies.pageDetail && companies.pageDetail.per_page )
+                    }
+                    currentPage={companies && companies.pageDetail && companies.pageDetail.current_page}
                 />
-                <HeaderFilter
-                    handleSort={this.handleSort}
-                    handleLimit={this.handleLimit}
-                    handleSortBy={this.handleSortBy}
-                    sort={this.state.sort}
-                    sortBy={this.state.sortBy}
-                    limit={this.state.limit}
-                />
-                {this.props.loading ? (<Spinner />) : (
-                    <CompanyList
-                        companies={this.props.companies && this.props.companies.data}
-                        handlePagination={this.handlePagination}
-                        nextPage={this.props.companies && this.props.companies.pageDetail && this.props.companies.pageDetail.next_page}
-                        prevPage={this.props.companies && this.props.companies.pageDetail && this.props.companies.pageDetail.prev_page}
-                    />
-                )}
-            </Fragment >
-        )
-    }
+            )}
+        </>
+    )
 }
 const mapStateToProps = state => ({
     companies: state.company.companies,
-    company: state.company.company,
-    engineer: state.engineer.engineer,
-    user: state.auth.user,
     loading: state.company.loading,
-    search: state.company.search,
-    sort: state.company.sort,
-    sortBy: state.company.sortBy,
-    limit: state.company.limit,
-    page: state.company.page
-})
+    gettingQueryUrl: state.router.location.search,
+    querySearch: parse(state.router.location.search).search,
+    querySortBy: parse(state.router.location.search).sortBy,
+    querySort: parse(state.router.location.search).sort,
+    queryLimit: parse(state.router.location.search).limit
+});
 export default connect(
     mapStateToProps,
-    { getCompanies }
-)(Company)
+    { getCompanies, changeQueryParam }
+)(Company);

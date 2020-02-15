@@ -13,12 +13,12 @@ import {
     DELETE_COMPANY,
     DELETE_COMPANY_ERROR
 } from './types'
-export const getCompanies = (search = '',sort = 'DESC',sortBy = 'date_updated',limit = '10',page = '1') => async dispatch => {
+export const getCompanies = () => async (dispatch, getState) => {
     try {
         dispatch({
             type: LOADING
         });
-        const response = await axios.get(`http://localhost:5000/api/v1/companies?search=${search}&sort=${sort}&sortBy=${sortBy}&limit=${limit}&page=${page}`)
+        const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}/${getState().router.location.search}`)
         dispatch({
             type: GET_COMPANIES,
             payload: response.data

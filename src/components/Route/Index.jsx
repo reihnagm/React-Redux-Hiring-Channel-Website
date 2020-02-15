@@ -12,9 +12,7 @@ import CompanyProfile from '../Company/CompanyProfile/Index';
 import CompanyProfileShow from '../Company/CompanyProfile/ProfileShow/Index';
 import CompanyProfileEdit from '../Company/CompanyProfile/ProfileEdit/Index';
 import Private from './Private/Index';
-import { getSkillsBasedOnProfileEngineer } from '../../actions/engineer';
-import { connect } from 'react-redux';
-const Routes = ({ getSkillsBasedOnProfileEngineer, skills_engineer }) => {
+const Routes = () => {
     return (
         <Switch>
             <Route exact path='/register' component={Register} />
@@ -31,10 +29,5 @@ const Routes = ({ getSkillsBasedOnProfileEngineer, skills_engineer }) => {
         </Switch>
     )
 }
-const mapStateToProps = state => ({
-    skills_engineer: state.engineer.skills_engineer
-});
-export default connect(
-    mapStateToProps,
-    { getSkillsBasedOnProfileEngineer }
-)(Routes);
+
+export default Routes

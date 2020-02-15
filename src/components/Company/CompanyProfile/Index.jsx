@@ -1,49 +1,84 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import defaultImage from '../../../images/default.png';
+import { Container, Grid, Paper, Button, Avatar, makeStyles } from '@material-ui/core';
+import Swal from 'sweetalert2';
 import Spinner from '../../Spinner/Index';
+import defaultImage from '../../../images/default.png';
 import { getCurrentProfileCompany, deleteProfileCompany } from '../../../actions/company';
-const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { company, loading } }) => {
-    let id = company.data && company.data.id;
+const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { company, loading }, history }) => {
+    const useStyles = makeStyles(theme => ({
+        root: {
+            flexGrow: 1,
+        },
+        paper: {
+            padding: theme.spacing(2)
+        },
+        large: {
+            width: theme.spacing(10),
+            height: theme.spacing(10)
+        },
+    }));
+    const classes = useStyles();
+    let logo = company.data && company.data.logo;
     let name = company.data && company.data.name;
-    let logo = company.data && company.data.logo ? `http://localhost:5000/images/company/${company.data.logo}` : defaultImage;
     let email = company.data && company.data.email;
     let description = company.data && company.data.description;
-    let location = company.data && company.data.location;
-    let phone = company.data && company.data.telephone;
+    let telephone = company.data && company.data.telephone;
     useEffect(() => {
-        const _fetchData = async () => {
+        const fetchData = async () => {
             await getCurrentProfileCompany();
         }
-        _fetchData();
+        fetchData();
     }, [getCurrentProfileCompany]);
-    const deleteProfileAccount = () => {
-        deleteProfileCompany(id);
-    }
     return loading ? ( <Spinner /> ) : (
-        <div id="top-screen">
-            <div id="box-profile-container">
-                <div id="box-profile-logo">
-                    <img id="profile-logo" src={ logo } alt={ name }/>
-                    <h2 id="profile-email"> { email } </h2>
-                    <h3 id="profile-phone"> { phone } </h3>
-                    <h4 id="profile-location"> { location } </h4>
-                    <span className="is-block is-center is-rounded button is-fullwidth mt-5" onClick={e => deleteProfileAccount(e)}> Delete Account </span>
-                    <Link className="is-block is-center is-rounded button is-fullwidth mt-5" to="/companies"> Back </Link>
-                </div>
-                <div id="box-profile-name">
-                    <h3 id="profile-name"> { name } </h3>
-                    <p id="profile-desc">{ description }</p>
-                </div>
+        <>
+            <div style={{
+                background: '#ea80fc',
+                position:"absolute",
+                zIndex: -1,
+                width:'100%',
+                top: "0px",
+                left: "0px",
+                right: "0px",
+                height: "300px" }}>
             </div>
-        </div>
+            <Container className="mt-64" Fixed>
+                <div className={classes.root}>
+                    <Grid container spacing={8}>
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper}>
+                                <Avatar
+                                    className={classes.large}
+                                    src={`http://localhost:5000/images/company/${logo}`} alt={name}
+                                />
+                                <p className="my-2"> {name} </p>
+                                <p className="my-2"> {email} </p>
+                                <p className="my-2"> {telephone} </p>
+                                <Button
+                                    type="button"
+                                    variant="contained"
+                                    color="primary"
+                                    component={ Link } to="/companies">
+                                    Back
+                                </Button>
+                            </Paper>
+                        </Grid>
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper}>
+                                <p> {description} </p>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </div>
+            </Container>
+        </>
     )
 }
 const mapStateToProps = state => ({
     company: state.company
-});
+})
 export default connect(
     mapStateToProps,
     { getCurrentProfileCompany, deleteProfileCompany }
-)(Profile);
+)(Profile)

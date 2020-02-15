@@ -6,8 +6,6 @@ import {
     LOADED,
     GET_SKILLS,
     GET_SKILLS_ERROR,
-    GET_SKILLS_ENGINEER,
-    GET_SKILLS_ENGINEER_ERROR,
     GET_ENGINEERS,
     GET_ENGINEERS_ERROR,
     GET_CURRENT_PROFILE_ENGINEER,
@@ -19,12 +17,12 @@ import {
     DELETE_ENGINEER,
     DELETE_ENGINEER_ERROR
 } from './types'
-export const getEngineers = (search = '', sort = 'DESC', sortBy = 'date_updated', limit = '10', page = '1') => async dispatch => {
+export const getEngineers = () => async (dispatch, getState) => {
     try {
         dispatch({
             type: LOADING
         });
-        const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}?search=${search}&sort=${sort}&sortBy=${sortBy}&limit=${limit}&page=${page}`);
+        const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/${getState().router.location.search}`);
         dispatch({
             type: GET_ENGINEERS,
             payload: response.data
@@ -51,20 +49,6 @@ export const getSkills = () => async dispatch => {
     } catch (error) {
         dispatch({
             type: GET_SKILLS_ERROR,
-            payload: error
-        });
-    }
-}
-export const getSkillsBasedOnProfileEngineer = (engineer_id) => async dispatch => {
-    try {
-        const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/skills-engineer/${engineer_id}`);
-        dispatch({
-            type: GET_SKILLS_ENGINEER,
-            payload: response.data
-        });
-    } catch (error) {
-        dispatch({
-            type: GET_SKILLS_ENGINEER_ERROR,
             payload: error
         });
     }

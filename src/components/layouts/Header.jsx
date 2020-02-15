@@ -1,174 +1,261 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import {
+    AppBar,
+    Avatar,
+    Toolbar,
+    InputBase,
+    IconButton,
+    Menu,
+    MenuItem,
+    fade,
+    makeStyles  } from '@material-ui/core';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import SearchIcon from '@material-ui/icons/Search';
 import defaultImage from '../../images/default.png';
 import logo from '../../images/logo.png';
+import { isObjectEmpty } from '../../configs/helper';
 import { logout } from '../../actions/auth';
 import { getCurrentProfileCompany } from '../../actions/company';
-import { getCurrentProfileEngineer,  getSkillsBasedOnProfileEngineer} from '../../actions/engineer';
+import { getCurrentProfileEngineer } from '../../actions/engineer';
 const Header = ({
-        engineer,
-        skills_engineer,
-        company,
-        location,
-        getCurrentProfileEngineer,
-        getSkillsBasedOnProfileEngineer,
-        getCurrentProfileCompany,
-        logout,
-        handleSearchEngineer,
-        handleSearchCompany,
-        searchEngineer,
-        searchCompany,
-        isAuthenticated,
-        user
+    engineer,
+    company,
+    location,
+    logout,
+    user,
+    isAuthenticated,
+    getCurrentProfileEngineer,
+    getCurrentProfileCompany,
+    setEngineersSearch,
+    selectedSearchEngineer,
+    setCompaniesSearch,
+    selectedSearchCompany
     }) => {
-        const [visible, setVisible] = useState(false);
-        let name_engineer = engineer && engineer.data && engineer.data.name;
-        let avatar_engineer = engineer && engineer.data && engineer.data.avatar;
-        let name_company = company && company.data && company.data.name;
-        let logo_company = company && company.data && company.data.logo;
+        const logout_user = () => {
+            logout();
+            handleMenuClose();
+        }
+        const useStyles = makeStyles(theme => ({
+            grow: {
+                flexGrow: 1,
+            },
+            menuButton: {
+                marginRight: theme.spacing(2),
+            },
+            large: {
+                width: theme.spacing(4),
+                height: theme.spacing(4)
+            },
+            title: {
+                display: 'none',
+                [theme.breakpoints.up('sm')]: {
+                    display: 'block',
+                },
+            },
+            search: {
+                position: 'relative',
+                borderRadius: theme.shape.borderRadius,
+                backgroundColor: fade(theme.palette.common.white, 0.15),
+                '&:hover': {
+                    backgroundColor: fade(theme.palette.common.white, 0.25),
+                },
+                marginRight: theme.spacing(2),
+                marginLeft: 0,
+                width: '100%',
+                [theme.breakpoints.up('sm')]: {
+                    marginLeft: theme.spacing(3),
+                    width: 'auto',
+                },
+            },
+            searchIcon: {
+                width: theme.spacing(7),
+                height: '100%',
+                position: 'absolute',
+                pointerEvents: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            },
+            inputRoot: {
+                color: 'inherit',
+            },
+            inputInput: {
+                padding: theme.spacing(1, 1, 1, 7),
+                transition: theme.transitions.create('width'),
+                width: '100%',
+                [theme.breakpoints.up('md')]: {
+                    width: 200,
+                },
+            },
+            sectionDesktop: {
+                display: 'none',
+                [theme.breakpoints.up('md')]: {
+                    display: 'flex',
+                },
+            },
+            sectionMobile: {
+                display: 'flex',
+                [theme.breakpoints.up('md')]: {
+                    display: 'none',
+                },
+            },
+        }));
+        const role_id = typeof user !== "undefined" && user && user.data && user.data.role_id;
+        const classes = useStyles();
+        const [anchorEl, setAnchorEl] = useState(null);
+        const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+         const menuId = 'primary-search-account-menu';
+        const isMenuOpen = Boolean(anchorEl);
+        const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+        const handleProfileMenuOpen = event => {
+             setAnchorEl(event.currentTarget);
+        };
+        const handleMenuClose = () => {
+            setAnchorEl(null);
+        };
+        const renderMenu = (
+            <Menu
+                keepMounted
+                elevation={1}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                anchorEl={anchorEl}
+                id={menuId}
+                open={isMenuOpen}
+                onClose={handleMenuClose}
+            >
+                { role_id === 1 &&
+                    <div>
+                        <MenuItem className="text-black" component={ Link } to="/engineer/profile">Profile</MenuItem>
+                        <MenuItem  className="text-black" component={ Link } to="/engineer/profile/me/edit">Edit Profile</MenuItem>
+                    </div>
+                }
+                { role_id === 2 &&
+                    <div>
+                        <MenuItem className="text-black" component={ Link } to="/company/profile">Profile</MenuItem>
+                        <MenuItem className="text-black" component={ Link } to="/company/profile/me/edit">Edit Profile</MenuItem>
+                    </div>
+                }
+                <MenuItem onClick={logout_user}>Logout</MenuItem>
+            </Menu>
+        );
         useEffect(() => {
             const fetchData = async () => {
-                await getCurrentProfileEngineer();
-                await getCurrentProfileCompany();
+                if(typeof role_id !== "undefined") {
+                    if(role_id === 1) {
+                        await getCurrentProfileEngineer();
+                    }
+                    if(role_id === 2) {
+                        await getCurrentProfileCompany();
+                    }
+                }
             }
             fetchData();
-        },[getCurrentProfileEngineer, getCurrentProfileCompany, name_engineer, name_company, avatar_engineer, logo_company]);
-        const dropdownBtn = () => {
-            setVisible(!visible)
-        }
-        let engineer_imageSource = avatar_engineer ? `http://localhost:5000/images/engineer/${avatar_engineer}`: defaultImage;
-        let company_imageSource = logo_company ? `http://localhost:5000/images/company/${logo_company}`: defaultImage;
-        let check_role_id = user && user.data && user.data.role_id;
-        const CompaniesMenu = (
-            <Fragment>
-                <span className='mx-10'>  <img className='is-avatar' src={company_imageSource} alt={name_company} /> </span>
-                <span className='text-black text-black mx-10 cursor-pointer' onClick={(e) => dropdownBtn(e)}>{ name_company }</span>
-                { visible &&
-                    <ul id="dropdown-header">
-                        <li><Link to={`companies`}>Companies</Link></li>
-                        <li><Link to={`engineers`}>Engineers</Link></li>
-                        <li><Link to={`company/profile`}>Profile</Link></li>
-                        <li><Link to={`company/profile/me/edit`}>Edit Profile</Link></li>
-                        <li><span className='text-black cursor-pointer ml-5' onClick={logout}>Logout</span></li>
-                    </ul>
-                }
-            </Fragment>
-        )
-        const EngineersMenu = (
-            <Fragment>
-                <span className='mx-10'> <img className='is-avatar' src={engineer_imageSource} alt={name_engineer} /> </span>
-                <span className='mx-10 text-black cursor-pointer' onClick={(e) => dropdownBtn(e)}>  { name_engineer } </span>
-                { visible &&
-                    <ul id='dropdown-header'>
-                        <li><Link to={`companies`}>Companies</Link></li>
-                        <li><Link to={`engineers`}>Engineers</Link></li>
-                        <li><Link to={`engineer/profile`}>Profile</Link></li>
-                        <li><Link to={`engineer/profile/me/edit`}>Edit Profile</Link></li>
-                        <li><span className='text-black cursor-pointer ml-5' onClick={logout}>Logout</span></li>
-                    </ul>
-                }
-            </Fragment>
-        )
+        },[getCurrentProfileEngineer, getCurrentProfileCompany, role_id]);
         const authLinks = (
-            <header className='navbar is-shadow'>
-                <img src={logo} alt="Logo" />
-                { location.pathname === "/" &&
-                    <div className='column is-half'></div>
-                }
-                { location.pathname !== "/" &&
-                    <Fragment>
-                         { location.pathname === "/engineers" &&
-                            <div className='column is-half'>
-                                <div className='field'>
-                                    <input
-                                        onChange={e => handleSearchEngineer(e)}
-                                        value={searchEngineer}
-                                        id='search-header'
-                                        placeholder='Search by Skill and Name here...'
-                                        name='search'
-                                        type='text'
-                                    />
+            <div className={classes.grow}>
+                <AppBar elevation={1} color="transparent" position="static">
+                    <Toolbar>
+                        <div className={classes.grow}>
+                            <img className="logo" src={logo} alt={logo} />
+                        </div>
+                        { location.pathname === "/engineers" &&
+                            <div className={classes.search}>
+                                <div className={classes.searchIcon}>
+                                    <SearchIcon />
                                 </div>
+                                <InputBase
+                                    placeholder="Search Name or Skills Here..."
+                                    inputProps={{ 'aria-label': 'search' }}
+                                    classes={{
+                                        root: classes.inputRoot,
+                                        input: classes.inputInput,
+                                    }}
+                                    onChange={event => setEngineersSearch(event.target.value)}
+                                    value={selectedSearchEngineer}
+                                />
                             </div>
                         }
                         { location.pathname === "/companies" &&
-                            <div className='column is-half'>
-                                <div className='field'>
-                                    <input
-                                        onChange={e => handleSearchCompany(e)}
-                                        value={searchCompany}
-                                        id='search-header'
-                                        placeholder='Search by Name and Location here...'
-                                        name='search'
-                                        type='text'
-                                    />
+                            <div className={classes.search}>
+                                <div className={classes.searchIcon}>
+                                    <SearchIcon />
                                 </div>
+                                <InputBase
+                                    placeholder="Search Name or Location Here..."
+                                    inputProps={{ 'aria-label': 'search' }}
+                                    classes={{
+                                        root: classes.inputRoot,
+                                        input: classes.inputInput,
+                                    }}
+                                    onChange={event => setCompaniesSearch(event.target.value)}
+                                    value={selectedSearchCompany}
+                                />
                             </div>
                         }
-                    </Fragment>
-                }
-                <ul className='is-relative'>
-                    <li className='is-flex is-items-center'>
-                        <span className='mx-10'> <Link className='text-black' to='/'>Home</Link> </span>
-                        { check_role_id === 2 ? CompaniesMenu : EngineersMenu }
-                    </li>
-                </ul>
-            </header>
+                        <div className={classes.grow}>
+                            <Link className="text-black mx-3" to="/">Home</Link>
+                            <Link className="text-black mx-3" to="/engineers">Engineers</Link>
+                            <Link className="text-black mx-3" to="/companies">Companies</Link>
+                        </div>
+                        <div className={classes.grow}>
+                            { user && user.data && user.data.role_id === 1 &&
+                                <span className="mx-3 cursor-pointer" onClick={handleProfileMenuOpen}>
+                                    { engineer && engineer.data && engineer.data.name }
+                                </span>
+                            }
+                            { user && user.data && user.data.role_id === 2 &&
+                                <span className="mx-3 cursor-pointer" onClick={handleProfileMenuOpen}>
+                                    { company && company.data && company.data.name }
+                                </span>
+                            }
+                            <IconButton
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-haspopup="true"
+                                color="inherit"
+                                aria-controls={menuId}
+                                onClick={handleProfileMenuOpen}
+                            >
+                                { user && user.data && user.data.role_id === 1 &&
+                                    <Avatar
+                                        className={classes.large}
+                                        src={`http://localhost:5000/images/engineer/${engineer && engineer.data && engineer.data.avatar }`}
+                                    />
+                                }
+                                { user && user.data && user.data.role_id === 2 &&
+                                    <Avatar
+                                        className={classes.large}
+                                        src={`http://localhost:5000/images/company/${company && company.data && company.data.logo }`}
+                                    />
+                                }
+                            </IconButton>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                {renderMenu}
+            </div>
         )
         const guestLinks = (
-            <header className='navbar is-shadow'>
-                <img src={logo} alt='Logo' />
-                { location.pathname === "/" &&
-                    <div className='column is-half'></div>
-                }
-                { location.pathname !== "/" &&
-                    <Fragment>
-                         { location.pathname === "/engineers" &&
-                            <div className='column is-half'>
-                                <div className='field'>
-                                    <input
-                                        onChange={e => handleSearchEngineer(e)}
-                                        value={searchEngineer}
-                                        id='search-header'
-                                        placeholder='Search by Skill and Name here...'
-                                        name='search'
-                                        type='text'
-                                    />
-                                </div>
-                            </div>
-                        }
-                        { location.pathname === "/companies" &&
-                            <div className='column is-half'>
-                                <div className='field'>
-                                    <input
-                                        onChange={e => handleSearchCompany(e)}
-                                        value={searchCompany}
-                                        id='search-header'
-                                        placeholder='Search by Name and Location here...'
-                                        name='search'
-                                        type='text'
-                                    />
-                                </div>
-                            </div>
-                        }
-                    </Fragment>
-                }
-                <ul className='is-relative'>
-                    <li className='is-flex is-items-center'>
-                        <span className='mx-10'> <Link className='text-black'to='/'>Home</Link> </span>
-                        <span className='mx-10'> <Link className='text-black'to='/companies'>Companies</Link> </span>
-                        <span className='mx-10'> <Link className='text-black'to='/engineers'>Engineers</Link> </span>
-                        <span className='mx-10 text-black cursor-pointer' onClick={(e) => dropdownBtn(e)}> Guest </span>
-                    </li>
-                    { visible &&
-                        <ul id="dropdown-header">
-                            <li><Link to={`login`}>Login</Link></li>
-                            <li><Link to={`register`}>Register</Link></li>
-                        </ul>
-                    }
-                </ul>
-            </header>
+            <div className={classes.grow}>
+                <AppBar elevation={1} color="transparent" position="static">
+                    <Toolbar>
+                        <div className={classes.grow}>
+                            <img className="logo" src={logo} alt={logo} />
+                        </div>
+                        <div className={classes.grow}>
+                            <Link className="text-black mx-3" to="/">Home</Link>
+                            <Link className="text-black mx-3" to="/engineers">Engineers</Link>
+                            <Link className="text-black mx-3" to="/companies">Companies</Link>
+                            <Link className="text-black mx-3" to="/login">Login</Link>
+                            <Link className="text-black mx-3" to="/register">Register</Link>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                {renderMenu}
+            </div>
         )
         return (
             <Fragment>
@@ -178,12 +265,11 @@ const Header = ({
     }
 const mapStateToProps = state => ({
     engineer: state.engineer.engineer,
-    skills_engineer: state.engineer.skills_engineer,
     company: state.company.company,
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user
 });
 export default connect(
     mapStateToProps,
-    { getCurrentProfileEngineer, getCurrentProfileCompany, getSkillsBasedOnProfileEngineer, logout }
+    { getCurrentProfileEngineer, getCurrentProfileCompany, logout }
 )(withRouter(Header))

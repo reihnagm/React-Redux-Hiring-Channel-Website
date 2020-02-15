@@ -1,12 +1,10 @@
 import {
 	LOADING,
 	LOADED,
-	GET_SKILLS,
-	GET_SKILLS_ERROR,
-	GET_SKILLS_ENGINEER,
-	GET_SKILLS_ENGINEER_ERROR,
 	GET_ENGINEERS,
 	GET_ENGINEERS_ERROR,
+	GET_SKILLS,
+	GET_SKILLS_ERROR,
 	GET_CURRENT_PROFILE_ENGINEER,
 	GET_CURRENT_PROFILE_ENGINEER_ERROR,
 	GET_PROFILE_ENGINEER_BY_SLUG,
@@ -18,9 +16,8 @@ import {
 } from '../actions/types'
 const initialState = {
 	engineers: [],
-	skills: [],
-	skills_engineer: [],
 	engineer: {},
+	skills: [],
 	error: {},
 	loading: true,
 	search: '',
@@ -48,16 +45,6 @@ export default function (state = initialState, action) {
 				skills: payload
 			}
 		case GET_SKILLS_ERROR:
-			return {
-				...state,
-				error: payload
-			}
-		case GET_SKILLS_ENGINEER:
-			return {
-				...state,
-				skills_engineer: payload
-			}
-		case GET_SKILLS_ENGINEER_ERROR:
 			return {
 				...state,
 				error: payload

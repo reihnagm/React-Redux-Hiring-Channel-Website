@@ -1,58 +1,124 @@
-import React, { Fragment } from 'react';
+import React, { useEffect } from 'react';
 import 'react-dropdown/style.css';
 import { withRouter } from 'react-router-dom';
 import Dropdown from 'react-dropdown';
-const HeaderFilter = ({ handleSort, handleSortBy, handleLimit, sort, sortBy, limit, location }) => {
-    const optionsSortByCompanies = [
+const HeaderFilter = ({
+    handleSearch,
+    handleSortBy,
+    handleSort,
+    handleLimit,
+    querySearch,
+    setSortBy,
+    setSort,
+    setLimit,
+    sortByE,
+    sortE,
+    limitE,
+    sortByC,
+    sortC,
+    limitC,
+    location
+}) => {
+    let optionsSortByE = [];
+    let optionsSortByC = [];
+    let optionsOrderBy = [];
+    let optionsShowPage = [];
+    optionsSortByC = [
         { value: 'date_updated', label: 'Date Updated' },
         { value: 'name', label : 'Name' },
         { value: 'location', label : 'Location'}
     ];
-    const optionsSortByEngineers = [
+    optionsSortByE = [
         { value: 'date_updated', label: 'Date Updated' },
         { value: 'name', label : 'Name' },
-        { value: 'skill', label : 'Skill'}
+        { value: 'skills', label : 'Skills'}
     ];
-    const optionsOrderBy = [
+    optionsOrderBy = [
         { value: 'DESC', label: 'Newer'},
         { value: 'ASC', label: 'Older' }
     ];
-    const optionsShowPage = [
+    optionsShowPage = [
         { value: '5', label: '5'   },
         { value: '10', label: '10' },
         { value: '20', label: '20' },
         { value: '30', label: '30' }
     ];
+    useEffect(() => {
+        if(location.pathname === "/engineers") {
+            setSortBy(optionsSortByE[0]);
+            setSort(optionsOrderBy[0]);
+            setLimit(optionsShowPage[0]);
+        }
+        if(location.pathname === "/companies") {
+            setSortBy(optionsSortByC[0]);
+            setSort(optionsOrderBy[0]);
+            setLimit(optionsShowPage[0]);
+        }
+    },[]);
     return (
-        <Fragment>
-            <div className='has-small-vm'>
-                <div className='columns'>
-                    <div className='column'>
-                        <div className='columns is-items-center is-justify-center'>
-                            <p id='label-sortBy'>Sort By :</p>
-                            { location.pathname === "/companies" && (
-                                <Dropdown options={optionsSortByCompanies} value={sortBy} onChange={e => handleSortBy(e)} />
-                            ) }
-                            { location.pathname === "/engineers" && (
-                                <Dropdown options={optionsSortByEngineers} value={sortBy} onChange={e => handleSortBy(e)} />
-                            )}
+        <>
+            <div className="my-5">
+                <div className="columns">
+                    <div className="column">
+                        <div className="columns items-center justify-center">
+                            <p className="mx-2">Sort By</p>
+                            { location.pathname === "/engineers" &&
+                                <Dropdown
+                                    options={optionsSortByE}
+                                    value={sortByE}
+                                    onChange={element => handleSortBy(element.value)}
+                                />
+                            }
+                            { location.pathname === "/companies" &&
+                                <Dropdown
+                                    options={optionsSortByC}
+                                    value={sortByC}
+                                    onChange={element => handleSortBy(element.value)}
+                                />
+                            }
                         </div>
                     </div>
-                    <div className='column'>
-                        <div className='columns is-items-center is-justify-center'>
-                            <p id='label-orderBy'>Sort :</p>
-                            <Dropdown options={optionsOrderBy} value={sort} onChange={e => handleSort(e)}  />
+                    <div className="column">
+                        <div className="columns items-center justify-center">
+                            <p className="mx-2">Sort</p>
+                            { location.pathname === "/engineers" &&
+                                <Dropdown
+                                    options={optionsOrderBy}
+                                    value={sortE}
+                                    onChange={element => handleSort(element.value)}
+                                />
+                            }
+                            { location.pathname === "/companies" &&
+                                <Dropdown
+                                    options={optionsOrderBy}
+                                    value={sortC}
+                                    onChange={element => handleSort(element.value)}
+                                />
+                            }
                         </div>
                     </div>
-                    <div className='column'>
-                        <div className='columns is-items-center is-justify-center'>
-                            <p id='label-showPage'>Show Page :</p>
-                            <Dropdown options={optionsShowPage} value={limit} onChange={e => handleLimit(e)} />
+                    <div className="column">
+                        <div className="columns items-center justify-center">
+                            <p className="mx-2">Show Page</p>
+                            { location.pathname === "/engineers" &&
+                                <Dropdown
+                                    options={optionsShowPage}
+                                    value={limitE}
+                                    onChange={element => handleLimit(element.value)}
+                                />
+                            }
+                            { location.pathname === "/companies" &&
+                                <Dropdown
+                                    options={optionsShowPage}
+                                    value={limitC}
+                                    onChange={element => handleLimit(element.value)}
+                                />
+                            }
                         </div>
                     </div>
                 </div>
             </div>
-        </Fragment>
+        </>
     )
 }
 export default (withRouter(HeaderFilter));

@@ -1,30 +1,44 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
-import defaultImage from '../../../images/default.png';
+import { Container, Grid, Paper, Button, Avatar, makeStyles } from '@material-ui/core';
+import Swal from 'sweetalert2';
 import Spinner from '../../Spinner/Index';
+import defaultImage from '../../../images/default.png';
 import { getCurrentProfileEngineer, deleteProfileEngineer } from '../../../actions/engineer';
 const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: { engineer, loading }, history }) => {
-    let avatar = engineer.data && engineer.data.avatar ? `http://localhost:5000/images/engineer/${engineer.data.avatar}` : defaultImage;
+    const useStyles = makeStyles(theme => ({
+        root: {
+            flexGrow: 1,
+        },
+        paper: {
+            padding: theme.spacing(2)
+        },
+        large: {
+            width: theme.spacing(10),
+            height: theme.spacing(10)
+        },
+    }));
+    const classes = useStyles();
+    let avatar = engineer.data && engineer.data.avatar;
     let engineer_id = engineer.data && engineer.data.id;
     let user_id = engineer.data && engineer.data.user_id;
     let name = engineer.data && engineer.data.name;
     let email = engineer.data && engineer.data.email;
-    let desc = engineer.data && engineer.data.description;
+    let description = engineer.data && engineer.data.description;
     let skills = engineer.data && engineer.data.skills;
     let location = engineer.data && engineer.data.location;
     let showcase = engineer.data && engineer.data.showcase;
     let birthdate = engineer.data && engineer.data.birthdate;
-    let phone = engineer.data && engineer.data.telephone;
+    let telephone = engineer.data && engineer.data.telephone;
     useEffect(() => {
-        const _fetchData = async () => {
+        const fetchData = async () => {
             await getCurrentProfileEngineer();
         }
-        _fetchData();
+        fetchData();
     }, [getCurrentProfileEngineer]);
-    const deleteProfileAccount = () => {
-        Swal.fire({
+    const deleteProfileAccount = async () => {
+        let result = await Swal.fire({
             title: 'are your sure want to delete account ?',
             text: 'IMPORTANT: data is not back again when you decided to delete an account.',
             showCancelButton: true,
@@ -33,14 +47,13 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
             cancelButtonColor: 'rgb(201, 152, 227)',
             confirmButtonText: 'Yes',
             cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.value) {
-                deleteProfileEngineer(engineer_id, user_id);
-                setTimeout(() => {
-                    history.push("/");
-                }, 800)
-            }
-        })
+        });
+        if (result.value) {
+            deleteProfileEngineer(engineer_id, user_id);
+            setTimeout(() => {
+                history.push("/");
+            }, 800)
+        }
     }
     let n = new Date(birthdate);
     let y = n.getFullYear();
@@ -55,28 +68,54 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
     }
     let displayDate = d +' '+ thisMonth +' '+ y ;
     return loading ? ( <Spinner /> ) : (
-        <div id="top-screen">
-            <div id="box-profile-container">
-                <div id="box-profile-avatar">
-                    <img id="profile-avatar" src={ avatar } alt={name}/>
-                    <h2 id="profile-email"> { email } </h2>
-                    <h3 id="profile-phone"> { phone } </h3>
-                    <h4 id="profile-location"> { location } </h4>
-                    <h4 id="profile-birthdate"> { displayDate }</h4>
-                    <h4 id="profile-showcase"> { showcase } </h4>
-                    <span className="is-block mt-5 is-center is-rounded button is-fullwidth"
-                    onClick={e => deleteProfileAccount(e)}> Delete Account </span>
-                    <Link className="is-block mt-5 is-center is-rounded button is-fullwidth" to="/engineers"> Back </Link>
-                </div>
-                <div id="box-profile-name">
-                    <h3 id="profile-name"> { name } </h3>
-                    <p id="profile-desc">{ desc }</p>
-                    <ul id="profile-skill">
-                        <li id="profile-list"> <span style={{ fontWeight: 'bold' }}> Skills: </span> { skills } </li>
-                    </ul>
-                </div>
+        <>
+            <div style={{
+                background: '#ea80fc',
+                position:"absolute",
+                zIndex: -1,
+                width:'100%',
+                top: "0px",
+                left: "0px",
+                right: "0px",
+                height: "300px" }}>
             </div>
-        </div>
+            <Container className="mt-64" Fixed>
+                <div className={classes.root}>
+                    <Grid container spacing={8}>
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper}>
+                                <Avatar
+                                    className={classes.large}
+                                    src={avatar ? `http://localhost:5000/images/engineer/${avatar}` : ''} alt={name}
+                                />
+                                <p className="my-2"> {name} </p>
+                                <p className="my-2"> {email} </p>
+                                <p className="my-2"> {telephone} </p>
+                                <p className="my-2"> {showcase} </p>
+                                <Button
+                                    type="button"
+                                    variant="contained"
+                                    color="primary"
+                                    component={ Link } to="/engineers">
+                                    Back
+                                </Button>
+                            </Paper>
+                        </Grid>
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper}>
+                                <p> {description} </p>
+                            </Paper>
+                        </Grid>
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper}>
+                                <p className="mb-2">Skills</p>
+                                <p>{skills}</p>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </div>
+            </Container>
+        </>
     )
 }
 const mapStateToProps = state => ({
