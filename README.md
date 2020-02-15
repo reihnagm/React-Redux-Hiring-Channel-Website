@@ -35,6 +35,7 @@ $ gulp watch
 - [redux](#)
 - [react-redux](#)
 - [redux-thunk](#)
+- [connected-react-router](#)
 - [redux-devtools-extension](#)
 - [sweetalert2](#)
 - [gulp](#)
