@@ -15,9 +15,21 @@ const b64toBlob = (b64Data, contentType, sliceSize) => {
     let blob = new Blob(byteArrays, {type: contentType});
     return blob;
 }
+const decodeJWT = token => {
+    let base64Url, base64, payload, data;
+    if(token) {
+        base64Url = token.split('.')[1];
+        base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        payload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        data = JSON.parse(payload);
+        return data;
+    }
+}
 // let ImageURL = avatar
 // let block = ImageURL.split(";");
 // let contentType = block[0].split(":")[1];
 // let realData = block[1].split(",")[1];
 // let blob = b64toBlob(realData, contentType);
-export { b64toBlob }
+export { b64toBlob, decodeJWT }

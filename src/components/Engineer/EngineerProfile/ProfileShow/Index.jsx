@@ -1,12 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from '@material-ui/core';
 import Swal from 'sweetalert2';
 import Spinner from '../../../Spinner/Index';
+import MessageList from './MessageList/Index';
 import defaultImage from '../../../../images/default.png';
-import { getProfileEngineerBySlug } from '../../../../actions/engineer';
-const Profile = ({ getProfileEngineerBySlug, engineer: { engineer, loading }, history, match }) => {
+import { getCurrentProfileEngineer, deleteProfileEngineer } from '../../../../actions/engineer';
+import { getMessages, getSenderId, checkPrivilegeMessage, sendMessage } from '../../../../actions/message';
+const Profile = ({
+    getCurrentProfileEngineer,
+    getMessages,
+    getSenderId,
+    deleteProfileEngineer,
+    checkPrivilegeMessage,
+    sendMessage,
+    message: { messages, sender_id, check_privilege_id },
+    engineer: { engineer, loading }, history }) => {
     const useStyles = makeStyles(theme => ({
         root: {
             flexGrow: 1,
@@ -20,21 +30,53 @@ const Profile = ({ getProfileEngineerBySlug, engineer: { engineer, loading }, hi
         },
     }));
     const classes = useStyles();
-    let avatar = engineer.avatar;
-    let name = engineer.name;
-    let email = engineer.email;
-    let description =  engineer.description;
-    let skills = engineer.skills;
-    let location = engineer.location;
-    let showcase =  engineer.showcase;
-    let birthdate = engineer.birthdate;
-    let telephone = engineer.telephone;
+    const [inputMessage, setInputMessage] = useState([]);
+
+    let avatar = engineer.data && engineer.data.avatar;
+    let engineer_id = engineer.data && engineer.data.id;
+    let receiver_id = engineer.data && engineer.data.user_id;
+    let user_id = engineer.data && engineer.data.user_id;
+    let name = engineer.data && engineer.data.name;
+    let email = engineer.data && engineer.data.email;
+    let description = engineer.data && engineer.data.description;
+    let skills = engineer.data && engineer.data.skills;
+    let location = engineer.data && engineer.data.location;
+    let showcase = engineer.data && engineer.data.showcase;
+    let birthdate = engineer.data && engineer.data.birthdate;
+    let telephone = engineer.data && engineer.data.telephone;
     useEffect(() => {
-       const _fetchData = async () => {
-           await getProfileEngineerBySlug(match.params.slug);
-       }
-       _fetchData();
-   }, [getProfileEngineerBySlug, match.params.slug]);
+        const fetchData = async () => {
+            await getCurrentProfileEngineer();
+        }
+        fetchData();
+    }, [getCurrentProfileEngineer]);
+    const deleteProfileAccount = async () => {
+        let result = await Swal.fire({
+            title: 'are your sure want to delete account ?',
+            text: 'IMPORTANT: data is not back again when you decided to delete an account.',
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            confirmButtonColor: 'red',
+            cancelButtonColor: 'rgb(201, 152, 227)',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        });
+        if (result.value) {
+            deleteProfileEngineer(engineer_id, user_id);
+            setTimeout(() => {
+                history.push("/");
+            }, 800)
+        }
+    }
+    const handleMessage = (event) => {
+        setInputMessage(event.target.value);
+    }
+    const handleEnterMessage = (event) => {
+        if(event.which === 13) {
+            sendMessage(sender_id, receiver_id, inputMessage);
+            setInputMessage('');
+        }
+    }
     let n = new Date(birthdate);
     let y = n.getFullYear();
     let d = n.getDate();
@@ -61,13 +103,21 @@ const Profile = ({ getProfileEngineerBySlug, engineer: { engineer, loading }, hi
             </div>
             <Container className="mt-64" Fixed>
                 <div className={classes.root}>
-                    <Grid container spacing={8}>
+                    <Grid container spacing={4}>
                         <Grid item md={4} xs={12}>
                             <Paper className={classes.paper}>
-                                <Avatar
-                                    className={classes.large}
-                                    src={avatar ? `http://localhost:5000/images/engineer/${avatar}` : ''} alt={name}
-                                />
+                                <Grid container>
+                                    <Grid item xs={6} md={6}>
+                                        <Avatar
+                                            className={classes.large}
+                                            src={`http://localhost:5000/images/engineer/${avatar}`}
+                                            alt={name}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6} md={6}>
+                                        <button> messages </button>
+                                    </Grid>
+                                </Grid>
                                 <p className="my-2"> {name} </p>
                                 <p className="my-2"> {email} </p>
                                 <p className="my-2"> {telephone} </p>
@@ -99,9 +149,17 @@ const Profile = ({ getProfileEngineerBySlug, engineer: { engineer, loading }, hi
     )
 }
 const mapStateToProps = state => ({
-    engineer: state.engineer
+    engineer: state.engineer,
+    message: state.message
 })
 export default connect(
     mapStateToProps,
-    { getProfileEngineerBySlug }
+    {
+        getCurrentProfileEngineer,
+        deleteProfileEngineer,
+        getMessages,
+        getSenderId,
+        checkPrivilegeMessage,
+        sendMessage
+    }
 )(Profile)

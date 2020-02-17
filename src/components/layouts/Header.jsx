@@ -102,7 +102,7 @@ const Header = ({
                 },
             },
         }));
-        const role_id = typeof user !== "undefined" && user && user.data && user.data.role_id;
+        const user_role_id = user && user.data && user.data.role_id;
         const classes = useStyles();
         const [anchorEl, setAnchorEl] = useState(null);
         const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -126,13 +126,13 @@ const Header = ({
                 open={isMenuOpen}
                 onClose={handleMenuClose}
             >
-                { role_id === 1 &&
+                { user_role_id === 1 &&
                     <div>
                         <MenuItem className="text-black" component={ Link } to="/engineer/profile">Profile</MenuItem>
                         <MenuItem  className="text-black" component={ Link } to="/engineer/profile/me/edit">Edit Profile</MenuItem>
                     </div>
                 }
-                { role_id === 2 &&
+                { user_role_id === 2 &&
                     <div>
                         <MenuItem className="text-black" component={ Link } to="/company/profile">Profile</MenuItem>
                         <MenuItem className="text-black" component={ Link } to="/company/profile/me/edit">Edit Profile</MenuItem>
@@ -143,17 +143,19 @@ const Header = ({
         );
         useEffect(() => {
             const fetchData = async () => {
-                if(typeof role_id !== "undefined") {
-                    if(role_id === 1) {
+                if(typeof user_role_id === "undefined") {
+                    return false;
+                } else {
+                    if(user_role_id === 1) {
                         await getCurrentProfileEngineer();
                     }
-                    if(role_id === 2) {
+                    if(user_role_id === 2) {
                         await getCurrentProfileCompany();
                     }
                 }
             }
             fetchData();
-        },[getCurrentProfileEngineer, getCurrentProfileCompany, role_id]);
+        },[getCurrentProfileEngineer, getCurrentProfileCompany, user_role_id]);
         const authLinks = (
             <div className={classes.grow}>
                 <AppBar elevation={1} color="transparent" position="static">
@@ -201,12 +203,12 @@ const Header = ({
                             <Link className="text-black mx-3" to="/companies">Companies</Link>
                         </div>
                         <div className={classes.grow}>
-                            { user && user.data && user.data.role_id === 1 &&
+                            { user_role_id === 1 &&
                                 <span className="mx-3 cursor-pointer" onClick={handleProfileMenuOpen}>
                                     { engineer && engineer.data && engineer.data.name }
                                 </span>
                             }
-                            { user && user.data && user.data.role_id === 2 &&
+                            { user_role_id === 2 &&
                                 <span className="mx-3 cursor-pointer" onClick={handleProfileMenuOpen}>
                                     { company && company.data && company.data.name }
                                 </span>
@@ -219,16 +221,16 @@ const Header = ({
                                 aria-controls={menuId}
                                 onClick={handleProfileMenuOpen}
                             >
-                                { user && user.data && user.data.role_id === 1 &&
+                                { user_role_id  === 1 &&
                                     <Avatar
                                         className={classes.large}
-                                        src={`http://localhost:5000/images/engineer/${engineer && engineer.data && engineer.data.avatar }`}
+                                        src=""
                                     />
                                 }
-                                { user && user.data && user.data.role_id === 2 &&
+                                { user_role_id === 2 &&
                                     <Avatar
                                         className={classes.large}
-                                        src={`http://localhost:5000/images/company/${company && company.data && company.data.logo }`}
+                                        src=""
                                     />
                                 }
                             </IconButton>
@@ -245,6 +247,40 @@ const Header = ({
                         <div className={classes.grow}>
                             <img className="logo" src={logo} alt={logo} />
                         </div>
+                        { location.pathname === "/engineers" &&
+                            <div className={classes.search}>
+                                <div className={classes.searchIcon}>
+                                    <SearchIcon />
+                                </div>
+                                <InputBase
+                                    placeholder="Search Name or Skills Here..."
+                                    inputProps={{ 'aria-label': 'search' }}
+                                    classes={{
+                                        root: classes.inputRoot,
+                                        input: classes.inputInput,
+                                    }}
+                                    onChange={event => setEngineersSearch(event.target.value)}
+                                    value={selectedSearchEngineer}
+                                />
+                            </div>
+                        }
+                        { location.pathname === "/companies" &&
+                            <div className={classes.search}>
+                                <div className={classes.searchIcon}>
+                                    <SearchIcon />
+                                </div>
+                                <InputBase
+                                    placeholder="Search Name or Location Here..."
+                                    inputProps={{ 'aria-label': 'search' }}
+                                    classes={{
+                                        root: classes.inputRoot,
+                                        input: classes.inputInput,
+                                    }}
+                                    onChange={event => setCompaniesSearch(event.target.value)}
+                                    value={selectedSearchCompany}
+                                />
+                            </div>
+                        }
                         <div className={classes.grow}>
                             <Link className="text-black mx-3" to="/">Home</Link>
                             <Link className="text-black mx-3" to="/engineers">Engineers</Link>

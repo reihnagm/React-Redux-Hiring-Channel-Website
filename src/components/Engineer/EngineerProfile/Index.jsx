@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Container, Grid, Paper, Button, Avatar, makeStyles } from '@material-ui/core';
+import { Container, Grid, Paper, Button, Avatar, IconButton, makeStyles } from '@material-ui/core';
 import Swal from 'sweetalert2';
 import Spinner from '../../Spinner/Index';
 import defaultImage from '../../../images/default.png';
@@ -12,7 +12,8 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
             flexGrow: 1,
         },
         paper: {
-            padding: theme.spacing(2)
+            padding: theme.spacing(2),
+            position: 'relative'
         },
         large: {
             width: theme.spacing(10),
@@ -81,7 +82,7 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
             </div>
             <Container className="mt-64" Fixed>
                 <div className={classes.root}>
-                    <Grid container spacing={8}>
+                    <Grid container spacing={3}>
                         <Grid item md={4} xs={12}>
                             <Paper className={classes.paper}>
                                 <Avatar
@@ -92,13 +93,23 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
                                 <p className="my-2"> {email} </p>
                                 <p className="my-2"> {telephone} </p>
                                 <p className="my-2"> {showcase} </p>
-                                <Button
-                                    type="button"
-                                    variant="contained"
-                                    color="primary"
-                                    component={ Link } to="/engineers">
-                                    Back
-                                </Button>
+                                <Grid>
+                                    <Button
+                                        type="button"
+                                        variant="contained"
+                                        color="primary">
+                                        Delete Account
+                                    </Button>
+                                </Grid>
+                                <Grid>
+                                    <Button
+                                        type="button"
+                                        variant="contained"
+                                        color="primary"
+                                        component={ Link } to="/engineers">
+                                        Back
+                                    </Button>
+                                </Grid>
                             </Paper>
                         </Grid>
                         <Grid item md={4} xs={12}>

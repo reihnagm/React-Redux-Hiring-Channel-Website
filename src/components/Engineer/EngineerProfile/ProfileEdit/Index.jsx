@@ -46,19 +46,8 @@ const ProfileEdit = ({
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     });
-    let dataSkillsEngineerArrayObject = [];
     let datasSkillsEngineer = engineer && engineer.data && engineer.data.skills;
     let datasSkillsIdEngineer = engineer && engineer.data && engineer.data.skills_id;
-    if(typeof datasSkillsEngineer !== "undefined" && datasSkillsEngineer !== null) {
-        let array_skills = datasSkillsEngineer.split(",");
-        let array_skills_id = datasSkillsIdEngineer.split(",");
-        for (let i = 0; i < array_skills.length; i++) {
-           dataSkillsEngineerArrayObject.push({
-               id: parseInt(array_skills_id[i]),
-               name: array_skills[i]
-           });
-       }
-    }
     let idProps = engineer.data && engineer.data.id;
     let avatarProps = engineer.data && engineer.data.avatar;
     let nameProps = engineer.data && engineer.data.name;
@@ -103,7 +92,7 @@ const ProfileEdit = ({
     const [avatarNotEdited, setAvatarNotEdited] = useState('');
     const [avatarDefault, setDefaultAvatar] = useState('');
     const [avatarFile, setAvatarFile] = useState('');
-    const [skillsMask, setSkills] = useState([]);
+    const [skillsMask, setSkills] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
             await getCurrentProfileEngineer();
@@ -185,7 +174,6 @@ const ProfileEdit = ({
     }
     const onSubmit = (event) => {
         event.preventDefault();
-        console.log(skillsMask)
         let avatar
         if(avatarFile === "") {
             avatar = avatarNotEdited;
@@ -310,7 +298,13 @@ const ProfileEdit = ({
                                 label="Description"
                                 fullWidth
                             />
-                            <SkillsComponent skills={skills} dataSkillsEngineerArrayObject={dataSkillsEngineerArrayObject} skillsMask={skillsMask} setSkills={setSkills} />
+                            <SkillsComponent
+                                datasSkillsEngineer={datasSkillsEngineer}
+                                datasSkillsIdEngineer={datasSkillsIdEngineer}
+                                skills={skills}
+                                setSkills={setSkills}
+                                skillsMask={skillsMask}
+                            />
                             <TextField
                                 onChange={e => onChange(e)}
                                 value={location}

@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';
+import { decodeJWT } from '../configs/helper';
 import {
     LOADING,
     LOADED,
@@ -36,17 +37,11 @@ export const getCompanies = () => async (dispatch, getState) => {
     }
 }
 export const getCurrentProfileCompany = () => async dispatch => {
-    let payload;
-    let data;
-    let user_id;
     const token = localStorage.token;
-    if(token)  {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        payload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        data = JSON.parse(payload);
+    let user_id;
+    let data;
+    if(token) {
+        data = decodeJWT(token);
         user_id = data.user.id;
     }
     try {

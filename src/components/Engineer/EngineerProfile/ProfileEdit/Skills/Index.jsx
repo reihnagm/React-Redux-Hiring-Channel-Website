@@ -1,20 +1,34 @@
 import React, { useEffect } from 'react';
 import { TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-const SkillsComponent = ({ skills, dataSkillsEngineerArrayObject, skillsMask, setSkills }) => {
+const SkillsComponent = ({ datasSkillsEngineer, datasSkillsIdEngineer, skills, skillsMask, setSkills }) => {
+    let dataSkillsEngineerArrayObject = [];
+    let array_skills = datasSkillsEngineer.split(",");
+    let array_skills_id = datasSkillsIdEngineer.split(",");
+    for (let i = 0; i < array_skills.length; i++) {
+       dataSkillsEngineerArrayObject.push({
+           id: parseInt(array_skills_id[i]),
+           name: array_skills[i]
+       });
+   }
     useEffect(() => {
-        if(dataSkillsEngineerArrayObject.length !== 0) {
-            setSkills(dataSkillsEngineerArrayObject);
-        }
-    },[setSkills, skills]);
+        setSkills(dataSkillsEngineerArrayObject);
+    },[]);
+    let data;
+    if(skillsMask === null) {
+        return false;
+    } else {
+        data = skillsMask
+    }
     return (
         <>
             <Autocomplete
                 multiple
                 filterSelectedOptions
                 freeSolo
-                value={skillsMask} /* kalo ga pake state(uncontrolled) bakal sering ilang value nya jika di refresh dan juga kalo ada perubahan pada code editor kadang datanya ilang value nya */
-                options={skills.data}
+                /* kalo ga pake state(uncontrolled) bakal sering ilang value nya jika di refresh dan juga kalo ada perubahan pada code editor kadang datanya ilang value nya */
+                value={data}
+                options={skills}
                 onChange={(event, getSkills) => {
                     setSkills(getSkills);
                 }}

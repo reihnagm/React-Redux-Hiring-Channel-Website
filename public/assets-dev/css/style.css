@@ -70,14 +70,20 @@
     color: #000000;
     margin-left: 20px;
 }
-#title-skill {
-    margin: 10px 0 5px 0;
-    font-size: 16px;
+.container-direct-message {
+    background-color: #ffffff;
+    width: 40%;
+    margin: 16rem auto;
 }
-#name-skill {
-    font-size: 16px;
-    margin: 5px 0;
+.chat-box {
+    background-color: #ea80fc;
 }
-#text-skill {
-    line-height: 20px;
+.backdrop {
+    background-color: #ea80fc;
+    height: 300px;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: -1;
 }

@@ -23,22 +23,24 @@ const EngineerList = ({ engineers, handlePage, currentPage, pageCount }) => {
                     alignItems="center"
                 >
                     <div className="masonry-container">
-                        { engineers && engineers.map(engineer => (
-                            <div className="masonry-item" key={engineer.id}>
-                                <Link className="text-white" to={`engineer/profile/${engineer.slug}`}>
-                                    <img className="image rounded" src={engineer.avatar ? `http://localhost:5000/images/engineer/${engineer.avatar}` : defaultImage} alt={engineer.name} />
-                                    <div className="masonry-description">
-                                        <p className="mb-1">{engineer.name}</p>
-                                        <p className="mb-1">{engineer.email}</p>
-                                        <p className="mb-1"> Expected Salary : <span> {engineer.salary} </span> </p>
-                                        <p className="mb-1"> Skills : </p>
-                                        <ul>
-                                            <li> {engineer.skills} </li>
-                                        </ul>
-                                    </div>
-                                </Link>
-                            </div>
-                        ))}
+                        { engineers && engineers.map(engineer => {
+                            return (
+                                <div className="masonry-item" key={engineer.id}>
+                                    <Link className="text-white" to={`engineer/profile/${engineer.slug}`}>
+                                        <img className="image rounded" src={`http://localhost:5000/images/engineer/${engineer.avatar}`} alt={engineer.name} />
+                                        <div className="masonry-description">
+                                            <p className="mb-1">{engineer.name}</p>
+                                            <p className="mb-1">{engineer.email}</p>
+                                            <p className="mb-1"> Expected Salary : <span> {engineer.salary} </span> </p>
+                                            <p className="mb-1"> Skills : </p>
+                                            <ul>
+                                                <li> {engineer.skills} </li>
+                                            </ul>
+                                        </div>
+                                    </Link>
+                                </div>
+                            )
+                        })}
                     </div>
                     <div className="my-8">
                         <Pagination

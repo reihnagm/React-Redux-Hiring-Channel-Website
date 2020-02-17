@@ -1,5 +1,6 @@
 import axios from 'axios';
 import store from '../store';
+import { decodeJWT } from '../configs/helper';
 import { logout } from './auth';
 import {
     LOADING,
@@ -44,7 +45,7 @@ export const getSkills = () => async dispatch => {
         const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/skills`);
         dispatch({
             type: GET_SKILLS,
-            payload: response.data
+            payload: response.data.data
         });
     } catch (error) {
         dispatch({
@@ -54,17 +55,11 @@ export const getSkills = () => async dispatch => {
     }
 }
 export const getCurrentProfileEngineer = () => async dispatch => {
-    let payload;
-    let data;
-    let user_id;
     const token = localStorage.token;
-    if(token)  {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        payload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        data = JSON.parse(payload);
+    let user_id;
+    let data;
+    if(token) {
+        data = decodeJWT(token);
         user_id = data.user.id;
     }
     try {

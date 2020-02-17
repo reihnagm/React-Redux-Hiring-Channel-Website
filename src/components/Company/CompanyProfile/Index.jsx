@@ -55,13 +55,23 @@ const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { co
                                 <p className="my-2"> {name} </p>
                                 <p className="my-2"> {email} </p>
                                 <p className="my-2"> {telephone} </p>
-                                <Button
-                                    type="button"
-                                    variant="contained"
-                                    color="primary"
-                                    component={ Link } to="/companies">
-                                    Back
-                                </Button>
+                                <Grid>
+                                    <Button
+                                        type="button"
+                                        variant="contained"
+                                        color="primary">
+                                        Delete Account
+                                    </Button>
+                                </Grid>
+                                <Grid>
+                                    <Button
+                                        type="button"
+                                        variant="contained"
+                                        color="primary"
+                                        component={ Link } to="/companies">
+                                        Back
+                                    </Button>
+                                </Grid>
                             </Paper>
                         </Grid>
                         <Grid item md={4} xs={12}>
