@@ -1,62 +1,74 @@
 import {
-	GET_MESSAGES,
-	GET_MESSAGES_ERROR,
-	SEND_MESSAGE,
-	SEND_MESSAGE_ERROR,
-	GET_SENDER_ID,
-	GET_SENDER_ID_ERROR,
-	CHECK_PRIVILEGE_MESSAGE,
-	CHECK_PRIVILEGE_MESSAGE_ERROR
+    GET_CONVERSATION_LISTS,
+    GET_CONVERSATION_LISTS_ERROR,
+    GET_REPLY_CONVERSATION_REPLIES,
+    GET_REPLY_CONVERSATION_REPLIES_ERROR,
+	CHECK_CONVERSATIONS,
+    CHECK_CONVERSATIONS_ERROR,
+    GET_CONVERSATIONS_LAST_ID,
+    GET_CONVERSATIONS_LAST_ID_ERROR,
+    INSERT_INTO_CONVERSATIONS,
+    INSERT_INTO_CONVERSATIONS_ERROR,
 } from '../actions/types'
 const initialState = {
-	messages: [],
-	sender_id: null,
-	check_privilege_message: null,
+    conversations_id: null,
+    conversation_lists: [],
+    replies: [],
+    check_conversations: null,
 	error: {}
 }
 export default function (state = initialState, action) {
     const { type, payload } = action;
     switch (type) {
-        case GET_MESSAGES:
+        case GET_CONVERSATION_LISTS:
+            return {
+                ...state, 
+                conversation_lists: payload
+            }
+        case GET_CONVERSATION_LISTS_ERROR:
+            return {
+                ...state, 
+                error: payload
+            }
+        case GET_REPLY_CONVERSATION_REPLIES:
+            return {
+                ...state, 
+                replies: payload
+            }
+        case GET_REPLY_CONVERSATION_REPLIES_ERROR:
+            return {
+                ...state, 
+                error: payload
+            }
+        case CHECK_CONVERSATIONS:
             return {
                 ...state,
-                messages: payload
+                check_conversations: payload
             }
-		case GET_MESSAGES_ERROR:
+		case CHECK_CONVERSATIONS_ERROR:
             return {
                 ...state,
                 error: payload
             }
-        case SEND_MESSAGE:
+        case GET_CONVERSATIONS_LAST_ID:
             return {
                 ...state,
-                messages: [...payload, state.messages]
+                conversations_id: payload
             }
-		case SEND_MESSAGE_ERROR:
-            return {
-                ...state,
-                error: payload
-            }
-		case GET_SENDER_ID:
-            return {
-                ...state,
-                sender_id: payload
-            }
-		case GET_SENDER_ID_ERROR:
+        case GET_CONVERSATIONS_LAST_ID_ERROR:
             return {
                 ...state,
                 error: payload
             }
-		case CHECK_PRIVILEGE_MESSAGE:
-			return {
-				...state,
-				check_privilege_message: payload
-			}
-		case CHECK_PRIVILEGE_MESSAGE_ERROR:
-			return {
-				...state,
-				error: payload
-			}
+        case INSERT_INTO_CONVERSATIONS: 
+            return {
+                ...state
+            }
+        case INSERT_INTO_CONVERSATIONS_ERROR: 
+            return {
+                ...state,
+                error: payload
+            }
 		default:
         	return state;
     }

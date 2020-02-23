@@ -72,11 +72,21 @@
 }
 .container-direct-message {
     background-color: #ffffff;
-    width: 40%;
+    width: 50%;
     margin: 16rem auto;
 }
 .chat-box {
     background-color: #ea80fc;
+}
+.conversation-lists {
+    background-color: #ba97c0 !important;
+    border-radius: 20px !important;
+    outline: none !important;
+    width: 50%; 
+    margin: 16rem auto;
+}
+.conversations-item {
+    background-color: #dbdbdb;
 }
 .backdrop {
     background-color: #ea80fc;

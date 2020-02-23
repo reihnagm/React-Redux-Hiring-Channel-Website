@@ -1,79 +1,92 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Container, Grid, Paper, Button, Avatar, makeStyles } from '@material-ui/core';
+import { Container, Grid, Paper, Button, Modal, Input, makeStyles } from '@material-ui/core';
 import Swal from 'sweetalert2';
+import MessageIcon from '@material-ui/icons/Message';
 import Spinner from '../../../Spinner/Index';
+import AvatarComponent from '../../../Avatar/Index';
 import MessageList from './MessageList/Index';
 import defaultImage from '../../../../images/default.png';
-import { getCurrentProfileEngineer, deleteProfileEngineer } from '../../../../actions/engineer';
-import { getMessages, getSenderId, checkPrivilegeMessage, sendMessage } from '../../../../actions/message';
+import { getProfileEngineerBySlug } from '../../../../actions/engineer';
+import { 
+    creatingConversations, 
+    InsertIntoConversationReplies, 
+    getConversationLists,
+    getConversationsLastId, 
+    checkConversations,
+    getReplyConversationReplies
+} from '../../../../actions/message';
 const Profile = ({
-    getCurrentProfileEngineer,
-    getMessages,
-    getSenderId,
-    deleteProfileEngineer,
-    checkPrivilegeMessage,
-    sendMessage,
-    message: { messages, sender_id, check_privilege_id },
-    engineer: { engineer, loading }, history }) => {
+    getProfileEngineerBySlug,
+    getConversationLists,
+    getReplyConversationReplies,
+    getConversationsLastId,
+    checkConversations,
+    creatingConversations,
+    InsertIntoConversationReplies,
+    message: { conversations_id, replies, check_conversations, conversation_lists },
+    user: { user },
+    engineer: { engineer, loading }, match }) => {
     const useStyles = makeStyles(theme => ({
         root: {
             flexGrow: 1,
         },
         paper: {
             padding: theme.spacing(2)
-        },
-        large: {
-            width: theme.spacing(10),
-            height: theme.spacing(10)
-        },
+        }
     }));
     const classes = useStyles();
-    const [inputMessage, setInputMessage] = useState([]);
-
-    let avatar = engineer.data && engineer.data.avatar;
-    let engineer_id = engineer.data && engineer.data.id;
-    let receiver_id = engineer.data && engineer.data.user_id;
-    let user_id = engineer.data && engineer.data.user_id;
-    let name = engineer.data && engineer.data.name;
-    let email = engineer.data && engineer.data.email;
-    let description = engineer.data && engineer.data.description;
-    let skills = engineer.data && engineer.data.skills;
-    let location = engineer.data && engineer.data.location;
-    let showcase = engineer.data && engineer.data.showcase;
-    let birthdate = engineer.data && engineer.data.birthdate;
-    let telephone = engineer.data && engineer.data.telephone;
+    const [messageMask, setMessageMask] = useState([]);
+    const [inputMessage, setInputMessage] = useState(null);
+    const [open, setOpen] = useState(false);
+    let user_two = engineer.user_id;
+    let name = engineer.name;
+    let email = engineer.email;
+    let description = engineer.description;
+    let skills = engineer.skills;
+    let location = engineer.location;
+    let showcase = engineer.showcase;
+    let birthdate = engineer.birthdate;
+    let telephone = engineer.telephone;
+    
     useEffect(() => {
         const fetchData = async () => {
-            await getCurrentProfileEngineer();
+            await getProfileEngineerBySlug(match.params.slug);
+            if(false === user_two === null || typeof user_two === "undefined") {
+                return false;
+            } 
+            await creatingConversations(user_two);
+            await checkConversations(user_two);
+            await getConversationLists(user_two);
+            setTimeout( async () => {
+                await getConversationsLastId(user_two);
+            }, 800);
         }
         fetchData();
-    }, [getCurrentProfileEngineer]);
-    const deleteProfileAccount = async () => {
-        let result = await Swal.fire({
-            title: 'are your sure want to delete account ?',
-            text: 'IMPORTANT: data is not back again when you decided to delete an account.',
-            showCancelButton: true,
-            showLoaderOnConfirm: true,
-            confirmButtonColor: 'red',
-            cancelButtonColor: 'rgb(201, 152, 227)',
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        });
-        if (result.value) {
-            deleteProfileEngineer(engineer_id, user_id);
-            setTimeout(() => {
-                history.push("/");
-            }, 800)
-        }
-    }
+    }, [getProfileEngineerBySlug, getConversationsLastId, creatingConversations, user_two, match.params.slug]);
+    const handleOpen = async () => {
+        await getReplyConversationReplies(conversations_id);
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
     const handleMessage = (event) => {
         setInputMessage(event.target.value);
     }
+    const loadDirectMessage = () => {
+      
+    }
     const handleEnterMessage = (event) => {
+        let obj = {
+            id: new Date(),
+            reply: inputMessage,
+            name: user && user.data && user.data.name
+        }
         if(event.which === 13) {
-            sendMessage(sender_id, receiver_id, inputMessage);
+            InsertIntoConversationReplies(conversations_id, inputMessage);
+            setMessageMask(state => [...state, obj]);
             setInputMessage('');
         }
     }
@@ -88,7 +101,7 @@ const Profile = ({
         d = '';
         thisMonth = '';
     }
-    let displayDate = d +' '+ thisMonth +' '+ y ;
+    let displayDate = d +' '+ thisMonth +' '+ y ;    
     return loading ? ( <Spinner /> ) : (
         <>
             <div style={{
@@ -101,21 +114,84 @@ const Profile = ({
                 right: "0px",
                 height: "300px" }}>
             </div>
-            <Container className="mt-64" Fixed>
+            <Container className="mt-64" fixed>
                 <div className={classes.root}>
                     <Grid container spacing={4}>
                         <Grid item md={4} xs={12}>
                             <Paper className={classes.paper}>
                                 <Grid container>
                                     <Grid item xs={6} md={6}>
-                                        <Avatar
-                                            className={classes.large}
-                                            src={`http://localhost:5000/images/engineer/${avatar}`}
-                                            alt={name}
+                                        <AvatarComponent 
+                                            imageSource={engineer.avatar} 
+                                            altName={engineer.name}
+                                            type="avatar" 
+                                            width="100"
+                                            height="100"
                                         />
                                     </Grid>
-                                    <Grid item xs={6} md={6}>
-                                        <button> messages </button>
+                                    <Grid item xs={6} md={4}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={handleOpen}
+                                            startIcon={<MessageIcon />}>
+                                            Message
+                                        </Button>
+                                        <Modal open={open} onClose={handleClose}>
+                                           <Paper className="p-5 conversation-lists">
+                                               { conversation_lists && conversation_lists.map(conversation_list => {
+                                                    return loading ? ( <Spinner /> ) : (
+                                                        <Grid 
+                                                            key={conversation_list.id}
+                                                            className="p-3 my-5 cursor-pointer rounded conversations-item"
+                                                            container
+                                                            direction="row"
+                                                            justify="center"
+                                                            alignItems="center"
+                                                            onClick={loadDirectMessage}
+                                                        > 
+                                                            <Grid item xs={2}>
+                                                                <AvatarComponent 
+                                                                    imageSource={conversation_list.avatar} 
+                                                                    altName={conversation_list.name}
+                                                                    type="avatar" 
+                                                                    width="60"
+                                                                    height="60"
+                                                                />                                                
+                                                            </Grid>
+                                                            <Grid item xs={10}>
+                                                                <Grid 
+                                                                    container
+                                                                    direction="column"
+                                                                    justify="start"
+                                                                    alignItems="start"
+                                                                >
+                                                                    <Grid item>
+                                                                         <p className="my-1"> {conversation_list.name} </p>
+                                                                    </Grid>
+                                                                    <Grid item>
+                                                                         <p className="mx-3"> {conversation_list.reply} </p>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Grid>
+                                                    )
+                                               })}
+                                            </Paper>
+                                            {/* <div className="p-5 container-direct-message">
+                                                <MessageList
+                                                    replies={replies}
+                                                    messageMask={messageMask}
+                                                    setMessageMask={setMessageMask}
+                                                />
+                                                <Input
+                                                    name="message"
+                                                    value={inputMessage}
+                                                    onChange={handleMessage}
+                                                    onKeyPress={handleEnterMessage}
+                                                />
+                                            </div> */}
+                                        </Modal>
                                     </Grid>
                                 </Grid>
                                 <p className="my-2"> {name} </p>
@@ -150,16 +226,18 @@ const Profile = ({
 }
 const mapStateToProps = state => ({
     engineer: state.engineer,
+    user: state.auth,
     message: state.message
-})
+});
 export default connect(
     mapStateToProps,
     {
-        getCurrentProfileEngineer,
-        deleteProfileEngineer,
-        getMessages,
-        getSenderId,
-        checkPrivilegeMessage,
-        sendMessage
+        getProfileEngineerBySlug,
+        getConversationLists,
+        getReplyConversationReplies,
+        getConversationsLastId,
+        InsertIntoConversationReplies,
+        checkConversations,
+        creatingConversations, 
     }
-)(Profile)
+)(Profile);

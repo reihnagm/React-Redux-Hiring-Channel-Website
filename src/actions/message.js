@@ -1,106 +1,152 @@
 import axios from 'axios';
 import { decodeJWT } from '../configs/helper';
 import {
-    GET_MESSAGES,
-    GET_MESSAGES_ERROR,
-    SEND_MESSAGE,
-    SEND_MESSAGE_ERROR,
-    GET_SENDER_ID,
-    GET_SENDER_ID_ERROR,
-    CHECK_PRIVILEGE_MESSAGE,
-    CHECK_PRIVILEGE_MESSAGE_ERROR
+    LOADING,
+    LOADED,
+    GET_CONVERSATION_LISTS,
+    GET_CONVERSATION_LISTS_ERROR,
+    GET_REPLY_CONVERSATION_REPLIES,
+    GET_REPLY_CONVERSATION_REPLIES_ERROR,
+    CHECK_CONVERSATIONS,
+    CHECK_CONVERSATIONS_ERROR,
+    GET_CONVERSATIONS_LAST_ID,
+    GET_CONVERSATIONS_LAST_ID_ERROR,
+    INSERT_INTO_CONVERSATIONS,
+    INSERT_INTO_CONVERSATIONS_ERROR,
+    INSERT_INTO_CONVERSATION_REPLIES,
+    INSERT_INTO_CONVERSATION_REPLIES_ERROR
 } from './types'
-export const getMessages = (receiver_id) => async (dispatch) => {
+export const getConversationLists = (user_two) => async (dispatch) => {
     const token = localStorage.token;
-    let data;
-    let sender_id;
+    let data, user_session, get_conversation_lists;
     if(token) {
         data = decodeJWT(token);
-        sender_id = data.user.id;
+        user_session = data.user.id;
     }
     try {
-        const response = await axios.get(`http://localhost:5000/api/v1/messages/${sender_id}/${receiver_id}`);
         dispatch({
-            type: GET_MESSAGES,
-            payload: response.data
+            type: LOADING
         });
+        get_conversation_lists = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_conversation_lists/${user_two}`);
+        dispatch({
+            type: GET_CONVERSATION_LISTS,
+            payload: get_conversation_lists.data.data
+        });
+        setTimeout(() => {
+            dispatch({
+                type: LOADED
+            });
+        }, 800);
     } catch (error) {
         dispatch({
-            type: GET_MESSAGES_ERROR,
-            payload: error
+            type: GET_CONVERSATION_LISTS_ERROR,
+            payload: error.message
         });
     }
 }
-export const getSenderId = (receiver_id) => async (dispatch) => {
+export const getReplyConversationReplies = (conversations_id) => async (dispatch) => {
+    let get_reply_conversation_replies;
     try {
-        const response = await axios.get(`http://localhost:5000/api/v1/messages/${receiver_id}`);
+        get_reply_conversation_replies = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_reply_conversation_replies/${conversations_id}`);
         dispatch({
-            type: GET_SENDER_ID,
-            payload: response.data.data[0].sender_id
+            type: GET_REPLY_CONVERSATION_REPLIES,
+            payload: get_reply_conversation_replies.data.data
         });
-    } catch (error) {
+    } catch(error) {
         dispatch({
-            type: GET_SENDER_ID_ERROR,
-            payload: error
+            type: GET_REPLY_CONVERSATION_REPLIES_ERROR,
+            payload: error.message
         });
     }
 }
-export const checkPrivilegeMessage = (sender_id_db, receiver_id) => async (dispatch) => {
+export const creatingConversations = (user_two) => async (dispatch) => {
     const token = localStorage.token;
-    let sender_id;
-    let data;
+    let data, check_conversations, user_one;
     if(token) {
         data = decodeJWT(token);
-        sender_id = data.user.id;
+        user_one = data.user.id;
     }
-    if(sender_id_db === "") {
-        sender_id = data.user.id;
-        if(sender_id === receiver_id) {
-            sender_id = sender_id_db;
+    if(user_one !== user_two) {
+        try {
+            check_conversations = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/check_conversations/${user_one}/${user_two}`);
+            dispatch({
+                type: CHECK_CONVERSATIONS,
+                payload: check_conversations.data.data.length
+            });
+        } catch (error) {
+            dispatch({
+                type: CHECK_CONVERSATIONS_ERROR, 
+                payload: error.message
+            });
+        }
+        if(check_conversations.data.data.length === 0) {
+            try {
+                await axios.post(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/insert_into_conversations/${user_one}/${user_two}`);
+                dispatch({
+                    type: INSERT_INTO_CONVERSATIONS 
+                });
+            } catch (error) {
+                dispatch({
+                    type: INSERT_INTO_CONVERSATIONS_ERROR,
+                    payload: error.message
+                });
+            }
         }
     }
+}
+export const checkConversations = (user_two) => async (dispatch) => {
+    const token = localStorage.token;
+    let data, check_conversations, user_one;
+    if(token) {
+        data = decodeJWT(token);
+        user_one = data.user.id;
+    }
     try {
-        const response = await axios.get(`http://localhost:5000/api/v1/messages/check/${sender_id}/${receiver_id}`);
+        check_conversations = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/check_conversations/${user_one}/${user_two}`);
         dispatch({
-            type: CHECK_PRIVILEGE_MESSAGE,
-            payload: response.data.data[0].total
+            type: CHECK_CONVERSATIONS,
+            payload: check_conversations.data.data.length
         });
     } catch (error) {
         dispatch({
-            type: CHECK_PRIVILEGE_MESSAGE_ERROR,
-            payload: error
+            type: CHECK_CONVERSATIONS_ERROR, 
+            payload: error.message
         });
     }
 }
-export const sendMessage = (sender_id_db, receiver_id, message) => async (dispatch) => {
-    let receiver_id_from_param = receiver_id;
+export const getConversationsLastId = (user_two) => async (dispatch) => {
+    let get_conversations_last_id;
+    try {
+        get_conversations_last_id = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_conversations_last_id/${user_two}`);
+        dispatch({
+            type: GET_CONVERSATIONS_LAST_ID,
+            payload: get_conversations_last_id.data.data
+        });
+    } catch (error) {
+        dispatch({
+            type: GET_CONVERSATIONS_LAST_ID_ERROR,
+            payload: error.message
+        });
+    }
+}
+export const InsertIntoConversationReplies = (conversation_id, message) => async (dispatch) => {
     const token = localStorage.token;
-    let data;
-    let sender_id;
+    let data, user_session;
     if(token) {
         data = decodeJWT(token);
-        sender_id = data.user.id;
-    }
-    if(sender_id_db === "") {
-        sender_id = data.user.id; // kalo belum pernah ngechat, pengirim yang sedang login membuat pesan baru
-    } else {
-        receiver_id = sender_id_db; // kalo udah pernah ngechat maka si pengirim akan diubah menjadi penerima untuk menerima pesan
-        if(receiver_id === sender_id) {
-            receiver_id = receiver_id_from_param;
-        } // kalo si id penerima nya sama dengan id pengirim, maka penerima diubah menjadi id receiver yang dari param bukan dari database
+        user_session = data.user.id;
     }
     try {
-        const response = await axios.post(`http://localhost:5000/api/v1/messages/${sender_id}/${receiver_id}`, {
+        await axios.post(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/insert_into_conversation_replies/${user_session}/${conversation_id}`, {
             message
         });
         dispatch({
-            type: SEND_MESSAGE,
-            payload: response
+            type: INSERT_INTO_CONVERSATION_REPLIES
         });
     } catch (error) {
         dispatch({
-            type: SEND_MESSAGE_ERROR,
-            payload: error
+            type: INSERT_INTO_CONVERSATION_REPLIES_ERROR,
+            payload: error.message
         });
     }
 }
