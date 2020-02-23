@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-const Message = ({  replies, messageMask, setMessageMask }) => {
+const MessageLists = ({  replies, messageMask, setMessageMask }) => {
     useEffect(() => {
         setMessageMask(replies);
     },[replies, setMessageMask]);
@@ -14,15 +14,10 @@ const Message = ({  replies, messageMask, setMessageMask }) => {
             })}
         </div>
     )
-    const dontHaveMessage = (
-        <div className="chat-box text-white rounded p-3 my-3">
-            <p> You don`t have a messages. </p>
-        </div>
-    )
     return (
         <>
             { getMessages }
         </>
     )
 }
-export default Message;
+export default MessageLists;

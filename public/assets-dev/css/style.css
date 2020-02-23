@@ -72,28 +72,35 @@
 }
 .container-direct-message {
     background-color: #ffffff;
-    width: 50%;
-    margin: 16rem auto;
 }
 .chat-box {
     background-color: #ea80fc;
 }
 .conversation-lists {
-    background-color: #ba97c0 !important;
+    background-color: #ea80fc !important;
     border-radius: 20px !important;
     outline: none !important;
-    width: 50%; 
+    width: 80%; 
     margin: 16rem auto;
 }
 .conversations-item {
     background-color: #dbdbdb;
 }
+.backdrop-top {
+    background-color: #ea80fc;
+    height: 300px;
+    position: fixed;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+}
 .backdrop {
     background-color: #ea80fc;
     height: 300px;
     position: fixed;
+    z-index: -1;
     left: 0px;
     right: 0px;
     bottom: 0px;
-    z-index: -1;
 }
