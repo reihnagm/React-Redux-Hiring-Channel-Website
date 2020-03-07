@@ -11,11 +11,11 @@ import {
     MenuItem,
     fade,
     makeStyles  } from '@material-ui/core';
+import AvatarComponent from '../Avatar/Index';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import defaultImage from '../../images/default.png';
 import logo from '../../images/logo.png';
-import { isObjectEmpty } from '../../configs/helper';
 import { logout } from '../../actions/auth';
 import { getCurrentProfileCompany } from '../../actions/company';
 import { getCurrentProfileEngineer } from '../../actions/engineer';
@@ -106,9 +106,8 @@ const Header = ({
         const classes = useStyles();
         const [anchorEl, setAnchorEl] = useState(null);
         const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-         const menuId = 'primary-search-account-menu';
+        const menuId = 'primary-search-account-menu';
         const isMenuOpen = Boolean(anchorEl);
-        const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
         const handleProfileMenuOpen = event => {
              setAnchorEl(event.currentTarget);
         };
@@ -222,15 +221,21 @@ const Header = ({
                                 onClick={handleProfileMenuOpen}
                             >
                                 { user_role_id  === 1 &&
-                                    <Avatar
-                                        className={classes.large}
-                                        src=""
+                                    <AvatarComponent 
+                                        imageSource={engineer && engineer.data && engineer.data.avatar} 
+                                        altName={engineer && engineer.data && engineer.data.name}
+                                        type="avatar" 
+                                        width="30"
+                                        height="30"
                                     />
                                 }
                                 { user_role_id === 2 &&
-                                    <Avatar
-                                        className={classes.large}
-                                        src=""
+                                    <AvatarComponent 
+                                        imageSource={company && company.data && company.data.logo} 
+                                        altName={company && company.data && company.data.name}
+                                        type="logo" 
+                                        width="30"
+                                        height="30"
                                     />
                                 }
                             </IconButton>

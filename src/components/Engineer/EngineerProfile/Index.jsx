@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Container, Grid, Paper, Button, Avatar, IconButton, makeStyles } from '@material-ui/core';
+import { Container, Grid, Paper, Button, Avatar, makeStyles } from '@material-ui/core';
 import Swal from 'sweetalert2';
 import Spinner from '../../Spinner/Index';
-import defaultImage from '../../../images/default.png';
 import { getCurrentProfileEngineer, deleteProfileEngineer } from '../../../actions/engineer';
 const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: { engineer, loading }, history }) => {
     const useStyles = makeStyles(theme => ({
@@ -70,17 +69,8 @@ const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: {
     let displayDate = d +' '+ thisMonth +' '+ y ;
     return loading ? ( <Spinner /> ) : (
         <>
-            <div style={{
-                background: '#ea80fc',
-                position:"absolute",
-                zIndex: -1,
-                width:'100%',
-                top: "0px",
-                left: "0px",
-                right: "0px",
-                height: "300px" }}>
-            </div>
-            <Container className="mt-64" Fixed>
+            <div className="backdrop-top"></div>
+            <Container className="mt-64" fixed>
                 <div className={classes.root}>
                     <Grid container spacing={3}>
                         <Grid item md={4} xs={12}>

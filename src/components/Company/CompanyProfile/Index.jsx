@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from '@material-ui/core';
-import Swal from 'sweetalert2';
 import Spinner from '../../Spinner/Index';
-import defaultImage from '../../../images/default.png';
 import { getCurrentProfileCompany, deleteProfileCompany } from '../../../actions/company';
 const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { company, loading }, history }) => {
     const useStyles = makeStyles(theme => ({

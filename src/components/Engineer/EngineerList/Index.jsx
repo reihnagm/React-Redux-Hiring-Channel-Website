@@ -2,17 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Grid } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/core/styles';
-import defaultImage from '../../../images/default.png';
 const EngineerList = ({ engineers, handlePage, currentPage, pageCount }) => {
-    const useStyles = makeStyles(theme => ({
-        root: {
-            '& > *': {
-                marginBottom: theme.spacing(8)
-            },
-        },
-    }));
-    const classes = useStyles();
     return (
         <>
             <Container fixed>

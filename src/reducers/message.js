@@ -4,17 +4,21 @@ import {
     GET_REPLY_CONVERSATION_REPLIES,
     GET_REPLY_CONVERSATION_REPLIES_ERROR,
 	CHECK_CONVERSATIONS,
-    CHECK_CONVERSATIONS_ERROR,
+	CHECK_CONVERSATIONS_ERROR,
+    GET_USER_TWO,
+    GET_USER_TWO_ERROR,
     GET_CONVERSATIONS_LAST_ID,
     GET_CONVERSATIONS_LAST_ID_ERROR,
     INSERT_INTO_CONVERSATIONS,
     INSERT_INTO_CONVERSATIONS_ERROR,
 } from '../actions/types'
 const initialState = {
-    conversations_id: null,
-    conversation_lists: [],
+	conversation_id: 0,
+    user_two: 0,
+	check_conversations: null,
+	check_conversations_users_reply: null,
+	conversation_lists: [],
     replies: [],
-    check_conversations: null,
 	error: {}
 }
 export default function (state = initialState, action) {
@@ -40,6 +44,16 @@ export default function (state = initialState, action) {
                 ...state, 
                 error: payload
             }
+        case GET_USER_TWO: 
+            return { 
+                ...state,
+                user_two: payload
+            }
+        case GET_USER_TWO_ERROR: 
+            return {
+                ...state,
+                error: payload
+            }
         case CHECK_CONVERSATIONS:
             return {
                 ...state,
@@ -49,11 +63,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 error: payload
-            }
+			}
         case GET_CONVERSATIONS_LAST_ID:
             return {
                 ...state,
-                conversations_id: payload
+                conversation_id: payload
             }
         case GET_CONVERSATIONS_LAST_ID_ERROR:
             return {

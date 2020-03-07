@@ -2,41 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Grid, Paper, Button, Modal, Input, makeStyles } from '@material-ui/core';
-import Swal from 'sweetalert2';
 import MessageIcon from '@material-ui/icons/Message';
 import Spinner from '../../../Spinner/Index';
 import AvatarComponent from '../../../Avatar/Index';
 import ConversationLists from './ConversationLists/Index';
-import MessageList from './MessageList/Index';
-import defaultImage from '../../../../images/default.png';
 import { getProfileEngineerBySlug } from '../../../../actions/engineer';
 import { 
-    creatingConversations, 
-    InsertIntoConversationReplies, 
-    getConversationLists,
-    getConversationsLastId, 
-    getReplyConversationReplies
+	getConversationLists,
+	getConversationsLastId,
+	checkConversations,
+	InsertIntoConversationReplies
 } from '../../../../actions/message';
 const Profile = ({
-    getProfileEngineerBySlug,
-    getConversationLists,
-    getConversationsLastId,
-    creatingConversations,
-    InsertIntoConversationReplies,
-    message: { conversations_id, replies, conversation_lists },
-    user: { user },
-    engineer: { engineer, loading }, match }) => {
-    const useStyles = makeStyles(theme => ({
-        root: {
-            flexGrow: 1,
-        },
-        paper: {
-            padding: theme.spacing(2)
-        }
-    }));
-    const classes = useStyles();
-    const [hide, setHide] = useState(true);
-    const [open, setOpen] = useState(false);
+	getProfileEngineerBySlug,
+	getConversationLists,
+	getConversationsLastId,
+	checkConversations,
+	InsertIntoConversationReplies,
+	message: { conversation_lists, check_conversations },
+	engineer: { engineer, loading }, 
+	user: { user },
+	match }) => {
+	const [open, setOpen] = useState(false);
+	const [conversationIdMask, setConversationIdMask] = useState();
+	const [messageMask, setMessageMask] = useState([]);
+    const [inputMessage, setInputMessage] = useState();
     let user_two = engineer.user_id;
     let name = engineer.name;
     let email = engineer.email;
@@ -46,30 +36,53 @@ const Profile = ({
     let showcase = engineer.showcase;
     let birthdate = engineer.birthdate;
     let telephone = engineer.telephone;
+    const useStyles = makeStyles(theme => ({
+        root: {
+            flexGrow: 1,
+        },
+        paper: {
+            padding: theme.spacing(2)
+        }
+    }));
+    const classes = useStyles();
     useEffect(() => {
         const fetchData = async () => {
             await getProfileEngineerBySlug(match.params.slug);
             if(false === user_two === null || typeof user_two === "undefined") {
                 return false;
-            } 
-            await creatingConversations(user_two);
-            await getConversationLists(user_two);
-            await getConversationsLastId(user_two);
+			}
+			await checkConversations(user_two);
+			await getConversationLists(user_two);
+			await getConversationsLastId(user_two);
         }
         fetchData();
     }, [getProfileEngineerBySlug, 
-        getConversationsLastId, 
-        getConversationLists, 
-        getConversationsLastId,
-        creatingConversations, 
-        user_two, 
-        match.params.slug]);
+		getConversationLists, 
+		getConversationsLastId,
+		checkConversations,
+		setConversationIdMask,
+		user_two, 
+		match.params.slug]);
     const handleOpen = async () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
-    };
+    };   const handleMessage = (event) => {
+        setInputMessage(event.target.value);
+    }
+    const handleEnterMessage = (event) => {
+        let obj = {
+            id: new Date(),
+            reply: inputMessage,
+            name: user && user.data && user.data.name
+		}
+        if(event.which === 13) {
+			InsertIntoConversationReplies(user_two, inputMessage);
+            setMessageMask(state => [...state, obj]);
+            setInputMessage('');
+        }
+    }
     let n = new Date(birthdate);
     let y = n.getFullYear();
     let d = n.getDate();
@@ -80,8 +93,8 @@ const Profile = ({
         y = '';
         d = '';
         thisMonth = '';
-    }
-    let displayDate = d +' '+ thisMonth +' '+ y ;     
+	}
+	let displayDate = d +' '+ thisMonth +' '+ y ;    
     return loading ? ( <Spinner /> ) : (
         <>
             <div className="backdrop-top"></div>
@@ -110,9 +123,36 @@ const Profile = ({
                                         </Button>
                                         <Modal open={open} onClose={handleClose}>
                                             <Paper className="p-5 conversation-lists">
-                                                <ConversationLists 
-                                                    conversation_lists={conversation_lists} 
-                                                />
+                                                { user && user.data && user.data.id !== user_two && check_conversations === 0 ? (
+                                                   
+													<div className="p-5 rounded container-direct-message">
+														<div className="p-2 relative h-56">
+															<div className="bar-bottom-message p-2">
+																<Input 
+																	fullWidth
+																	name="message" 
+																	value={inputMessage}
+																	onChange={handleMessage}
+																	onKeyPress={handleEnterMessage}
+																/>      
+															</div>   
+														</div>
+													</div>
+                                                ) : user && user.data && user.data.id !== user_two && (
+                                                    <>
+                                                        <ConversationLists 
+                                                            user_two={user_two}
+                                                            conversation_lists={conversation_lists} 
+                                                        />
+                                                    </>
+                                                )}
+                                                { user && user.data && user.data.id === user_two && (
+                                                    <>
+                                                        <ConversationLists 
+                                                            conversation_lists={conversation_lists} 
+                                                        />
+                                                    </>
+                                                )}
                                             </Paper>
                                         </Modal>
                                     </Grid>
@@ -158,8 +198,8 @@ export default connect(
     {
         getProfileEngineerBySlug,
         getConversationLists,
-        getConversationsLastId,
-        InsertIntoConversationReplies,
-        creatingConversations, 
+		getConversationsLastId,
+		checkConversations,
+		InsertIntoConversationReplies
     }
 )(Profile);

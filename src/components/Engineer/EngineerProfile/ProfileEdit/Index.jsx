@@ -220,6 +220,7 @@ const ProfileEdit = ({
     }
     return loading ? ( <Spinner /> ) : (
         <>
+            <div className="backdrop-bottom"></div>
             <Container fixed>
                 <Grid
                     container
@@ -387,7 +388,6 @@ const ProfileEdit = ({
                     </Grid>
                 </Grid>
             </Container>
-            <div className="backdrop"></div>
         </>
     )
 }

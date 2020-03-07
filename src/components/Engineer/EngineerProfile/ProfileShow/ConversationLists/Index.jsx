@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Input } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { getReplyConversationReplies, InsertIntoConversationReplies } from '../../../../../actions/message';
-import MessageLists from '../MessageList/Index';
+import moment from 'moment';
+import { 
+    getReplyConversationReplies, 
+    getUserTwo,
+    InsertIntoConversationReplies
+} from '../../../../../actions/message';
+import MessageLists from '../MessageLists/Index';
 import AvatarComponent from '../../../../Avatar/Index';
 const ReplyLists = ({ 
     conversation_id, 
     getReplyConversationReplies,
     InsertIntoConversationReplies,
+    getUserTwo,
     replies,
     messageMask,
     setMessageMask,
     inputMessage,   
     setInputMessage, 
     user,
+    user_two,
     set_confirm_conversation_id,
     set_hide_conversation_lists, 
     hide_conversation_lists  }) => {
@@ -31,7 +38,7 @@ const ReplyLists = ({
             name: user && user.data && user.data.name
         }
         if(event.which === 13) {
-            InsertIntoConversationReplies(conversation_id, inputMessage);
+            InsertIntoConversationReplies(user_two, inputMessage);
             setMessageMask(state => [...state, obj]);
             setInputMessage('');
         }
@@ -39,23 +46,27 @@ const ReplyLists = ({
     useEffect(() => {
         const fetchData = async () => {
             await getReplyConversationReplies(conversation_id);
+            await getUserTwo(conversation_id);
         }
         fetchData();
-    },[getReplyConversationReplies, conversation_id]);
+    },[getReplyConversationReplies, getUserTwo, conversation_id]);
     return (
         <>
-        <div className="p-5 rounded container-direct-message">
+        	<div className="p-5 relative rounded container-direct-message">
                 <MessageLists
                     replies={replies}
                     messageMask={messageMask}
                     setMessageMask={setMessageMask}
-                />
-                <Input
-                    name="message"
-                    value={inputMessage}
-                    onChange={handleMessage}
-                    onKeyPress={handleEnterMessage}
-                />
+                /> 
+				<div className="bar-bottom-message p-2">
+					<Input
+						fullWidth="true"
+						name="message"
+						value={inputMessage}
+						onChange={handleMessage}
+						onKeyPress={handleEnterMessage}
+					/>
+				</div>
             </div>
             <button type="submit" onClick={back}>Back</button>
         </>
@@ -65,7 +76,9 @@ const ConversationLists = ({
     conversation_lists, 
     getReplyConversationReplies,
     InsertIntoConversationReplies,
+    getUserTwo,
     replies,
+    user_two,
     user
     }) => {
     const [hide, setHide] = useState(true);
@@ -87,10 +100,12 @@ const ConversationLists = ({
                     hide={hide}
                     conversation_id={confirm_conversation_id} 
                     set_confirm_conversation_id={set_confirm_conversation_id}
-                    getReplyConversationReplies={getReplyConversationReplies}
+                    getReplyConversationReplies={getReplyConversationReplies}   
+                    getUserTwo={getUserTwo}
                     InsertIntoConversationReplies={InsertIntoConversationReplies}
                     replies={replies}
                     user={user}
+                    user_two={user_two}
                     messageMask={messageMask}
                     setMessageMask={setMessageMask}
                     setInputMessage={setInputMessage}
@@ -101,7 +116,7 @@ const ConversationLists = ({
                 return (
                     <Grid 
                         key={conversation_list.id}
-                        onClick={(e) => loadDm(conversation_list.id)}
+                        onClick={() => loadDm(conversation_list.id)}
                         className="p-3 my-5 cursor-pointer rounded conversations-item"
                         container
                         direction="row"
@@ -140,9 +155,10 @@ const ConversationLists = ({
 }
 const mapStateToProps = state => ({
     replies: state.message.replies,
+    user_two: state.message.user_two,
     user: state.auth.user
 });
 export default connect(
     mapStateToProps,
-    {  getReplyConversationReplies, InsertIntoConversationReplies } 
+    {  getReplyConversationReplies, getUserTwo, InsertIntoConversationReplies } 
 )(ConversationLists);
