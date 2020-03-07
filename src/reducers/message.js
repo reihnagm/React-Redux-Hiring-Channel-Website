@@ -11,10 +11,11 @@ import {
     GET_CONVERSATIONS_LAST_ID_ERROR,
     INSERT_INTO_CONVERSATIONS,
     INSERT_INTO_CONVERSATIONS_ERROR,
+    RESET_CONVERSATION_ID
 } from '../actions/types'
 const initialState = {
-	conversation_id: 0,
-    user_two: 0,
+    user_two: null,
+	conversation_id: null,
 	check_conversations: null,
 	check_conversations_users_reply: null,
 	conversation_lists: [],
@@ -82,6 +83,12 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 error: payload
+            }
+        case RESET_CONVERSATION_ID: 
+            return {
+                ...state,
+                conversation_id: payload,
+                replies: []
             }
 		default:
         	return state;

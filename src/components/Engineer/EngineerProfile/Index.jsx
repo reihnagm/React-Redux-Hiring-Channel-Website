@@ -5,7 +5,11 @@ import { Container, Grid, Paper, Button, Avatar, makeStyles } from '@material-ui
 import Swal from 'sweetalert2';
 import Spinner from '../../Spinner/Index';
 import { getCurrentProfileEngineer, deleteProfileEngineer } from '../../../actions/engineer';
-const Profile = ({ getCurrentProfileEngineer, deleteProfileEngineer, engineer: { engineer, loading }, history }) => {
+const Profile = ({ 
+    getCurrentProfileEngineer, 
+    deleteProfileEngineer, 
+    engineer: { engineer, loading }, 
+    history }) => {
     const useStyles = makeStyles(theme => ({
         root: {
             flexGrow: 1,

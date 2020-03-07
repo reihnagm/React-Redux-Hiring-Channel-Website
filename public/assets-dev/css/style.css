@@ -72,19 +72,22 @@
 }
 .container-direct-message {
 	background-color: #ffffff;
+    border-radius: 8px;
+    padding-bottom: 80px;
 }
 .chat-box {
     background-color: #ea80fc;
 }
 .conversation-lists {
     background-color: #ea80fc !important;
-    border-radius: 20px !important;
+    border-radius: 8px !important;
     outline: none !important;
     width: 80%; 
-    margin: 16rem auto;
+    margin: 10rem auto;
 }
 .conversations-item {
     background-color: #dbdbdb;
+    border-radius: 8px !important;
 }
 .bar-bottom-message {
 	background-color: #d8d8d8;

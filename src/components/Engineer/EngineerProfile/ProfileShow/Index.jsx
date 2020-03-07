@@ -3,31 +3,36 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Grid, Paper, Button, Modal, Input, makeStyles } from '@material-ui/core';
 import MessageIcon from '@material-ui/icons/Message';
+import store from '../../../../store';
+import { RESET_CONVERSATION_ID } from '../../../../actions/types'
 import Spinner from '../../../Spinner/Index';
 import AvatarComponent from '../../../Avatar/Index';
+import MessageLists from './MessageLists/Index';
 import ConversationLists from './ConversationLists/Index';
 import { getProfileEngineerBySlug } from '../../../../actions/engineer';
 import { 
 	getConversationLists,
 	getConversationsLastId,
-	checkConversations,
+    getReplyConversationReplies, 
 	InsertIntoConversationReplies
 } from '../../../../actions/message';
 const Profile = ({
 	getProfileEngineerBySlug,
 	getConversationLists,
 	getConversationsLastId,
-	checkConversations,
+    getReplyConversationReplies, 
 	InsertIntoConversationReplies,
-	message: { conversation_lists, check_conversations },
+	message: { conversation_lists, replies, conversation_id },
 	engineer: { engineer, loading }, 
 	user: { user },
 	match }) => {
 	const [open, setOpen] = useState(false);
-	const [conversationIdMask, setConversationIdMask] = useState();
-	const [messageMask, setMessageMask] = useState([]);
+    const [messageMask, setMessageMask] = useState([]);
     const [inputMessage, setInputMessage] = useState();
     let user_two = engineer.user_id;
+    let user_one = user && user.data && user.data.id;
+    let user_session_name = user && user.data && user.data.name;
+    let slug = match.params.slug;
     let name = engineer.name;
     let email = engineer.email;
     let description = engineer.description;
@@ -47,35 +52,38 @@ const Profile = ({
     const classes = useStyles();
     useEffect(() => {
         const fetchData = async () => {
-            await getProfileEngineerBySlug(match.params.slug);
+            await getProfileEngineerBySlug(slug);
             if(false === user_two === null || typeof user_two === "undefined") {
                 return false;
 			}
-			await checkConversations(user_two);
 			await getConversationLists(user_two);
-			await getConversationsLastId(user_two);
         }
         fetchData();
     }, [getProfileEngineerBySlug, 
 		getConversationLists, 
 		getConversationsLastId,
-		checkConversations,
-		setConversationIdMask,
+        getReplyConversationReplies, 
 		user_two, 
-		match.params.slug]);
+		slug]);
     const handleOpen = async () => {
         setOpen(true);
+        await getReplyConversationReplies(conversation_id);
     };
     const handleClose = () => {
         setOpen(false);
-    };   const handleMessage = (event) => {
+        store.dispatch({
+            type: RESET_CONVERSATION_ID,
+            payload: null
+        });
+    };   
+    const handleMessage = (event) => {
         setInputMessage(event.target.value);
     }
     const handleEnterMessage = (event) => {
         let obj = {
             id: new Date(),
             reply: inputMessage,
-            name: user && user.data && user.data.name
+            name: user_session_name
 		}
         if(event.which === 13) {
 			InsertIntoConversationReplies(user_two, inputMessage);
@@ -123,30 +131,25 @@ const Profile = ({
                                         </Button>
                                         <Modal open={open} onClose={handleClose}>
                                             <Paper className="p-5 conversation-lists">
-                                                { user && user.data && user.data.id !== user_two && check_conversations === 0 ? (
-                                                   
-													<div className="p-5 rounded container-direct-message">
-														<div className="p-2 relative h-56">
-															<div className="bar-bottom-message p-2">
-																<Input 
-																	fullWidth
-																	name="message" 
-																	value={inputMessage}
-																	onChange={handleMessage}
-																	onKeyPress={handleEnterMessage}
-																/>      
-															</div>   
-														</div>
+                                                { user_one !== user_two && ( 
+													<div className="p-5 relative container-direct-message">
+                                                        <MessageLists
+                                                            replies={replies}
+                                                            messageMask={messageMask}
+                                                            setMessageMask={setMessageMask}
+                                                        /> 
+                                                        <div className="bar-bottom-message p-2">
+                                                            <Input 
+                                                                fullWidth
+                                                                name="message" 
+                                                                value={inputMessage}
+                                                                onChange={handleMessage}
+                                                                onKeyPress={handleEnterMessage}
+                                                            />      
+                                                        </div>   
 													</div>
-                                                ) : user && user.data && user.data.id !== user_two && (
-                                                    <>
-                                                        <ConversationLists 
-                                                            user_two={user_two}
-                                                            conversation_lists={conversation_lists} 
-                                                        />
-                                                    </>
                                                 )}
-                                                { user && user.data && user.data.id === user_two && (
+                                                { user_one === user_two && (
                                                     <>
                                                         <ConversationLists 
                                                             conversation_lists={conversation_lists} 
@@ -199,7 +202,7 @@ export default connect(
         getProfileEngineerBySlug,
         getConversationLists,
 		getConversationsLastId,
-		checkConversations,
+        getReplyConversationReplies, 
 		InsertIntoConversationReplies
     }
 )(Profile);

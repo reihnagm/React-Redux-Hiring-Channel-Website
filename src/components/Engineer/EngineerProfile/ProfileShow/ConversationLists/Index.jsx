@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Input } from '@material-ui/core';
+import { Grid, Input, Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { 
@@ -52,7 +52,7 @@ const ReplyLists = ({
     },[getReplyConversationReplies, getUserTwo, conversation_id]);
     return (
         <>
-        	<div className="p-5 relative rounded container-direct-message">
+        	<div className="p-5 relative container-direct-message">
                 <MessageLists
                     replies={replies}
                     messageMask={messageMask}
@@ -68,7 +68,13 @@ const ReplyLists = ({
 					/>
 				</div>
             </div>
-            <button type="submit" onClick={back}>Back</button>
+            <Button 
+                variant="contained"
+                color="secondary"
+                type="submit" 
+                onClick={back}>
+                Back
+            </Button>
         </>
     )
 }
@@ -117,7 +123,7 @@ const ConversationLists = ({
                     <Grid 
                         key={conversation_list.id}
                         onClick={() => loadDm(conversation_list.id)}
-                        className="p-3 my-5 cursor-pointer rounded conversations-item"
+                        className="p-3 my-5 cursor-pointer conversations-item"
                         container
                         direction="row"
                         justify="center"

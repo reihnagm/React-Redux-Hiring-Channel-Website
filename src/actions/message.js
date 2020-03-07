@@ -24,6 +24,7 @@ export const getConversationLists = (user_two) => async (dispatch) => {
             type: GET_CONVERSATION_LISTS,
             payload: get_conversation_lists.data.data
         });
+        dispatch(getConversationsLastId(user_two));
     } catch (error) {
         dispatch({
             type: GET_CONVERSATION_LISTS_ERROR,
@@ -90,10 +91,12 @@ export const checkConversations = (user_two) => async (dispatch) => {
     }
     try {
 		check_conversations = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/check_conversations/${user_one}/${user_two}`);
-		dispatch({
-			type: CHECK_CONVERSATIONS,
-			payload: check_conversations.data.data.length
-		});
+        if(check_conversations.data.data.length !== 0) {
+            dispatch({
+                type: CHECK_CONVERSATIONS,
+                payload: check_conversations.data.data[0].id
+		    });
+        }
     } catch (error) {
         dispatch({
             type: CHECK_CONVERSATIONS_ERROR, 
@@ -102,12 +105,22 @@ export const checkConversations = (user_two) => async (dispatch) => {
     }
 }
 export const getUserTwo = (user_two) => async (dispatch) => {
-    let get_user_two; 
+    const token = localStorage.token;
+    let data, user_one, get_user_two, change_user_two; 
+    if(token) {
+        data = decodeJWT(token);
+        user_one = data.user.id;
+    }
     try {
 		get_user_two = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_user_two/${user_two}`);
-		dispatch({
+        if(get_user_two.data.data[0].user_two === user_one) {
+            change_user_two = get_user_two.data.data[0].user_one;
+        } else {
+            change_user_two =  get_user_two.data.data[0].user_two;
+        }
+        dispatch({
 			type: GET_USER_TWO,
-			payload: get_user_two.data.data[0].user_two
+			payload: change_user_two
 		});
     } catch (error) {
         dispatch({

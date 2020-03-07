@@ -19,6 +19,10 @@ export const theme = createMuiTheme({
             main: purple['A100'],
             contrastText: "#ffffff",
         },
+        secondary: {
+            main: purple['A400'],
+            contrastText: "#ffffff",
+        },
         common: {
             white: grey['400']
         },
