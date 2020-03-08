@@ -38,7 +38,7 @@ const ReplyLists = ({
             name: user && user.data && user.data.name
         }
         if(event.which === 13) {
-            InsertIntoConversationReplies(user_two, inputMessage);
+            InsertIntoConversationReplies(user_two, obj, inputMessage);
             setMessageMask(state => [...state, obj]);
             setInputMessage('');
         }
@@ -82,8 +82,8 @@ const ConversationLists = ({
     conversation_lists, 
     getReplyConversationReplies,
     InsertIntoConversationReplies,
-    getUserTwo,
     replies,
+    getUserTwo,
     user_two,
     user
     }) => {
@@ -101,8 +101,8 @@ const ConversationLists = ({
             { confirm_conversation_id !== null && 
                 <ReplyLists 
                     set_hide_conversation_lists={set_hide_conversation_lists}
-                    setHide={setHide}
                     hide_conversation_lists={hide_conversation_lists}
+                    setHide={setHide}
                     hide={hide}
                     conversation_id={confirm_conversation_id} 
                     set_confirm_conversation_id={set_confirm_conversation_id}

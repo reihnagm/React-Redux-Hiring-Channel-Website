@@ -9,22 +9,21 @@ import {
 	CHECK_CONVERSATIONS_ERROR,
     GET_USER_TWO,
     GET_USER_TWO_ERROR,
-    GET_CONVERSATIONS_LAST_ID,
-    GET_CONVERSATIONS_LAST_ID_ERROR,
+    GET_CONVERSATION_ID,
+    GET_CONVERSATION_ID_ERROR,
     INSERT_INTO_CONVERSATIONS,
     INSERT_INTO_CONVERSATIONS_ERROR,
     INSERT_INTO_CONVERSATION_REPLIES,
     INSERT_INTO_CONVERSATION_REPLIES_ERROR
 } from './types'
 export const getConversationLists = (user_two) => async (dispatch) => {
-	let get_conversation_lists;
+	let response;
     try {
-        get_conversation_lists = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_conversation_lists/${user_two}`);
+        response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_conversation_lists/${user_two}`);
         dispatch({
             type: GET_CONVERSATION_LISTS,
-            payload: get_conversation_lists.data.data
+            payload: response.data.data
         });
-        dispatch(getConversationsLastId(user_two));
     } catch (error) {
         dispatch({
             type: GET_CONVERSATION_LISTS_ERROR,
@@ -33,12 +32,12 @@ export const getConversationLists = (user_two) => async (dispatch) => {
     }
 }
 export const getReplyConversationReplies = (conversation_id) => async (dispatch) => {
-    let get_reply_conversation_replies;
+    let response;
     try {
-        get_reply_conversation_replies = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_reply_conversation_replies/${conversation_id}`);
+        response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_reply_conversation_replies/${conversation_id}`);
         dispatch({
             type: GET_REPLY_CONVERSATION_REPLIES,
-            payload: get_reply_conversation_replies.data.data
+            payload: response.data.data
         });
     } catch(error) {
         dispatch({
@@ -49,17 +48,17 @@ export const getReplyConversationReplies = (conversation_id) => async (dispatch)
 }
 export const creatingConversations = (user_two) => async (dispatch) => {
     const token = localStorage.token;
-    let data, check_conversations, user_one;
+    let data, user_one, response;
     if(token) {
         data = decodeJWT(token);
         user_one = data.user.id;
     }
     if(user_one !== user_two) {
         try {
-            check_conversations = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/check_conversations/${user_one}/${user_two}`);
+            response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/check_conversations/${user_one}/${user_two}`);
             dispatch({
                 type: CHECK_CONVERSATIONS,
-                payload: check_conversations.data.data.length
+                payload: response.data.data.length
             });
         } catch (error) {
             dispatch({
@@ -67,7 +66,7 @@ export const creatingConversations = (user_two) => async (dispatch) => {
                 payload: error.message
             });
         }
-        if(check_conversations.data.data.length === 0) {
+        if(response.data.data.length === 0) {
             try {
                 await axios.post(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/insert_into_conversations/${user_one}/${user_two}`);
                 dispatch({
@@ -84,17 +83,17 @@ export const creatingConversations = (user_two) => async (dispatch) => {
 }
 export const checkConversations = (user_two) => async (dispatch) => {
     const token = localStorage.token;
-    let data, check_conversations, user_one;
+    let data, user_one, response;
     if(token) {
         data = decodeJWT(token);
         user_one = data.user.id;
     }
     try {
-		check_conversations = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/check_conversations/${user_one}/${user_two}`);
-        if(check_conversations.data.data.length !== 0) {
+		response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/check_conversations/${user_one}/${user_two}`);
+        if(response.data.data.length !== 0) {
             dispatch({
                 type: CHECK_CONVERSATIONS,
-                payload: check_conversations.data.data[0].id
+                payload: response.data.data[0].id
 		    });
         }
     } catch (error) {
@@ -104,23 +103,23 @@ export const checkConversations = (user_two) => async (dispatch) => {
         });
     }
 }
-export const getUserTwo = (user_two) => async (dispatch) => {
+export const getUserTwo = (conversation_id) => async (dispatch) => {
     const token = localStorage.token;
-    let data, user_one, get_user_two, change_user_two; 
+    let data, user_one, user_two, response; 
     if(token) {
         data = decodeJWT(token);
         user_one = data.user.id;
     }
     try {
-		get_user_two = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_user_two/${user_two}`);
-        if(get_user_two.data.data[0].user_two === user_one) {
-            change_user_two = get_user_two.data.data[0].user_one;
+		response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_user_two/${conversation_id}`);
+        if(response.data.data[0].user_two === user_one) {
+            user_two = response.data.data[0].user_one;
         } else {
-            change_user_two =  get_user_two.data.data[0].user_two;
+            user_two =  response.data.data[0].user_two;
         }
         dispatch({
 			type: GET_USER_TWO,
-			payload: change_user_two
+			payload: user_two
 		});
     } catch (error) {
         dispatch({
@@ -129,22 +128,22 @@ export const getUserTwo = (user_two) => async (dispatch) => {
         });
     }
 }
-export const getConversationsLastId = (user_two) => async (dispatch) => {
-    let get_conversations_last_id;
+export const getConversationId = (user_two) => async (dispatch) => {
+    let response;
     try {
-		get_conversations_last_id = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_conversations_last_id/${user_two}`);
+        response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_conversation_id/${user_two}`);
         dispatch({
-            type: GET_CONVERSATIONS_LAST_ID,
-            payload: get_conversations_last_id.data.data
+            type: GET_CONVERSATION_ID,
+            payload: response.data.data
         });
     } catch (error) {
         dispatch({
-            type: GET_CONVERSATIONS_LAST_ID_ERROR,
+            type: GET_CONVERSATION_ID_ERROR,
             payload: error.message
         });
     }
 }
-export const InsertIntoConversationReplies = (user_two, message) => async (dispatch) => {
+export const InsertIntoConversationReplies = (user_two, obj, message) => async (dispatch) => {
 	const token = localStorage.token;
     let data, user_one;
     if(token) {
@@ -156,7 +155,8 @@ export const InsertIntoConversationReplies = (user_two, message) => async (dispa
 			message
         });
         dispatch({
-            type: INSERT_INTO_CONVERSATION_REPLIES
+            type: INSERT_INTO_CONVERSATION_REPLIES,
+            payload: obj
         });
     } catch (error) {
         dispatch({

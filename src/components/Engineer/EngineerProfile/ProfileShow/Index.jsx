@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Container, Grid, Paper, Button, Modal, Input, makeStyles } from '@material-ui/core';
 import MessageIcon from '@material-ui/icons/Message';
 import store from '../../../../store';
-import { RESET_CONVERSATION_ID } from '../../../../actions/types'
+import { CHECK_CONVERSATIONS } from '../../../../actions/types'
 import Spinner from '../../../Spinner/Index';
 import AvatarComponent from '../../../Avatar/Index';
 import MessageLists from './MessageLists/Index';
@@ -12,23 +12,25 @@ import ConversationLists from './ConversationLists/Index';
 import { getProfileEngineerBySlug } from '../../../../actions/engineer';
 import { 
 	getConversationLists,
-	getConversationsLastId,
+	getConversationId,
     getReplyConversationReplies, 
+    checkConversations,
 	InsertIntoConversationReplies
 } from '../../../../actions/message';
 const Profile = ({
 	getProfileEngineerBySlug,
 	getConversationLists,
-	getConversationsLastId,
+	getConversationId,
     getReplyConversationReplies, 
+    checkConversations,
 	InsertIntoConversationReplies,
-	message: { conversation_lists, replies, conversation_id },
+	message: { conversation_lists, conversation_id, check_conversations, replies },
 	engineer: { engineer, loading }, 
 	user: { user },
 	match }) => {
 	const [open, setOpen] = useState(false);
     const [messageMask, setMessageMask] = useState([]);
-    const [inputMessage, setInputMessage] = useState();
+    const [inputMessage, setInputMessage] = useState("");
     let user_two = engineer.user_id;
     let user_one = user && user.data && user.data.id;
     let user_session_name = user && user.data && user.data.name;
@@ -52,29 +54,28 @@ const Profile = ({
     const classes = useStyles();
     useEffect(() => {
         const fetchData = async () => {
-            await getProfileEngineerBySlug(slug);
-            if(false === user_two === null || typeof user_two === "undefined") {
-                return false;
-			}
-			await getConversationLists(user_two);
+            await getProfileEngineerBySlug(slug);    
+            await getConversationLists(user_two);
+            await checkConversations(user_two);
         }
         fetchData();
     }, [getProfileEngineerBySlug, 
 		getConversationLists, 
-		getConversationsLastId,
         getReplyConversationReplies, 
-		user_two, 
-		slug]);
+        checkConversations,
+        user_two,
+        slug]);
     const handleOpen = async () => {
         setOpen(true);
-        await getReplyConversationReplies(conversation_id);
+        store.dispatch({
+            type: CHECK_CONVERSATIONS,
+            payload: check_conversations
+        });
+        await getReplyConversationReplies(check_conversations); // ini udah dinamis karena udah gua store dispatch
+        // jadi otomatis ketika di open conversation_id nya berubah-ubah
     };
     const handleClose = () => {
         setOpen(false);
-        store.dispatch({
-            type: RESET_CONVERSATION_ID,
-            payload: null
-        });
     };   
     const handleMessage = (event) => {
         setInputMessage(event.target.value);
@@ -86,7 +87,7 @@ const Profile = ({
             name: user_session_name
 		}
         if(event.which === 13) {
-			InsertIntoConversationReplies(user_two, inputMessage);
+			InsertIntoConversationReplies(user_two, obj, inputMessage);
             setMessageMask(state => [...state, obj]);
             setInputMessage('');
         }
@@ -131,7 +132,7 @@ const Profile = ({
                                         </Button>
                                         <Modal open={open} onClose={handleClose}>
                                             <Paper className="p-5 conversation-lists">
-                                                { user_one !== user_two && ( 
+                                                { user_one !== user_two &&  ( 
 													<div className="p-5 relative container-direct-message">
                                                         <MessageLists
                                                             replies={replies}
@@ -201,8 +202,9 @@ export default connect(
     {
         getProfileEngineerBySlug,
         getConversationLists,
-		getConversationsLastId,
+		getConversationId,
         getReplyConversationReplies, 
+        checkConversations,
 		InsertIntoConversationReplies
     }
 )(Profile);

@@ -7,17 +7,17 @@ import {
 	CHECK_CONVERSATIONS_ERROR,
     GET_USER_TWO,
     GET_USER_TWO_ERROR,
-    GET_CONVERSATIONS_LAST_ID,
-    GET_CONVERSATIONS_LAST_ID_ERROR,
+    GET_CONVERSATION_ID,
+    GET_CONVERSATION_ID_ERROR,
     INSERT_INTO_CONVERSATIONS,
     INSERT_INTO_CONVERSATIONS_ERROR,
-    RESET_CONVERSATION_ID
+    INSERT_INTO_CONVERSATION_REPLIES,
+    INSERT_INTO_CONVERSATION_REPLIES_ERROR
 } from '../actions/types'
 const initialState = {
     user_two: null,
 	conversation_id: null,
 	check_conversations: null,
-	check_conversations_users_reply: null,
 	conversation_lists: [],
     replies: [],
 	error: {}
@@ -65,12 +65,12 @@ export default function (state = initialState, action) {
                 ...state,
                 error: payload
 			}
-        case GET_CONVERSATIONS_LAST_ID:
+        case GET_CONVERSATION_ID:
             return {
                 ...state,
                 conversation_id: payload
             }
-        case GET_CONVERSATIONS_LAST_ID_ERROR:
+        case GET_CONVERSATION_ID_ERROR:
             return {
                 ...state,
                 error: payload
@@ -84,11 +84,15 @@ export default function (state = initialState, action) {
                 ...state,
                 error: payload
             }
-        case RESET_CONVERSATION_ID: 
+        case INSERT_INTO_CONVERSATION_REPLIES: 
             return {
                 ...state,
-                conversation_id: payload,
-                replies: []
+                replies: [payload, ...state.replies]
+            }
+        case INSERT_INTO_CONVERSATION_REPLIES_ERROR: 
+            return {
+                ...state,
+                error: payload
             }
 		default:
         	return state;
