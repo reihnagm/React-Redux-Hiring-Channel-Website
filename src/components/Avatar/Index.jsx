@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, makeStyles } from '@material-ui/core';
+import { Avatar } from '@material-ui/core';
 const AvatarComponent = ({ imageSource, type, altName, width, height }) => {
     const [image, setImage] = useState(null);
     useEffect(() => {

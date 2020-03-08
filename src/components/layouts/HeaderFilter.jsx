@@ -1,13 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import 'react-dropdown/style.css';
 import { withRouter } from 'react-router-dom';
 import Dropdown from 'react-dropdown';
 const HeaderFilter = ({
-    handleSearch,
     handleSortBy,
     handleSort,
     handleLimit,
-    querySearch,
     setSortBy,
     setSort,
     setLimit,
@@ -19,42 +17,43 @@ const HeaderFilter = ({
     limitC,
     location
 }) => {
-    let optionsSortByE = [];
-    let optionsSortByC = [];
-    let optionsOrderBy = [];
-    let optionsShowPage = [];
-    optionsSortByC = [
-        { value: 'date_updated', label: 'Date Updated' },
-        { value: 'name', label : 'Name' },
-        { value: 'location', label : 'Location'}
-    ];
-    optionsSortByE = [
+    const path = location.pathname;
+    let optionsSortByE = [
         { value: 'date_updated', label: 'Date Updated' },
         { value: 'name', label : 'Name' },
         { value: 'skills', label : 'Skills'}
     ];
-    optionsOrderBy = [
+    let optionsOrderBy = [
         { value: 'DESC', label: 'Newer'},
         { value: 'ASC', label: 'Older' }
     ];
-    optionsShowPage = [
+    let optionsShowPage = [
         { value: '5', label: '5'   },
         { value: '10', label: '10' },
         { value: '20', label: '20' },
         { value: '30', label: '30' }
     ];
-    useEffect(() => {
-        if(location.pathname === "/engineers") {
+    let optionsSortByC = [
+        { value: 'date_updated', label: 'Date Updated' },
+        { value: 'name', label : 'Name' },
+        { value: 'location', label : 'Location'}
+    ];
+    const getFilter = useCallback(() => {
+        if(path === "/engineers") {
             setSortBy(optionsSortByE[0]);
             setSort(optionsOrderBy[0]);
             setLimit(optionsShowPage[0]);
         }
-        if(location.pathname === "/companies") {
+        if(path === "/companies") {
             setSortBy(optionsSortByC[0]);
             setSort(optionsOrderBy[0]);
             setLimit(optionsShowPage[0]);
         }
-    },[]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    useEffect(() => {
+        getFilter();
+    },[getFilter]);
     return (
         <>
             <div className="my-5">

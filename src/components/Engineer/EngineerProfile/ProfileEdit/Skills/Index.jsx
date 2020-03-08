@@ -13,6 +13,7 @@ const SkillsComponent = ({ datasSkillsEngineer, datasSkillsIdEngineer, skills, s
    }
     useEffect(() => {
         setSkills(dataSkillsEngineerArrayObject);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
     let data;
     if(skillsMask === null) {

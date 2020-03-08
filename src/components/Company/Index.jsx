@@ -59,8 +59,7 @@ const Company = ({
     return  (
         <>
             <Header
-                handleSearch={handleSearch}
-                querySearch={querySearch}
+                handleSearchCompany={handleSearch}
             />
             <HeaderFilter
                 handleSortBy={handleSortBy}

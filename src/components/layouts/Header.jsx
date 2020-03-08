@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import {
     AppBar,
-    Avatar,
     Toolbar,
     InputBase,
     IconButton,
@@ -12,9 +11,7 @@ import {
     fade,
     makeStyles  } from '@material-ui/core';
 import AvatarComponent from '../Avatar/Index';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
-import defaultImage from '../../images/default.png';
 import logo from '../../images/logo.png';
 import { logout } from '../../actions/auth';
 import { getCurrentProfileCompany } from '../../actions/company';
@@ -28,10 +25,10 @@ const Header = ({
     isAuthenticated,
     getCurrentProfileEngineer,
     getCurrentProfileCompany,
-    setEngineersSearch,
-    selectedSearchEngineer,
-    setCompaniesSearch,
-    selectedSearchCompany
+    handleSearchEngineer,
+    handleSearchCompany,
+    querySearchEngineer,
+    querySearchCompany
     }) => {
         const logout_user = () => {
             logout();
@@ -174,8 +171,7 @@ const Header = ({
                                         root: classes.inputRoot,
                                         input: classes.inputInput,
                                     }}
-                                    onChange={event => setEngineersSearch(event.target.value)}
-                                    value={selectedSearchEngineer}
+                                    onChange={event => handleSearchEngineer(event.target.value)}
                                 />
                             </div>
                         }
@@ -191,8 +187,7 @@ const Header = ({
                                         root: classes.inputRoot,
                                         input: classes.inputInput,
                                     }}
-                                    onChange={event => setCompaniesSearch(event.target.value)}
-                                    value={selectedSearchCompany}
+                                    onChange={event => handleSearchCompany(event.target.value)}
                                 />
                             </div>
                         }
@@ -264,8 +259,7 @@ const Header = ({
                                         root: classes.inputRoot,
                                         input: classes.inputInput,
                                     }}
-                                    onChange={event => setEngineersSearch(event.target.value)}
-                                    value={selectedSearchEngineer}
+                                    onChange={event => handleSearchEngineer(event.target.value)}
                                 />
                             </div>
                         }
@@ -281,8 +275,7 @@ const Header = ({
                                         root: classes.inputRoot,
                                         input: classes.inputInput,
                                     }}
-                                    onChange={event => setCompaniesSearch(event.target.value)}
-                                    value={selectedSearchCompany}
+                                    onChange={event => handleSearchCompany(event.target.value)}
                                 />
                             </div>
                         }

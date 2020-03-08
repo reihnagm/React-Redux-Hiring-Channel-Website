@@ -16,8 +16,7 @@ import {
     UPDATE_PROFILE_ENGINEER,
     UPDATE_PROFILE_ENGINEER_ERROR,
     DELETE_ENGINEER,
-    DELETE_ENGINEER_ERROR,
-    RESET_CONVERSATION_ID
+    DELETE_ENGINEER_ERROR
 } from './types'
 export const getEngineers = () => async (dispatch, getState) => {
     try {

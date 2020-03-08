@@ -16,11 +16,7 @@ const Engineer = ({
     handleSearch,
     handleSort,
     handleSortBy,
-    handleLimit,
-    querySearch,
-    querySortBy,
-    querySort,
-    queryLimit
+    handleLimit
  }) => {
     useEffect(() => {
         const fetchData = async () => {
@@ -59,8 +55,7 @@ const Engineer = ({
     return  (
         <>
             <Header
-                handleSearch={handleSearch}
-                querySearch={querySearch}
+                handleSearchEngineer={handleSearch}
             />
             <HeaderFilter
                 handleSortBy={handleSortBy}

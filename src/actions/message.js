@@ -95,6 +95,11 @@ export const checkConversations = (user_two) => async (dispatch) => {
                 type: CHECK_CONVERSATIONS,
                 payload: response.data.data[0].id
 		    });
+        } else {
+            dispatch({
+                type: CHECK_CONVERSATIONS,
+                payload: null
+		    });
         }
     } catch (error) {
         dispatch({

@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Grid, Paper, Button, Modal, Input, makeStyles } from '@material-ui/core';
 import MessageIcon from '@material-ui/icons/Message';
-import store from '../../../../store';
-import { CHECK_CONVERSATIONS } from '../../../../actions/types'
 import Spinner from '../../../Spinner/Index';
 import AvatarComponent from '../../../Avatar/Index';
 import MessageLists from './MessageLists/Index';
@@ -24,7 +22,7 @@ const Profile = ({
     getReplyConversationReplies, 
     checkConversations,
 	InsertIntoConversationReplies,
-	message: { conversation_lists, conversation_id, check_conversations, replies },
+	message: { conversation_lists, check_conversations, replies },
 	engineer: { engineer, loading }, 
 	user: { user },
 	match }) => {
@@ -57,22 +55,18 @@ const Profile = ({
             await getProfileEngineerBySlug(slug);    
             await getConversationLists(user_two);
             await checkConversations(user_two);
+            await getReplyConversationReplies(check_conversations); 
         }
         fetchData();
     }, [getProfileEngineerBySlug, 
 		getConversationLists, 
         getReplyConversationReplies, 
         checkConversations,
+        check_conversations,
         user_two,
         slug]);
     const handleOpen = async () => {
         setOpen(true);
-        store.dispatch({
-            type: CHECK_CONVERSATIONS,
-            payload: check_conversations
-        });
-        await getReplyConversationReplies(check_conversations); // ini udah dinamis karena udah gua store dispatch
-        // jadi otomatis ketika di open conversation_id nya berubah-ubah
     };
     const handleClose = () => {
         setOpen(false);
