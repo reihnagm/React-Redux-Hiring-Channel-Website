@@ -46,8 +46,8 @@ const ProfileEdit = ({
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     });
-    let datasSkillsEngineer = engineer && engineer.data && engineer.data.skills;
-    let datasSkillsIdEngineer = engineer && engineer.data && engineer.data.skills_id;
+    let datasSkillsEngineer = engineer.data && engineer.data.skills;
+    let datasSkillsIdEngineer = engineer.data && engineer.data.skills_id;
     let idProps = engineer.data && engineer.data.id;
     let avatarProps = engineer.data && engineer.data.avatar;
     let nameProps = engineer.data && engineer.data.name;
@@ -89,9 +89,9 @@ const ProfileEdit = ({
     }));
     const classes = useStyles();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [avatarNotEdited, setAvatarNotEdited] = useState('');
-    const [avatarDefault, setDefaultAvatar] = useState('');
-    const [avatarFile, setAvatarFile] = useState('');
+    const [avatarNotEdited, setAvatarNotEdited] = useState("");
+    const [avatarDefault, setDefaultAvatar] = useState("");
+    const [avatarFile, setAvatarFile] = useState("");
     const [skillsMask, setSkills] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
@@ -122,8 +122,7 @@ const ProfileEdit = ({
         setFormData({ ...formData, [event.target.name]: event.target.value });
     }
     const handleDate = (value) => {
-        let convertDate = moment(value).format('YYYY-MM-D');
-        setSelectedDate(convertDate);
+        setSelectedDate(value);
     }
     let getFile;
     const handleFile = (event) => {
@@ -174,7 +173,8 @@ const ProfileEdit = ({
     }
     const onSubmit = (event) => {
         event.preventDefault();
-        let avatar
+        let convert_date = moment(selectedDate).format("YYYY-MM-DD");
+        let avatar;
         if(avatarFile === "") {
             avatar = avatarNotEdited;
         } else {
@@ -192,7 +192,7 @@ const ProfileEdit = ({
             data.set('avatar', avatar);
             data.set('name', name ? name : '');
             data.set('email', email ? email: '');
-            data.set('birthdate', selectedDate);
+            data.set('birthdate', convert_date);
             data.set('description', description ? description : '');
             data.set('skills', JSON.stringify(skillsMask));
             // pake JSON.stringify ngatasin biar ngga [object object] datanya
@@ -303,7 +303,7 @@ const ProfileEdit = ({
                                 datasSkillsEngineer={datasSkillsEngineer}
                                 datasSkillsIdEngineer={datasSkillsIdEngineer}
                                 skills={skills}
-                                setSkills={setSkills}
+                                setSkills={setSkills} 
                                 skillsMask={skillsMask}
                             />
                             <TextField

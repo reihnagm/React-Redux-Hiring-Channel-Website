@@ -51,6 +51,8 @@ const HeaderFilter = ({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+        // kenapa di disable karena infinite looping jika ada optionsSortByC, optionsOrderBy, optionsShowPage
+        // yang merupakan nilai array
     useEffect(() => {
         getFilter();
     },[getFilter]);

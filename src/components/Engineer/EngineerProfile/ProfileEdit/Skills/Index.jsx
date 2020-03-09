@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 const SkillsComponent = ({ datasSkillsEngineer, datasSkillsIdEngineer, skills, skillsMask, setSkills }) => {
-    let dataSkillsEngineerArrayObject = [];
-    let array_skills = datasSkillsEngineer.split(",");
-    let array_skills_id = datasSkillsIdEngineer.split(",");
-    for (let i = 0; i < array_skills.length; i++) {
+    let dataSkillsEngineerArrayObject = []; 
+    let array_skills = datasSkillsEngineer !== null && datasSkillsEngineer.split(",");
+    let array_skills_id = datasSkillsIdEngineer !== null && datasSkillsIdEngineer.split(",");
+    for (let i = 0; i <  array_skills.length; i++) {
        dataSkillsEngineerArrayObject.push({
            id: parseInt(array_skills_id[i]),
            name: array_skills[i]
@@ -13,13 +13,9 @@ const SkillsComponent = ({ datasSkillsEngineer, datasSkillsIdEngineer, skills, s
    }
     useEffect(() => {
         setSkills(dataSkillsEngineerArrayObject);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);
-    let data;
+    },[setSkills]);
     if(skillsMask === null) {
         return false;
-    } else {
-        data = skillsMask
     }
     return (
         <>
@@ -28,7 +24,7 @@ const SkillsComponent = ({ datasSkillsEngineer, datasSkillsIdEngineer, skills, s
                 filterSelectedOptions
                 freeSolo
                 /* kalo ga pake state(uncontrolled) bakal sering ilang value nya jika di refresh dan juga kalo ada perubahan pada code editor kadang datanya ilang value nya */
-                value={data}
+                value={skillsMask}
                 options={skills}
                 onChange={(event, getSkills) => {
                     setSkills(getSkills);
