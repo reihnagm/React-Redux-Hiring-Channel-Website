@@ -23,7 +23,9 @@ const SkillsComponent = ({ datasSkillsEngineer, datasSkillsIdEngineer, skills, s
                 multiple
                 filterSelectedOptions
                 freeSolo
-                /* kalo ga pake state(uncontrolled) bakal sering ilang value nya jika di refresh dan juga kalo ada perubahan pada code editor kadang datanya ilang value nya */
+                /* kalo ga pake state(uncontrolled) akan sering ilang value nya 
+                jika di refresh dan juga 
+                kalo ada perubahan pada code editor kadang datanya ilang value nya */
                 value={skillsMask}
                 options={skills}
                 onChange={(event, getSkills) => {

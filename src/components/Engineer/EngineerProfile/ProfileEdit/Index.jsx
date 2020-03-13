@@ -132,16 +132,16 @@ const ProfileEdit = ({
         if (event.target.files && event.target.files[0]) {
             let error = false;
             let size = event.target.files[0].size;
-            let extension = event.target.files[0].name.split('.')[1];
+            let extension = event.target.files[0].name.split(".")[1];
             let reader = new FileReader();
             try {
                 if(size > 1024000) {
                     error = true;
-                    throw new Error('File size cannot larger than 1MB.');
+                    throw new Error("File size cannot larger than 1MB.");
                 }
                 if(!isImage(extension)) {
                     error = true;
-                    throw new Error('File type allowed: PNG, JPG, JPEG, GIF, SVG, BMP.');
+                    throw new Error("File type allowed: PNG, JPG, JPEG, GIF, SVG, BMP.");
                 }
                 if(error === false) {
                     setAvatarFile(event.target.files[0]);
@@ -182,38 +182,38 @@ const ProfileEdit = ({
         }
         try {
             if(name.length < 3) {
-                throw new Error('Name Minimum 3 Character.');
+                throw new Error("Name Minimum 3 Character.");
             }
             if(description.length < 200) {
-                throw new Error('Description Minimum 200 Character.');
+                throw new Error("Description Minimum 200 Character.");
             }
             let data = new FormData();
-            data.set('user_id', user_id);
-            data.set('avatar', avatar);
-            data.set('name', name ? name : '');
-            data.set('email', email ? email: '');
-            data.set('birthdate', convert_date);
-            data.set('description', description ? description : '');
-            data.set('skills', JSON.stringify(skillsMask));
-            // pake JSON.stringify ngatasin biar ngga [object object] datanya
-            // ntar di JSON.parse di backend
-            // kalo cek array pake 0 bukan null
-            data.set('showcase', showcase ? showcase : '');
-            data.set('telephone', telephone ? telephone : '');
-            data.set('salary', salary ? salary : '');
-            data.set('location', location ? location : '');
+            data.set("user_id", user_id);
+            data.set("avatar", avatar);
+            data.set("name", name ? name : "");
+            data.set("email", email ? email: "");
+            data.set("birthdate", convert_date);
+            data.set("description", description ? description : "");
+            data.set("skills", JSON.stringify(skillsMask));
+            // menggunakan JSON.stringify agar tidak [object object] datanya
+            // di JSON.parse di backend
+            // cek array pake 0 bukan null
+            data.set("showcase", showcase ? showcase : "");
+            data.set("telephone", telephone ? telephone : "");
+            data.set("salary", salary ? salary : "");
+            data.set("location", location ? location : "");
             const engineer_id = id;
             updateProfileEngineer(engineer_id, data);
             setTimeout(() => {
-                history.push('/engineers');
+                history.push("/engineers");
                 Toast.fire({
-                    icon: 'success',
-                    title: 'Yay ! Profile Updated.'
+                    icon: "success",
+                    title: "Yay ! Profile Updated."
                 });
             }, 1000);
         } catch (error) {
             Toast.fire({
-                icon: 'error',
+                icon: "error",
                 title: error.message
             });
         }
