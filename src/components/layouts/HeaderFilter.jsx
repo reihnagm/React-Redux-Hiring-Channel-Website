@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
-import 'react-dropdown/style.css';
 import { withRouter } from 'react-router-dom';
+import 'react-dropdown/style.css';
 import Dropdown from 'react-dropdown';
 const HeaderFilter = ({
     handleSortBy,
@@ -51,7 +51,8 @@ const HeaderFilter = ({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-        // kenapa di disable karena infinite looping jika ada optionsSortByC, optionsOrderBy, optionsShowPage
+        // kenapa di disable karena infinite looping jika ada 
+        // optionsSortByC, optionsOrderBy, optionsShowPage
         // yang merupakan nilai array
     useEffect(() => {
         getFilter();
@@ -62,7 +63,7 @@ const HeaderFilter = ({
                 <div className="columns">
                     <div className="column">
                         <div className="columns items-center justify-center">
-                            <p className="mx-2">Sort By</p>
+                            <p className="mx-2">Filter By</p>
                             { location.pathname === "/engineers" &&
                                 <Dropdown
                                     options={optionsSortByE}

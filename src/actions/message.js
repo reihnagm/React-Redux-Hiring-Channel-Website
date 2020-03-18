@@ -148,7 +148,7 @@ export const getConversationId = (user_two) => async (dispatch) => {
         });
     }
 }
-export const InsertIntoConversationReplies = (user_two, obj, message) => async (dispatch) => {
+export const InsertIntoConversationReplies = (user_two, dataParam, message, created_at) => async (dispatch) => {
 	const token = localStorage.token;
     let data, user_one;
     if(token) {
@@ -157,12 +157,14 @@ export const InsertIntoConversationReplies = (user_two, obj, message) => async (
 	}
     try {
         await axios.post(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/insert_into_conversation_replies/${user_one}/${user_two}`, {
-			message
+            message,
+            created_at
         });
         dispatch({
             type: INSERT_INTO_CONVERSATION_REPLIES,
-            payload: obj
+            payload: dataParam
         });
+        dispatch(getConversationLists(user_two));
     } catch (error) {
         dispatch({
             type: INSERT_INTO_CONVERSATION_REPLIES_ERROR,

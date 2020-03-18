@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import * as moment from 'moment';
 import { Container, Grid, Paper, Button, Modal, Input, makeStyles } from '@material-ui/core';
 import MessageIcon from '@material-ui/icons/Message';
 import Spinner from '../../../Spinner/Index';
@@ -39,7 +40,7 @@ const Profile = ({
     let skills = engineer.skills;
     let location = engineer.location;
     let showcase = engineer.showcase;
-    let birthdate = engineer.birthdate;
+    let birthdate = moment(engineer.birthdate).format("D MMMM YYYY");
     let telephone = engineer.telephone;
     const useStyles = makeStyles(theme => ({
         root: {
@@ -75,29 +76,19 @@ const Profile = ({
         setInputMessage(event.target.value);
     }
     const handleEnterMessage = (event) => {
-        let obj = {
+        let data = {
             id: new Date(),
             reply: inputMessage,
-            name: user_session_name
-		}
-        if(event.which === 13) {
-			InsertIntoConversationReplies(user_two, obj, inputMessage);
-            setMessageMask(state => [...state, obj]);
-            setInputMessage('');
+            name: user_session_name,
+            created_at:  moment().format('YYYY-MM-DD HH:mm:ss')
+        }
+        let created_at = moment().format('YYYY-MM-DD HH:mm:ss');
+        if(event.which === 13) { // code to enter keyboard 
+			InsertIntoConversationReplies(user_two, data, inputMessage, created_at);
+            setMessageMask(state => [...state, data]);
+            setInputMessage("");
         }
     }
-    let n = new Date(birthdate);
-    let y = n.getFullYear();
-    let d = n.getDate();
-    let m = n.getMonth()+1;
-    let months = ["January","February","March","April","May","June",'July',"August","September","October","November","December"];
-    let thisMonth  = months[m-1];
-    if(isNaN(y) || isNaN(d) || typeof y === "undefined") {
-        y = '';
-        d = '';
-        thisMonth = '';
-	}
-	let displayDate = d +' '+ thisMonth +' '+ y ;    
     return loading ? ( <Spinner /> ) : (
         <>
             <div className="backdrop-top"></div>
@@ -146,18 +137,22 @@ const Profile = ({
                                                 )}
                                                 { user_one === user_two && (
                                                     <>
+                                                        { conversation_lists.length == 0 && (
+                                                            <p className="center">No conversations.</p>
+                                                        )}
                                                         <ConversationLists 
                                                             conversation_lists={conversation_lists} 
                                                         />
                                                     </>
                                                 )}
+                                                
                                             </Paper>
                                         </Modal>
                                     </Grid>
                                 </Grid>
                                 <p className="my-2"> {name} </p>
                                 <p className="my-2"> {email} </p>
-                                <p className="my-2"> {displayDate} </p>
+                                <p className="my-2"> {birthdate} </p>
                                 <p className="my-2"> {telephone} </p>
                                 <p className="my-2"> {showcase} </p>
                                 <Button

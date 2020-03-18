@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Input, Button } from '@material-ui/core';
+import * as moment from 'moment';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import { 
     getReplyConversationReplies, 
     getUserTwo,
@@ -32,15 +32,17 @@ const ReplyLists = ({
         setInputMessage(event.target.value);
     }
     const handleEnterMessage = (event) => {
-        let obj = {
+        let data = {
             id: new Date(),
             reply: inputMessage,
-            name: user && user.data && user.data.name
+            name: user && user.data && user.data.name,
+            created_at: moment.utc().format('YYYY-MM-DD HH:mm:ss')
         }
-        if(event.which === 13) {
-            InsertIntoConversationReplies(user_two, obj, inputMessage);
-            setMessageMask(state => [...state, obj]);
-            setInputMessage('');
+        let created_at = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+        if(event.which === 13) { // code to enter keyboard
+            InsertIntoConversationReplies(user_two, data, inputMessage, created_at);
+            setMessageMask(state => [...state, data]);
+            setInputMessage("");
         }
     }
     useEffect(() => {

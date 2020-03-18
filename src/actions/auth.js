@@ -38,17 +38,17 @@ export const loadUser = () => async dispatch => {
     }
 }
 export const login = (email, password) => async dispatch => {
+    let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
+    let checkEmail = regexp.test(email);
     try {
         if(email.trim() === "") {
             throw new Error("Email Required.");
         }
-        let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
-        let checkEmail = regexp.test(email);
+        if(password.trim() === "") {
+            throw new Error("Password Required.");
+        }
         if(!checkEmail) {
             throw new Error("Invalid Email. e.g : johndoe@gmail.com");
-        }
-        if(password.trim() === '') {
-            throw new Error("Password Required.");
         }
         if(password.length < 6) {
             throw new Error("Password Minimum 6 Character.");
@@ -66,20 +66,31 @@ export const login = (email, password) => async dispatch => {
             payload: response.data
         });
         dispatch(loadUser());
-    } catch (error) {
-        if(error.message === "Request failed with status code 500") {
-            error.message = "User not exists.";
+    } catch(error) {
+        if(error.response && error.response.data.message.name === "UserNotExists") { 
+            Toast.fire({
+                    icon: "error",
+                    title: "User not exists."
+            });
+        } else if(error.response && error.response.data.message.name === "InvalidCredentials") {
+            Toast.fire({
+                icon: "error",
+                title: "Invalid Credentials."
+            });
+        } else {
+            Toast.fire({
+                icon: "error",
+                title: error.message
+             });
         }
-        Toast.fire({
-            icon: "error",
-            title: error.message
-        });
         dispatch({
             type: LOGIN_FAIL
         });
     }
 }
 export const register = (name, email, password, role, history) => async dispatch => {
+    let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
+    let checkEmail = regexp.test(email);
     try {
         if(name.trim() === "") {
             throw new Error("Name Required.");
@@ -87,8 +98,6 @@ export const register = (name, email, password, role, history) => async dispatch
         if(email.trim() === "") {
             throw new Error("Email Required.");
         }
-        let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
-        let checkEmail = regexp.test(email);
         if(!checkEmail) {
             throw new Error("Invalid Email. e.g : johndoe@gmail.com");
         }
@@ -99,7 +108,7 @@ export const register = (name, email, password, role, history) => async dispatch
             throw new Error("Password Minimum 6 Character.");
         }
         if(typeof role === "undefined") {
-            throw new Error("Role Required.")
+            throw new Error("Role Required.");
         }
         const response = await axios.post(`${process.env.REACT_APP_LOCAL_AUTH}/register`, {
             name,
@@ -123,13 +132,17 @@ export const register = (name, email, password, role, history) => async dispatch
         });
         dispatch(loadUser());
     } catch (error) {
-        if(error.message === "Request failed with status code 500") {
-            error.message = "User already exists.";
+        if(error.response && error.response.data.message.name === "UserAlreadyExists") { 
+            Toast.fire({
+                    icon: "error",
+                    title: "User already exists."
+            });
+        } else {
+            Toast.fire({
+                icon: "error",
+                title: error.message
+            });
         }
-        Toast.fire({
-            icon: "error",
-            title: error.message
-        });
         dispatch({
             type: REGISTER_FAIL
         });
