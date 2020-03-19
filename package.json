@@ -22,6 +22,7 @@
     "gulp-watch": "^5.0.1",
     "history": "^4.10.1",
     "moment": "^2.24.0",
+    "pusher-js": "^5.1.1",
     "query-string": "^6.10.1",
     "react": "^16.12.0",
     "react-datepicker": "^2.10.1",

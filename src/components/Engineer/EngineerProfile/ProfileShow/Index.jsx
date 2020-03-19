@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Pusher from 'pusher-js';
 import * as moment from 'moment';
 import { Container, Grid, Paper, Button, Modal, Input, makeStyles } from '@material-ui/core';
-import MessageIcon from '@material-ui/icons/Message';
 import Spinner from '../../../Spinner/Index';
+import ConversationLists from './ConversationLists/Index';
+import MessageIcon from '@material-ui/icons/Message';
 import AvatarComponent from '../../../Avatar/Index';
 import MessageLists from './MessageLists/Index';
-import ConversationLists from './ConversationLists/Index';
 import { getProfileEngineerBySlug } from '../../../../actions/engineer';
 import { 
 	getConversationLists,
@@ -27,6 +28,7 @@ const Profile = ({
 	engineer: { engineer, loading }, 
 	user: { user },
 	match }) => {
+    const messagesEndRef = useRef(null)
 	const [open, setOpen] = useState(false);
     const [messageMask, setMessageMask] = useState([]);
     const [inputMessage, setInputMessage] = useState("");
@@ -56,7 +58,7 @@ const Profile = ({
             await getProfileEngineerBySlug(slug);    
             await getConversationLists(user_two);
             await checkConversations(user_two);
-            await getReplyConversationReplies(check_conversations); 
+            await getReplyConversationReplies(check_conversations);
         }
         fetchData();
     }, [getProfileEngineerBySlug, 
@@ -80,17 +82,20 @@ const Profile = ({
             id: new Date(),
             reply: inputMessage,
             name: user_session_name,
-            created_at:  moment().format('YYYY-MM-DD HH:mm:ss')
+            created_at: moment().format('YYYY-MM-DD HH:mm:ss')
         }
         let created_at = moment().format('YYYY-MM-DD HH:mm:ss');
         if(event.which === 13) { // code to enter keyboard 
-			InsertIntoConversationReplies(user_two, data, inputMessage, created_at);
-            setMessageMask(state => [...state, data]);
+            setTimeout(() => { 
+                messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+            }, 800);
+            InsertIntoConversationReplies(user_two, data, inputMessage, created_at, user_session_name);
+            setMessageMask(state => [...state, data]); 
             setInputMessage("");
         }
     }
     return loading ? ( <Spinner /> ) : (
-        <>
+        <Fragment>
             <div className="backdrop-top"></div>
             <Container className="mt-64" fixed>
                 <div className={classes.root}>
@@ -121,6 +126,7 @@ const Profile = ({
 													<div className="p-5 relative container-direct-message">
                                                         <MessageLists
                                                             replies={replies}
+                                                            messagesEndRef={messagesEndRef}
                                                             messageMask={messageMask}
                                                             setMessageMask={setMessageMask}
                                                         /> 
@@ -136,16 +142,15 @@ const Profile = ({
 													</div>
                                                 )}
                                                 { user_one === user_two && (
-                                                    <>
+                                                    <div>
                                                         { conversation_lists.length == 0 && (
                                                             <p className="center">No conversations.</p>
                                                         )}
                                                         <ConversationLists 
                                                             conversation_lists={conversation_lists} 
                                                         />
-                                                    </>
+                                                    </div>
                                                 )}
-                                                
                                             </Paper>
                                         </Modal>
                                     </Grid>
@@ -178,7 +183,7 @@ const Profile = ({
                     </Grid>
                 </div>
             </Container>
-        </>
+        </Fragment>
     )
 }
 const mapStateToProps = state => ({

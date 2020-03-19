@@ -77,7 +77,13 @@ export const login = (email, password) => async dispatch => {
                 icon: "error",
                 title: "Invalid Credentials."
             });
-        } else {
+        } else if(error.response && error.response.data) {
+            Toast.fire({
+                icon: "error",
+                title: error.response.data.message
+            });
+        }
+        else {
             Toast.fire({
                 icon: "error",
                 title: error.message
