@@ -75,8 +75,16 @@
     border-radius: 8px;
     padding-bottom: 80px;
 }
-.chat-box {
+.chat-box-left {
+    width: 45%;
     background-color: #ea80fc;
+}
+.chat-box-right {
+    width: 45%;
+    background-color: #8e24aa;
+}
+.chat-author {
+    background-color: #ab47bc;
 }
 .conversation-lists {
     background-color: #ea80fc !important;

@@ -126,6 +126,7 @@ const Profile = ({
 													<div className="p-5 relative container-direct-message">
                                                         <MessageLists
                                                             replies={replies}
+                                                            user_two={user_two}
                                                             messagesEndRef={messagesEndRef}
                                                             messageMask={messageMask}
                                                             setMessageMask={setMessageMask}

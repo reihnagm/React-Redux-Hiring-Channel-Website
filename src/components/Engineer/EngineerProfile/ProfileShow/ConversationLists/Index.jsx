@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Grid, Input, Button } from '@material-ui/core';
 import * as moment from 'moment';
 import { connect } from 'react-redux';
@@ -24,6 +24,7 @@ const ReplyLists = ({
     set_confirm_conversation_id,
     set_hide_conversation_lists, 
     hide_conversation_lists  }) => {
+    const messagesEndRef = useRef(null)
     const back = () => {
         set_confirm_conversation_id(null);
         set_hide_conversation_lists(!hide_conversation_lists);
@@ -40,6 +41,10 @@ const ReplyLists = ({
         }
         let created_at = moment.utc().format('YYYY-MM-DD HH:mm:ss');
         if(event.which === 13) { // code to enter keyboard
+            setTimeout(() => { 
+                messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+            }, 800);
+            console.log(data);
             InsertIntoConversationReplies(user_two, data, inputMessage, created_at);
             setMessageMask(state => [...state, data]);
             setInputMessage("");
@@ -57,12 +62,14 @@ const ReplyLists = ({
         	<div className="p-5 relative container-direct-message">
                 <MessageLists
                     replies={replies}
+                    messagesEndRef={messagesEndRef}
+                    user_two={user_two}
                     messageMask={messageMask}
                     setMessageMask={setMessageMask}
                 /> 
 				<div className="bar-bottom-message p-2">
 					<Input
-						fullWidth="true"
+						fullWidth
 						name="message"
 						value={inputMessage}
 						onChange={handleMessage}
