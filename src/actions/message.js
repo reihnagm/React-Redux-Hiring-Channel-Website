@@ -11,15 +11,14 @@ import {
     GET_USER_TWO_ERROR,
     GET_CONVERSATION_ID,
     GET_CONVERSATION_ID_ERROR,
-    INSERT_INTO_CONVERSATIONS,
-    INSERT_INTO_CONVERSATIONS_ERROR,
     INSERT_INTO_CONVERSATION_REPLIES,
-    INSERT_INTO_CONVERSATION_REPLIES_ERROR
+    INSERT_INTO_CONVERSATION_REPLIES_ERROR,
+    CHANGES_REPLY_TO_REALTIME
 } from './types'
 export const getConversationLists = (user_two) => async (dispatch) => {
 	let response;
     try {
-        response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_conversation_lists/${user_two}`);
+        response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/conversation-lists/${user_two}`);
         dispatch({
             type: GET_CONVERSATION_LISTS,
             payload: response.data.data
@@ -34,7 +33,7 @@ export const getConversationLists = (user_two) => async (dispatch) => {
 export const getReplyConversationReplies = (conversation_id) => async (dispatch) => {
     let response;
     try {
-        response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_reply_conversation_replies/${conversation_id}`);
+        response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/conversation-replies/${conversation_id}`);
         dispatch({
             type: GET_REPLY_CONVERSATION_REPLIES,
             payload: response.data.data
@@ -46,41 +45,6 @@ export const getReplyConversationReplies = (conversation_id) => async (dispatch)
         });
     }
 }
-export const creatingConversations = (user_two) => async (dispatch) => {
-    const token = localStorage.token;
-    let data, user_one, response;
-    if(token) {
-        data = decodeJWT(token);
-        user_one = data.user.id;
-    }
-    if(user_one !== user_two) {
-        try {
-            response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/check_conversations/${user_one}/${user_two}`);
-            dispatch({
-                type: CHECK_CONVERSATIONS,
-                payload: response.data.data.length
-            });
-        } catch (error) {
-            dispatch({
-                type: CHECK_CONVERSATIONS_ERROR, 
-                payload: error.message
-            });
-        }
-        if(response.data.data.length === 0) {
-            try {
-                await axios.post(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/insert_into_conversations/${user_one}/${user_two}`);
-                dispatch({
-                    type: INSERT_INTO_CONVERSATIONS 
-                });
-            } catch (error) {
-                dispatch({
-                    type: INSERT_INTO_CONVERSATIONS_ERROR,
-                    payload: error.message
-                });
-            }
-        } 
-    }
-}
 export const checkConversations = (user_two) => async (dispatch) => {
     const token = localStorage.token;
     let data, user_one, response;
@@ -89,7 +53,7 @@ export const checkConversations = (user_two) => async (dispatch) => {
         user_one = data.user.id;
     }
     try {
-		response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/check_conversations/${user_one}/${user_two}`);
+		response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/check-conversations/${user_one}/${user_two}`);
         if(response.data.data.length !== 0) {
             dispatch({
                 type: CHECK_CONVERSATIONS,
@@ -116,7 +80,7 @@ export const getUserTwo = (conversation_id) => async (dispatch) => {
         user_one = data.user.id;
     }
     try {
-		response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_user_two/${conversation_id}`);
+		response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/user-two/${conversation_id}`);
         if(response.data.data[0].user_two === user_one) {
             user_two = response.data.data[0].user_one;
         } else {
@@ -136,7 +100,7 @@ export const getUserTwo = (conversation_id) => async (dispatch) => {
 export const getConversationId = (user_two) => async (dispatch) => {
     let response;
     try {
-        response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/get_conversation_id/${user_two}`);
+        response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/conversation-id/${user_two}`);
         dispatch({
             type: GET_CONVERSATION_ID,
             payload: response.data.data
@@ -148,22 +112,24 @@ export const getConversationId = (user_two) => async (dispatch) => {
         });
     }
 }
-export const InsertIntoConversationReplies = (user_two, dataParam, message, created_at, user_session_name) => async (dispatch) => {
-	const token = localStorage.token;
+export const InsertIntoConversationReplies = (user_two, payload) => async (dispatch) => {
+    const token = localStorage.token;
+    let message = payload.reply;
+    let created_at = payload.created_at;
+    let user_session_name = payload.name;
     let data, user_one;
     if(token) {
         data = decodeJWT(token);
         user_one = data.user.id;
 	}
     try {
-        await axios.post(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/insert_into_conversation_replies/${user_one}/${user_two}`, {
+        await axios.post(`${process.env.REACT_APP_GET_LOCAL_MESSAGES}/conversation-replies/${user_one}/${user_two}`, {
             message,
             created_at,
             user_session_name
         });
         dispatch({
-            type: INSERT_INTO_CONVERSATION_REPLIES,
-            payload: dataParam.reverse()
+            type: INSERT_INTO_CONVERSATION_REPLIES
         });
         dispatch(getConversationLists(user_two));
     } catch (error) {
@@ -172,4 +138,10 @@ export const InsertIntoConversationReplies = (user_two, dataParam, message, crea
             payload: error.message
         });
     }
+}
+export const changesReplyToRealtime = (payload) => async (dispatch) => {
+    dispatch({
+        type: CHANGES_REPLY_TO_REALTIME,
+        payload: payload
+    });
 }

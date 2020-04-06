@@ -10,7 +10,6 @@ import {
 import MessageLists from '../MessageLists/Index';
 import AvatarComponent from '../../../../Avatar/Index';
 const ReplyLists = ({ 
-    conversation_id, 
     getReplyConversationReplies,
     InsertIntoConversationReplies,
     getUserTwo,
@@ -20,6 +19,7 @@ const ReplyLists = ({
     inputMessage,   
     setInputMessage, 
     user,
+    conversation_id,
     user_two,
     set_confirm_conversation_id,
     set_hide_conversation_lists, 
@@ -39,14 +39,11 @@ const ReplyLists = ({
             name: user && user.data && user.data.name,
             created_at: moment.utc().format('YYYY-MM-DD HH:mm:ss')
         }
-        let created_at = moment.utc().format('YYYY-MM-DD HH:mm:ss');
         if(event.which === 13) { // code to enter keyboard
             setTimeout(() => { 
                 messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
             }, 800);
-            console.log(data);
-            InsertIntoConversationReplies(user_two, data, inputMessage, created_at);
-            setMessageMask(state => [...state, data]);
+            InsertIntoConversationReplies(user_two, data);
             setInputMessage("");
         }
     }
@@ -63,7 +60,7 @@ const ReplyLists = ({
                 <MessageLists
                     replies={replies}
                     messagesEndRef={messagesEndRef}
-                    user_two={user_two}
+                    userTwo={user_two}
                     messageMask={messageMask}
                     setMessageMask={setMessageMask}
                 /> 

@@ -12,7 +12,8 @@ import {
     INSERT_INTO_CONVERSATIONS,
     INSERT_INTO_CONVERSATIONS_ERROR,
     INSERT_INTO_CONVERSATION_REPLIES,
-    INSERT_INTO_CONVERSATION_REPLIES_ERROR
+    INSERT_INTO_CONVERSATION_REPLIES_ERROR,
+    CHANGES_REPLY_TO_REALTIME
 } from '../actions/types'
 const initialState = {
     user_two: null,
@@ -84,10 +85,14 @@ export default function (state = initialState, action) {
                 ...state,
                 error: payload
             }
-        case INSERT_INTO_CONVERSATION_REPLIES: 
+        case CHANGES_REPLY_TO_REALTIME: 
             return {
                 ...state,
-                replies: [payload, ...state.replies]
+                replies: [payload, ...state.replies].reverse()
+            }
+        case INSERT_INTO_CONVERSATION_REPLIES: 
+            return {
+                ...state
             }
         case INSERT_INTO_CONVERSATION_REPLIES_ERROR: 
             return {

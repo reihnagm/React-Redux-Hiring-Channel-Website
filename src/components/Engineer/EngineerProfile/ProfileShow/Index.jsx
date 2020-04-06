@@ -12,18 +12,18 @@ import MessageLists from './MessageLists/Index';
 import { getProfileEngineerBySlug } from '../../../../actions/engineer';
 import { 
 	getConversationLists,
-	getConversationId,
     getReplyConversationReplies, 
     checkConversations,
-	InsertIntoConversationReplies
+	InsertIntoConversationReplies,
+    changesReplyToRealtime
 } from '../../../../actions/message';
 const Profile = ({
 	getProfileEngineerBySlug,
 	getConversationLists,
-	getConversationId,
     getReplyConversationReplies, 
     checkConversations,
-	InsertIntoConversationReplies,
+    InsertIntoConversationReplies,
+    changesReplyToRealtime,
 	message: { conversation_lists, check_conversations, replies },
 	engineer: { engineer, loading }, 
 	user: { user },
@@ -54,6 +54,15 @@ const Profile = ({
     }));
     const classes = useStyles();
     useEffect(() => {
+        const pusher = new Pusher('20b3b98bfc23f9164876', {
+            cluster: 'ap1',
+            forceTLS: true
+        });
+        const channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', data => {
+            setMessageMask(state => [...state, data]); 
+            changesReplyToRealtime(data);
+        })
         const fetchData = async () => {
             await getProfileEngineerBySlug(slug);    
             await getConversationLists(user_two);
@@ -61,14 +70,18 @@ const Profile = ({
             await getReplyConversationReplies(check_conversations);
         }
         fetchData();
+        return () => {
+            channel.unbind('my-event');
+            channel.unsubscribe('my-channel');
+        };
     }, [getProfileEngineerBySlug, 
-		getConversationLists, 
-        getReplyConversationReplies, 
+        getConversationLists, 
         checkConversations,
+        getReplyConversationReplies, 
         check_conversations,
         user_two,
         slug]);
-    const handleOpen = async () => {
+    const handleOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
@@ -84,13 +97,11 @@ const Profile = ({
             name: user_session_name,
             created_at: moment().format('YYYY-MM-DD HH:mm:ss')
         }
-        let created_at = moment().format('YYYY-MM-DD HH:mm:ss');
         if(event.which === 13) { // code to enter keyboard 
             setTimeout(() => { 
                 messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
             }, 800);
-            InsertIntoConversationReplies(user_two, data, inputMessage, created_at, user_session_name);
-            setMessageMask(state => [...state, data]); 
+            InsertIntoConversationReplies(user_two, data);
             setInputMessage("");
         }
     }
@@ -126,7 +137,7 @@ const Profile = ({
 													<div className="p-5 relative container-direct-message">
                                                         <MessageLists
                                                             replies={replies}
-                                                            user_two={user_two}
+                                                            userTwo={user_two}
                                                             messagesEndRef={messagesEndRef}
                                                             messageMask={messageMask}
                                                             setMessageMask={setMessageMask}
@@ -144,7 +155,7 @@ const Profile = ({
                                                 )}
                                                 { user_one === user_two && (
                                                     <div>
-                                                        { conversation_lists.length == 0 && (
+                                                        { conversation_lists.length === 0 && (
                                                             <p className="center">No conversations.</p>
                                                         )}
                                                         <ConversationLists 
@@ -197,9 +208,9 @@ export default connect(
     {
         getProfileEngineerBySlug,
         getConversationLists,
-		getConversationId,
         getReplyConversationReplies, 
         checkConversations,
-		InsertIntoConversationReplies
+        InsertIntoConversationReplies,
+        changesReplyToRealtime
     }
 )(Profile);

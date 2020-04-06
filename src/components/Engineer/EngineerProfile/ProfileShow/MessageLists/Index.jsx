@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 import * as moment from 'moment';
 import { connect } from 'react-redux';
-const MessageLists = ({  user, user_two, replies, messagesEndRef, messageMask, setMessageMask }) => {
-    let user_id = user !== null && typeof user !== "undefined" && user && user.data && user.data.id
+const MessageLists = ({ userTwo, replies, messagesEndRef, messageMask, setMessageMask }) => {
     useEffect(() => {
         setMessageMask(replies);
     },[replies, setMessageMask]);
     return (
         <div ref={messagesEndRef} className="p-2 overflow-y-scroll h-56">
             {messageMask && messageMask.map(message => {
-                const box = message.user_id !== user_two ? `box-left` : 'box-right';
-                const chatDirection = message.user_id !== user_two ? 'flex justify-start' : 'flex justify-end'
+                const box = message.user_id !== userTwo ? `box-left` : 'box-right';
+                const chatDirection = message.user_id !== userTwo ? 'flex justify-start' : 'flex justify-end'
                 return (
                     <div className={`${chatDirection}`}>
                         <div 
@@ -30,10 +29,7 @@ const MessageLists = ({  user, user_two, replies, messagesEndRef, messageMask, s
         </div>
     )
 }
-const mapStateToProps = state => ({
-    user: state.auth.user
-});
 export default connect(
-    mapStateToProps,
+    null,
     { }
 )(MessageLists);
