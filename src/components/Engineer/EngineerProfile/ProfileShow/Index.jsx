@@ -70,6 +70,7 @@ const Profile = ({
             await getReplyConversationReplies(check_conversations);
         }
         fetchData();
+        // Agar data pesan ngga dua kali tampil 
         return () => {
             channel.unbind('my-event');
             channel.unsubscribe('my-channel');
