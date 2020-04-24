@@ -73,8 +73,8 @@ const Engineer = ({
                     engineers={engineers && engineers.data}
                     handlePage={handlePage}
                     pageCount={
-                            getPageCount( engineers && engineers.pageDetail && engineers.pageDetail.total,
-                            engineers && engineers.pageDetail && engineers.pageDetail.per_page )
+                        getPageCount( engineers && engineers.pageDetail && engineers.pageDetail.total,
+                        engineers && engineers.pageDetail && engineers.pageDetail.per_page )
                     }
                     currentPage={engineers && engineers.pageDetail && engineers.pageDetail.current_page}
                 />

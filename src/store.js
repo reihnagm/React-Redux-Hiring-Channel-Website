@@ -8,8 +8,8 @@ export const history = createBrowserHistory();
 const initialState = {};
 const middleware = [thunk, routerMiddleware(history)];
 const store = createStore(
-    reducers(history),
-    initialState,
-    composeWithDevTools(applyMiddleware(...middleware))
+  reducers(history),
+  initialState,
+  composeWithDevTools(applyMiddleware(...middleware))
 );
 export default store;

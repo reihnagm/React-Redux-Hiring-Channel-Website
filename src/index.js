@@ -7,9 +7,9 @@ import App from './components/App/Index';
 import store, { history } from './store';
 const AppWithRouter = withRouter(App);
 render(
-    <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <AppWithRouter />
-        </ConnectedRouter>
-    </Provider>
-    , document.getElementById('root'));
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <AppWithRouter />
+    </ConnectedRouter>
+  </Provider> , document.getElementById('root')
+);

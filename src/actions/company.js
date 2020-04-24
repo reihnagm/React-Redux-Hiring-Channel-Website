@@ -90,16 +90,16 @@ export const getProfileCompanyBySlug = (slug) => async dispatch => {
         })
     }
 }
-export const updateProfileCompany = (id, data) => async dispatch => {
+export const updateProfileCompany = (id, payload) => async dispatch => {
     let company_id = id;
     try {
         dispatch({
             type: LOADING
         });
-        await axios.patch(`http://localhost:5000/api/v1/companies/${company_id}`, data);
+        await axios.patch(`http://localhost:5000/api/v1/companies/${company_id}`, payload);
         dispatch({
             type: UPDATE_PROFILE_COMPANY,
-            payload: data
+            payload: payload
         });
         setTimeout(() => {
             dispatch({

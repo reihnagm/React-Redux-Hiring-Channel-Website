@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Pusher from 'pusher-js';
 import * as moment from 'moment';
-import { Container, Grid, Paper, Button, Modal, Input, makeStyles } from '@material-ui/core';
+import { Container, Grid, Paper, Button, Badge, Modal, Input, makeStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import Spinner from '../../../Spinner/Index';
 import ConversationLists from './ConversationLists/Index';
 import MessageIcon from '@material-ui/icons/Message';
@@ -44,6 +45,24 @@ const Profile = ({
     let showcase = engineer.showcase;
     let birthdate = moment(engineer.birthdate).format("D MMMM YYYY");
     let telephone = engineer.telephone;
+    const styles = theme => ({
+        customBadge: {
+          backgroundColor: "#00AFD7",
+          color: "white"
+        }
+    });
+    const StyledBadge = withStyles((theme) => ({
+        badge: {
+          right: 8,
+          top: 8,
+          fontSize: 14,
+          backgroundColor: '#ff002a',
+          overlap: 'circle',
+          borderRadius: '50%',
+          border: `2px solid ${theme.palette.background.paper}`,
+          padding: '14px 10px',
+        },
+      }))(Badge);
     const useStyles = makeStyles(theme => ({
         root: {
             flexGrow: 1,
@@ -59,9 +78,14 @@ const Profile = ({
             forceTLS: true
         });
         const channel = pusher.subscribe('my-channel');
-        channel.bind('my-event', data => {
+        channel.bind('my-event',  async data => {
             setMessageMask(state => [...state, data]); 
-            changesReplyToRealtime(data);
+            if(messagesEndRef.current !== null) {
+                setTimeout(() => { 
+                    messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+                }, 800);
+            }
+            await changesReplyToRealtime(data);
         })
         const fetchData = async () => {
             await getProfileEngineerBySlug(slug);    
@@ -70,7 +94,7 @@ const Profile = ({
             await getReplyConversationReplies(check_conversations);
         }
         fetchData();
-        // Agar data pesan ngga dua kali tampil 
+        // agar data pesan ngga dua kali tampil 
         return () => {
             channel.unbind('my-event');
             channel.unsubscribe('my-channel');
@@ -78,8 +102,10 @@ const Profile = ({
     }, [getProfileEngineerBySlug, 
         getConversationLists, 
         checkConversations,
+        changesReplyToRealtime,
         getReplyConversationReplies, 
         check_conversations,
+        messagesEndRef,
         user_two,
         slug]);
     const handleOpen = () => {
@@ -125,13 +151,17 @@ const Profile = ({
                                         />
                                     </Grid>
                                     <Grid item xs={6} md={4}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={handleOpen}
-                                            startIcon={<MessageIcon />}>
-                                            Message
-                                        </Button>
+                                        <StyledBadge 
+                                            badgeContent={4} 
+                                            color="secondary">
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={handleOpen}
+                                                startIcon={<MessageIcon />}>
+                                                Message
+                                            </Button>
+                                        </StyledBadge>
                                         <Modal open={open} onClose={handleClose}>
                                             <Paper className="p-5 conversation-lists">
                                                 { user_one !== user_two &&  ( 
