@@ -280,11 +280,11 @@ const Header = ({
                             </div>
                         }
                         <div className={classes.grow}>
-                            <Link className="text-black mx-3" to="/">Home</Link>
-                            <Link className="text-black mx-3" to="/engineers">Engineers</Link>
-                            <Link className="text-black mx-3" to="/companies">Companies</Link>
-                            <Link className="text-black mx-3" to="/login">Login</Link>
-                            <Link className="text-black mx-3" to="/register">Register</Link>
+                          <Link className="text-black mx-3" to="/">Home</Link>
+                          <Link className="text-black mx-3" to="/engineers">Engineers</Link>
+                          <Link className="text-black mx-3" to="/companies">Companies</Link>
+                          <Link className="text-black mx-3" to="/login">Login</Link>
+                          <Link className="text-black mx-3" to="/register">Register</Link>
                         </div>
                     </Toolbar>
                 </AppBar>
@@ -292,18 +292,18 @@ const Header = ({
             </div>
         )
         return (
-            <Fragment>
-                { isAuthenticated ? authLinks : guestLinks }
-            </Fragment>
+          <Fragment>
+            { isAuthenticated ? authLinks : guestLinks }
+          </Fragment>
         )
     }
 const mapStateToProps = state => ({
-    engineer: state.engineer.engineer,
-    company: state.company.company,
-    isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
+  engineer: state.engineer.engineer,
+  company: state.company.company,
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user
 });
 export default connect(
-    mapStateToProps,
-    { getCurrentProfileEngineer, getCurrentProfileCompany, logout }
+  mapStateToProps,
+  { getCurrentProfileEngineer, getCurrentProfileCompany, logout }
 )(withRouter(Header))

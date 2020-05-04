@@ -47,8 +47,9 @@ const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { co
                         <Grid item md={4} xs={12}>
                             <Paper className={classes.paper}>
                                 <Avatar
-                                    className={classes.large}
-                                    src={`http://localhost:5000/images/company/${logo}`} alt={name}
+                                  className={classes.large}
+                                  src={`http://localhost:5000/images/company/${logo}`} 
+                                  alt={name}
                                 />
                                 <p className="my-2"> {name} </p>
                                 <p className="my-2"> {email} </p>

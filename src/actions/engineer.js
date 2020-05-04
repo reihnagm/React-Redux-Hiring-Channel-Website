@@ -28,15 +28,14 @@ export const getEngineers = () => async (dispatch, getState) => {
       type: GET_ENGINEERS,
       payload: response.data
     });
-    setTimeout(() => {
-      dispatch({
-        type: LOADED
-      });
-    }, 800);
   } catch (error) {
     dispatch({
       type: GET_ENGINEERS_ERROR,
       payload: error
+    });
+  } finally {
+    dispatch({
+      type: LOADED
     });
   }
 }
@@ -71,37 +70,35 @@ export const getCurrentProfileEngineer = () => async dispatch => {
       type: GET_CURRENT_PROFILE_ENGINEER,
       payload: response.data
     });
-    setTimeout(() => {
-      dispatch({
-        type: LOADED
-      });
-    }, 800);
   } catch (error) {
     dispatch({
       type: GET_CURRENT_PROFILE_ENGINEER_ERROR,
       payload: error
     });
+  } finally {
+    dispatch({
+      type: LOADED
+    });
   }
 }
 export const getProfileEngineerBySlug = (slug) => async dispatch => {
   try {
-      dispatch({
-        type: LOADING
-      });
-        const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/profile/${slug}`);
+    dispatch({
+      type: LOADING
+    });
+    const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/profile/${slug}`);
     dispatch({
       type: GET_PROFILE_ENGINEER_BY_SLUG,
       payload: response.data.data
     });
-    setTimeout(() => {
-      dispatch({
-        type: LOADED
-      });
-    }, 800);
   } catch (error) {
     dispatch({
       type: GET_PROFILE_ENGINEER_BY_SLUG_ERROR,
       payload: error
+    });
+  } finally {
+    dispatch({
+      type: LOADED
     });
   }
 }

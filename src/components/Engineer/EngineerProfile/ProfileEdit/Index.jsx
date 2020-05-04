@@ -58,7 +58,13 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps, lo
               style,
             })}
           >
-            <span>{suggestion.description}</span>
+            <span style={{
+              backgroundColor: '#ea80fc',
+              display: 'inline-block',
+              height: '200',
+              padding: '8px',
+              color: 'white',
+            }}>{suggestion.description}</span>
           </div>
         );
       })}
@@ -168,7 +174,7 @@ const ProfileEdit = ({
       const results = await geocodeByAddress(address);
       setLocation(results[0].formatted_address);
     } catch(error) {
-      console.log(error)
+      console.log(error);
     }
   };
   const handleDate = (value) => {
@@ -248,24 +254,22 @@ const ProfileEdit = ({
       // menggunakan JSON.stringify agar tidak [object object] datanya
       // di JSON.parse di backend
       // cek array length pake 0 bukan null
-      console.log(location)
       data.set("showcase", showcase ? showcase : "");
       data.set("telephone", telephone ? telephone : "");
       data.set("salary", salary ? salary : "");
       data.set("location", location ? location : "");
       const engineer_id = id;
       await updateProfileEngineer(engineer_id, data);
-      setTimeout(() => {
-        history.push("/engineers");
-          Toast.fire({
-            icon: "success",
-            title: "Yay ! Profile Updated."
-          });
-      }, 1000);
     } catch (error) {
       Toast.fire({
         icon: "error",
         title: error.message
+      });
+    } finally {
+      history.push("/engineers");
+      Toast.fire({
+        icon: "success",
+        title: "Yay ! Profile Updated."
       });
     }
   }

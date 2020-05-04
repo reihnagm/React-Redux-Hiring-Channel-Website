@@ -19,9 +19,10 @@ const Profile = ({
       padding: theme.spacing(2),
       position: 'relative'
     },
-    large: {
+    avatar: {
       width: theme.spacing(10),
-      height: theme.spacing(10)
+      height: theme.spacing(10),
+      marginBottom: '20px' 
     },
   }));
   const classes = useStyles();
@@ -69,12 +70,14 @@ const Profile = ({
               <Grid item md={4} xs={12}>
                 <Paper className={classes.paper}>
                   <Avatar
-                    className={classes.large}
-                    src={avatar ? `http://localhost:5000/images/engineer/${avatar}` : ''} alt={name}
+                    className={classes.avatar}
+                    src={avatar ? `http://localhost:5000/images/engineer/${avatar}` : ''} 
+                    alt={name}
                   />
                   <p className="my-2"> {name} </p>
                   <p className="my-2"> {email} </p>
                   <p className="my-2"> {birthdate} </p>
+                  <p className="my-2 leading-loose"> {location} </p>
                   <p className="my-2"> {telephone} </p>
                   <p className="my-2"> {showcase} </p>
                   <Grid>
