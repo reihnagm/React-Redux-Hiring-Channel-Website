@@ -3,8 +3,8 @@ import {
     GET_CONVERSATION_LISTS_ERROR,
     GET_REPLY_CONVERSATION_REPLIES,
     GET_REPLY_CONVERSATION_REPLIES_ERROR,
-	CHECK_CONVERSATIONS,
-	CHECK_CONVERSATIONS_ERROR,
+	  CHECK_CONVERSATIONS,
+	  CHECK_CONVERSATIONS_ERROR,
     GET_USER_TWO,
     GET_USER_TWO_ERROR,
     GET_CONVERSATION_ID,
@@ -16,11 +16,11 @@ import {
     CHANGES_REPLY_TO_REALTIME
 } from '../actions/types'
 const initialState = {
-    user_two: null,
+  user_two: null,
 	conversation_id: null,
 	check_conversations: null,
 	conversation_lists: [],
-    replies: [],
+  replies: [],
 	error: {}
 }
 export default function (state = initialState, action) {
@@ -88,7 +88,7 @@ export default function (state = initialState, action) {
         case CHANGES_REPLY_TO_REALTIME: 
             return {
                 ...state,
-                replies: [payload, ...state.replies].reverse()
+                replies: state.replies.concat(payload[0].payload)
             }
         case INSERT_INTO_CONVERSATION_REPLIES: 
             return {

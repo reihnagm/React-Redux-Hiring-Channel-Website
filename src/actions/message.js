@@ -141,8 +141,13 @@ export const InsertIntoConversationReplies = (user_two, payload) => async (dispa
   }
 }
 export const changesReplyToRealtime = (payload) => async (dispatch) => {
+  let data = []
+  data.push({
+    payload
+  }) 
+  console.log(data);
   dispatch({
     type: CHANGES_REPLY_TO_REALTIME,
-    payload: payload
+    payload: data
   });
 }
