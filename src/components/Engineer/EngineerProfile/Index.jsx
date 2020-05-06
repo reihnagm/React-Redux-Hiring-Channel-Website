@@ -2,6 +2,12 @@ import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as moment from 'moment';
+import PersonIcon from '@material-ui/icons/Person';
+import EmailIcon from '@material-ui/icons/Email';
+import CakeIcon from '@material-ui/icons/Cake';
+import PhoneIcon from '@material-ui/icons/Phone';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import SlideshowIcon from '@material-ui/icons/Slideshow';
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from '@material-ui/core';
 import Swal from 'sweetalert2';
 import Spinner from '../../Spinner/Index';
@@ -74,12 +80,54 @@ const Profile = ({
                     src={avatar ? `http://localhost:5000/images/engineer/${avatar}` : ''} 
                     alt={name}
                   />
-                  <p className="my-2"> {name} </p>
-                  <p className="my-2"> {email} </p>
-                  <p className="my-2"> {birthdate} </p>
-                  <p className="my-2 leading-loose"> {location} </p>
-                  <p className="my-2"> {telephone} </p>
-                  <p className="my-2"> {showcase} </p>
+                  <Grid container>
+                    <Grid item md={2} xs={2}>
+                      <PersonIcon />
+                    </Grid>
+                    <Grid item md={10} xs={10}>
+                      <p> {name} </p>
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid item md={2} xs={2}>
+                      <EmailIcon />
+                    </Grid>
+                    <Grid item md={10} xs={10}>
+                      <p> {email} </p>
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid item md={2} xs={2}>
+                      <CakeIcon />
+                    </Grid>
+                    <Grid item md={10} xs={10}>
+                      <p> {birthdate} </p>
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid item md={2} xs={2}>
+                      <LocationOnIcon />
+                    </Grid>
+                    <Grid item md={10} xs={10}>
+                      <p className="leading-loose"> {location} </p>
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid item md={2} xs={2}>
+                      <PhoneIcon />
+                    </Grid>
+                    <Grid item md={10} xs={10}>
+                      <p> {telephone} </p>
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid item md={2} xs={2}>
+                      <SlideshowIcon />
+                    </Grid>
+                    <Grid item md={10} xs={10}>
+                      <p> {showcase} </p>
+                    </Grid>
+                  </Grid>
                   <Grid>
                     <Button
                       type="button"

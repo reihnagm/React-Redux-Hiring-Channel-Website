@@ -29,14 +29,14 @@ import { connect } from 'react-redux';
 import {
   getCurrentProfileEngineer,
   getSkills,
-  updateProfileEngineer 
+  updateProfileEngineer
 } from '../../../../actions/engineer';
 import Spinner from '../../../Spinner/Index';
 
 const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
   <div>
     <TextField
-      {...getInputProps()} 
+      {...getInputProps()}
       margin="normal"
       variant="outlined"
       label="Location"
@@ -92,7 +92,6 @@ const ProfileEdit = ({
     }
   });
   let datasSkillsEngineer = engineer.data && engineer.data.skills;
-  let datasSkillsIdEngineer = engineer.data && engineer.data.skills_id;
   let idProps = engineer.data && engineer.data.id;
   let avatarProps = engineer.data && engineer.data.avatar;
   let nameProps = engineer.data && engineer.data.name;
@@ -259,17 +258,21 @@ const ProfileEdit = ({
       data.set("salary", salary ? salary : "");
       data.set("location", location ? location : "");
       const engineer_id = id;
-      await updateProfileEngineer(engineer_id, data);
+      await updateProfileEngineer(engineer_id, data).then((response) => {
+        Toast.fire({
+          icon: "success",
+          title: "Yay ! Profile Updated."
+        });
+        setTimeout(() => {
+          history.push("/engineers");
+        }, 3000);
+      }).catch(error => {
+        throw new Error("Network Error.");
+      });
     } catch (error) {
       Toast.fire({
         icon: "error",
         title: error.message
-      });
-    } finally {
-      history.push("/engineers");
-      Toast.fire({
-        icon: "success",
-        title: "Yay ! Profile Updated."
       });
     }
   }
@@ -356,9 +359,8 @@ const ProfileEdit = ({
               />
               <SkillsComponent
                 datasSkillsEngineer={datasSkillsEngineer}
-                datasSkillsIdEngineer={datasSkillsIdEngineer}
                 skills={skills}
-                setSkills={setSkills} 
+                setSkills={setSkills}
                 skillsMask={skillsMask}
               />
               <PlacesAutocomplete
@@ -443,7 +445,7 @@ const ProfileEdit = ({
         </Grid>
       </Container>
     </>
-  ) 
+  )
 }
 const mapStateToProps = state => ({
   engineer: state.engineer,

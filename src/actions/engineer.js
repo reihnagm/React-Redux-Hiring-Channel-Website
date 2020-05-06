@@ -104,11 +104,12 @@ export const getProfileEngineerBySlug = (slug) => async dispatch => {
 }
 export const updateProfileEngineer = (engineer_id, payload) => async dispatch => {
   try {
-    await axios.patch(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/${engineer_id}`, payload);
+    const response = await axios.patch(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/${engineer_id}`, payload);
     dispatch({
       type: UPDATE_PROFILE_ENGINEER,
       payload: payload
     });
+    return response;
   } catch (error) {
     dispatch({
       type: UPDATE_PROFILE_ENGINEER_ERROR,

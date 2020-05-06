@@ -3,6 +3,12 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Pusher from 'pusher-js';
 import * as moment from 'moment';
+import PersonIcon from '@material-ui/icons/Person';
+import EmailIcon from '@material-ui/icons/Email';
+import CakeIcon from '@material-ui/icons/Cake';
+import PhoneIcon from '@material-ui/icons/Phone';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import SlideshowIcon from '@material-ui/icons/Slideshow';
 import { Container, Grid, Paper, Button, Badge, Modal, Input, makeStyles } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Spinner from '../../../Spinner/Index';
@@ -168,52 +174,94 @@ const Profile = ({
                       </Button>
                     </StyledBadge>
                     <Modal open={open} onClose={handleClose}>
-                        <Paper className="p-5 conversation-lists">
-                            { user_one !== user_two &&  ( 
-                              <div className="p-5 relative container-direct-message">
-                                <MessageLists
-                                  replies={replies}
-                                  userTwo={user_two}
-                                  messagesEndRef={messagesEndRef}
-                                /> 
-                                  <div className="bar-bottom-message p-2">
-                                    <Input 
-                                      fullWidth
-                                      name="message" 
-                                      value={inputMessage}
-                                      onChange={handleMessage}
-                                      onKeyPress={handleEnterMessage}
-                                    />      
-                                  </div>   
-                                </div>
-                              )}
-                              { user_one === user_two && (
-                                <div>
-                                  { conversation_lists.length === 0 && (
-                                    <p className="center">No conversations.</p>
-                                  )}
-                                  <ConversationLists 
-                                    conversation_lists={conversation_lists} 
-                                  />
-                                </div>
-                              )}
-                            </Paper>
-                          </Modal>
+                      <Paper className="p-5 conversation-lists">
+                        { user_one !== user_two &&  ( 
+                          <div className="p-5 relative container-direct-message">
+                            <MessageLists
+                              replies={replies}
+                              userTwo={user_two}
+                              messagesEndRef={messagesEndRef}
+                            /> 
+                            <div className="bar-bottom-message p-2">
+                              <Input 
+                                fullWidth
+                                name="message" 
+                                value={inputMessage}
+                                onChange={handleMessage}
+                                onKeyPress={handleEnterMessage}
+                              />      
+                            </div>   
+                          </div>
+                        )}
+                        { user_one === user_two && (
+                          <div>
+                            { conversation_lists.length === 0 && (
+                              <p className="center">No conversations.</p>
+                            )}
+                            <ConversationLists 
+                              conversation_lists={conversation_lists} 
+                            />
+                          </div>
+                        )}
+                      </Paper>
+                    </Modal>
                   </Grid>
                 </Grid>
-                  <p className="my-2"> {name} </p>
-                  <p className="my-2"> {email} </p>
-                  <p className="my-2"> {birthdate} </p>
-                  <p className="my-2 leading-loose"> {location} </p>
-                  <p className="my-2"> {telephone} </p>
-                  <p className="my-2"> {showcase} </p>
-                  <Button
-                    type="button"
-                    variant="contained"
-                    color="primary"
-                    component={ Link } to="/engineers">
-                    Back
-                  </Button>
+                <Grid container>
+                  <Grid item md={2} xs={2}>
+                    <PersonIcon />
+                  </Grid>
+                  <Grid item md={10} xs={10}>
+                    <p> {name} </p>
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item md={2} xs={2}>
+                    <EmailIcon />
+                  </Grid>
+                  <Grid item md={10} xs={10}>
+                    <p> {email} </p>
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item md={2} xs={2}>
+                    <CakeIcon />
+                  </Grid>
+                  <Grid item md={10} xs={10}>
+                    <p> {birthdate} </p>
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item md={2} xs={2}>
+                    <LocationOnIcon />
+                  </Grid>
+                  <Grid item md={10} xs={10}>
+                    <p className="leading-loose"> {location} </p>
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item md={2} xs={2}>
+                    <PhoneIcon />
+                  </Grid>
+                  <Grid item md={10} xs={10}>
+                    <p> {telephone} </p>
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item md={2} xs={2}>
+                    <SlideshowIcon />
+                  </Grid>
+                  <Grid item md={10} xs={10}>
+                    <p> {showcase} </p>
+                  </Grid>
+                </Grid>
+                <Button
+                  type="button"
+                  variant="contained"
+                  color="primary"
+                  component={ Link } to="/engineers">
+                  Back
+                </Button>
                 </Paper>
               </Grid>
             <Grid item md={4} xs={12}>
