@@ -155,7 +155,11 @@ const Profile = ({
               <Grid item md={4} xs={12}>
                 <Paper className={classes.paper}>
                   <p className="mb-2">Skills</p>
-                  <p>{skills}</p>
+                  <p>{
+                    skills.map(skill => (
+                      skill.name + ' '
+                    ))  
+                  }</p>
                 </Paper>
               </Grid>
             </Grid>

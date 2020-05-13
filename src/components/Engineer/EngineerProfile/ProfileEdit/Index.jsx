@@ -4,7 +4,6 @@ import Swal from 'sweetalert2';
 import PlacesAutocomplete, {
   geocodeByAddress,
 } from 'react-places-autocomplete';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import SkillsComponent from './Skills/Index';
 import {
   Container,
@@ -258,7 +257,7 @@ const ProfileEdit = ({
       data.set("salary", salary ? salary : "");
       data.set("location", location ? location : "");
       const engineer_id = id;
-      await updateProfileEngineer(engineer_id, data).then((response) => {
+      await updateProfileEngineer(engineer_id, data).then((_) => {
         Toast.fire({
           icon: "success",
           title: "Yay ! Profile Updated."
