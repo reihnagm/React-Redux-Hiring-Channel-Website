@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from "react"
 export default function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value)
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedValue(value);
+      setDebouncedValue(value)
     }, delay)
-      return () => {
-        clearTimeout(handler);
-      }
+    return () => {
+      clearTimeout(handler)
+    }
   }, [delay, value])
-  return debouncedValue;
+  return debouncedValue
 }
