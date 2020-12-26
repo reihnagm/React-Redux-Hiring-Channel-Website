@@ -7,7 +7,6 @@ import { getCurrentProfileCompany } from "../../actions/company"
 import { getCurrentProfileEngineer } from "../../actions/engineer"
 import AvatarComponent from "../avatar/avatar"
 import SearchIcon from "@material-ui/icons/Search"
-import logo from "../../images/logo.png"
 const Header = ({ engineer, company, location, logout, user, isAuthenticated, getCurrentProfileEngineer, getCurrentProfileCompany, handleSearchEngineer, handleSearchCompany, querySearchEngineer, querySearchCompany }) => {
   const logoutUser = () => {
     logout()
@@ -135,7 +134,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
       <AppBar elevation={1} color="transparent" position="static">
         <Toolbar>
           <div className={classes.grow}>
-            <img className="logo" src={logo} alt={logo} />
+            <img className="logo" src="./images/logo.png" alt="My Logo" />
           </div>
           {location.pathname === "/engineers" && (
             <div className={classes.search}>
@@ -192,8 +191,8 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
               </span>
             )}
             <IconButton edge="end" aria-label="account of current user" aria-haspopup="true" color="inherit" aria-controls={menuId} onClick={handleProfileMenuOpen}>
-              {userRoleId === 1 && <AvatarComponent imageSource={engineer && engineer.avatar} altName={engineer && engineer.nickname} type="avatar" width="30" height="30" />}
-              {userRoleId === 2 && <AvatarComponent imageSource={company && company.data && company.data.logo} altName={company && company.data && company.data.name} type="logo" width="30" height="30" />}
+              {userRoleId === 1 && <AvatarComponent imageSource={engineer && engineer.avatar} altName={engineer && engineer.nickname} type="engineers" width="30" height="30" />}
+              {userRoleId === 2 && <AvatarComponent imageSource={company && company.data && company.data.logo} altName={company && company.data && company.data.name} type="companies" width="30" height="30" />}
             </IconButton>
           </div>
         </Toolbar>
@@ -206,7 +205,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
       <AppBar elevation={1} color="transparent" position="static">
         <Toolbar>
           <div className={classes.grow}>
-            <img className="logo" src={logo} alt={logo} />
+            <img className="logo" src="./images/logo.png" alt="My Logo" />
           </div>
           {location.pathname === "/engineers" && (
             <div className={classes.search}>

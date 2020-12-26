@@ -80,12 +80,15 @@ export const login = (email, password) => async dispatch => {
     })
   }
 }
-export const register = (name, email, password, role, history) => async dispatch => {
+export const register = (fullname, nickname, email, password, role, history) => async dispatch => {
   let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
   let checkEmail = regexp.test(email)
   try {
-    if (name.trim() === "") {
-      throw new Error("Name Required")
+    if (fullname.trim() === "") {
+      throw new Error("Fullname Required")
+    }
+    if (nickname.trim() === "") {
+      throw new Error("Nickname Required")
     }
     if (email.trim() === "") {
       throw new Error("Email Required")
@@ -103,15 +106,16 @@ export const register = (name, email, password, role, history) => async dispatch
       throw new Error("Role Required")
     }
     const response = await axios.post(`${process.env.REACT_APP_LOCAL_REGISTER}`, {
-      name,
+      fullname,
+      nickname,
       email,
       password,
-      role_id: role.value
+      role_id: role
     })
-    if (role.value === 1) {
+    if (role === 1) {
       history.push("/engineers")
     }
-    if (role.value === 2) {
+    if (role === 2) {
       history.push("/companies")
     }
     Toast.fire({

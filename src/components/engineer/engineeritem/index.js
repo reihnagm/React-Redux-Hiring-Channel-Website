@@ -1,35 +1,35 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { Container, Grid } from "@material-ui/core"
+import { Avatar, Container, Grid } from "@material-ui/core"
 import { Pagination } from "@material-ui/lab"
 import LazyLoad from "react-lazy-load"
 import ProfileSkillsItem from "../engineerprofile/profileskillsitem/profileskillsitem"
-const EngineerItem = ({ items, handlePage, currentPage, pageCount }) => {
+const EngineerItem = ({ engineers, handlePage, currentPage, pageCount }) => {
   return (
     <>
       <Container fixed>
         <Grid container direction="row" justify="center" alignItems="center">
           <div className="masonry-container">
-            {items &&
-              items.map(item => {
+            {engineers &&
+              engineers.map(engineer => {
                 return (
-                  <div className="masonry-item" key={item.uid}>
-                    <Link className="text-white" to={`engineers/profile/${item.slug}`}>
+                  <div className="masonry-item text-white" key={engineer.uid}>
+                    <Link to={`engineers/profile/${engineer.slug}`}>
                       <LazyLoad>
-                        <img className="image" src={item.avatar == "null" ? `${process.env.REACT_APP_GET_LOCAL_IMAGES_DEFAULT}/avatar.png` : `${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/${item.avatar}`} alt={item.name} />
+                        <img className="image masonry-image" src={`${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/${engineer.avatar}`} alt={engineer.fullname} />
                       </LazyLoad>
-                      <div className="masonry-description">
-                        <p className="mb-1">{item.fullname}</p>
-                        <p className="mb-1">
-                          Expected Salary : <span> {item.salary} </span>
-                        </p>
-                        <p>
-                          Skills :
-                          <ProfileSkillsItem items={item.skills} />
-                        </p>
-                        {/* <p className={`tag-${item.color} margin-normal`}> {item.skills} </p> */}
-                      </div>
                     </Link>
+                    <div className="masonry-description">
+                      <p className="mb-1">{engineer.fullname}</p>
+                      <p>
+                        Expected Salary : <span> {engineer.salary} </span>
+                      </p>
+                      <p>
+                        Skills :
+                        <ProfileSkillsItem items={engineer.skills} />
+                      </p>
+                      {/* <p className={`tag-${item.color} margin-normal`}> {item.skills} </p> */}
+                    </div>
                   </div>
                 )
               })}

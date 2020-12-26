@@ -1,37 +1,36 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Grid, Input, Button } from "@material-ui/core"
-import * as moment from "moment"
 import { connect } from "react-redux"
-import { getReplyConversationReplies, getUserTwo, InsertIntoConversationReplies } from "../../../../../actions/message"
+import * as moment from "moment"
+import { getConversationLists, getReplyConversationReplies, getUserGuestUid, InsertIntoConversationReplies } from "../../../../../actions/message"
 import MessageLists from "../messagelists"
 import AvatarComponent from "../../../../avatar/avatar"
-const ReplyLists = ({ checkConversations, getReplyConversationReplies, InsertIntoConversationReplies, getUserTwo, replies, inputMessage, setInputMessage, user, conversation_id, user_two, set_confirm_conversation_id, set_hide_conversation_lists, hide_conversation_lists }) => {
+const ReplyLists = ({ getConversationLists, getCheckConversations, getReplyConversationReplies, InsertIntoConversationReplies, getUserGuestUid, replies, inputMessage, setInputMessage, conversationUid, userGuestUid, setConfirmConversationUid, setHideConversationLists, hideConversationLists }) => {
   const messagesEndRef = useRef(null)
   useEffect(() => {
     const fetchData = async () => {
-      await getReplyConversationReplies(conversation_id)
-      await getUserTwo(conversation_id)
+      await getReplyConversationReplies(conversationUid)
+      await getUserGuestUid(conversationUid)
     }
     fetchData()
-  }, [getReplyConversationReplies, getUserTwo, conversation_id])
+  }, [getReplyConversationReplies, getUserGuestUid, conversationUid])
   const back = async () => {
-    await checkConversations(user_two)
-    set_confirm_conversation_id(null)
-    set_hide_conversation_lists(!hide_conversation_lists)
+    await getCheckConversations(userGuestUid)
+    setConfirmConversationUid(null)
+    setHideConversationLists(!hideConversationLists)
   }
   const handleMessage = event => {
     setInputMessage(event.target.value)
   }
   const handleEnterMessage = async event => {
-    let data = {
+    let payload = {
       id: new Date(),
       reply: inputMessage,
-      name: user && user.data && user.data.name,
-      created_at: moment.utc().format("YYYY-MM-DD HH:mm:ss")
+      createdAt: moment.utc().format("YYYY-MM-DD HH:mm:ss")
     }
     if (event.which === 13) {
       try {
-        await InsertIntoConversationReplies(user_two, data)
+        await InsertIntoConversationReplies(userGuestUid, payload)
       } catch (error) {
         console.log(error)
       } finally {
@@ -41,9 +40,9 @@ const ReplyLists = ({ checkConversations, getReplyConversationReplies, InsertInt
     }
   }
   return (
-    <>
+    <div>
       <div className="p-5 relative container-direct-message">
-        <MessageLists replies={replies} messagesEndRef={messagesEndRef} userTwo={user_two} />
+        <MessageLists replies={replies} messagesEndRef={messagesEndRef} userGuestUid={userGuestUid} />
         <div className="bar-bottom-message p-2">
           <Input fullWidth name="message" value={inputMessage} onChange={handleMessage} onKeyPress={handleEnterMessage} />
         </div>
@@ -51,48 +50,47 @@ const ReplyLists = ({ checkConversations, getReplyConversationReplies, InsertInt
       <Button variant="contained" color="secondary" type="submit" onClick={back}>
         Back
       </Button>
-    </>
+    </div>
   )
 }
-const ConversationLists = ({ conversation_lists, checkConversations, getReplyConversationReplies, InsertIntoConversationReplies, replies, getUserTwo, user_two, user }) => {
+const ConversationLists = ({ conversationLists, getCheckConversations, getReplyConversationReplies, InsertIntoConversationReplies, replies, getUserGuestUid, userGuestUid }) => {
   const [hide, setHide] = useState(true)
-  const [hide_conversation_lists, set_hide_conversation_lists] = useState(true)
-  const [confirm_conversation_id, set_confirm_conversation_id] = useState(null)
+  const [hideConversationLists, setHideConversationLists] = useState(true)
+  const [confirmConversationUid, setConfirmConversationUid] = useState(null)
   const [inputMessage, setInputMessage] = useState(null)
-  const loadDm = conversation_id => {
-    set_confirm_conversation_id(conversation_id)
-    set_hide_conversation_lists(false)
+  const showDirectMessage = conversationUid => {
+    setConfirmConversationUid(conversationUid)
+    setHideConversationLists(false)
   }
   return (
-    <>
-      {confirm_conversation_id !== null && <ReplyLists checkConversations={checkConversations} set_hide_conversation_lists={set_hide_conversation_lists} hide_conversation_lists={hide_conversation_lists} setHide={setHide} hide={hide} conversation_id={confirm_conversation_id} set_confirm_conversation_id={set_confirm_conversation_id} getReplyConversationReplies={getReplyConversationReplies} getUserTwo={getUserTwo} InsertIntoConversationReplies={InsertIntoConversationReplies} replies={replies} user={user} user_two={user_two} setInputMessage={setInputMessage} inputMessage={inputMessage} />}
-      {hide_conversation_lists &&
-        conversation_lists &&
-        conversation_lists.map(conversation_list => {
+    <div>
+      {confirmConversationUid !== null && <ReplyLists getCheckConversations={getCheckConversations} setHideConversationLists={setHideConversationLists} hideConversationLists={hideConversationLists} setHide={setHide} hide={hide} conversationUid={confirmConversationUid} setConfirmConversationUid={setConfirmConversationUid} getReplyConversationReplies={getReplyConversationReplies} getUserGuestUid={getUserGuestUid} InsertIntoConversationReplies={InsertIntoConversationReplies} replies={replies} userGuestUid={userGuestUid} setInputMessage={setInputMessage} inputMessage={inputMessage} />}
+      {hideConversationLists &&
+        conversationLists &&
+        conversationLists.map(conversation => {
           return (
-            <Grid key={conversation_list.id} onClick={() => loadDm(conversation_list.id)} container className="p-3 my-5 cursor-pointer conversations-item" direction="row" justify="center" alignItems="center">
+            <Grid key={conversation.uid} onClick={() => showDirectMessage(conversation.uid)} container className="p-3 my-5 cursor-pointer conversations-item" direction="row" justify="center" alignItems="center">
               <Grid item xs={2}>
-                <AvatarComponent imageSource={conversation_list.avatar} altName={conversation_list.name} type="avatar" width="60" height="60" />
+                <AvatarComponent imageSource={conversation.avatar} altName={conversation.fullname} type="engineers" width="60" height="60" />
               </Grid>
               <Grid item xs={10}>
                 <Grid container direction="column" justify="flex-start" alignItems="flex-start">
                   <Grid item>
-                    <p className="my-1"> {conversation_list.name} </p>
+                    <p className="my-1">{conversation.fullname}</p>
                   </Grid>
                   <Grid item>
-                    <p className="mx-3"> {conversation_list.reply} </p>
+                    <p className="mx-3"> {conversation.reply} </p>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
           )
         })}
-    </>
+    </div>
   )
 }
 const mapStateToProps = state => ({
   replies: state.message.replies,
-  user_two: state.message.user_two,
-  user: state.auth.user
+  userGuestUid: state.message.userGuestUid
 })
-export default connect(mapStateToProps, { getReplyConversationReplies, getUserTwo, InsertIntoConversationReplies })(ConversationLists)
+export default connect(mapStateToProps, { getConversationLists, getReplyConversationReplies, getUserGuestUid, InsertIntoConversationReplies })(ConversationLists)

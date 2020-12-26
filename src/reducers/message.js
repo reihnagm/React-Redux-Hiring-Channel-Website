@@ -1,9 +1,9 @@
-import { GET_CONVERSATION_LISTS, GET_CONVERSATION_LISTS_ERROR, GET_REPLY_CONVERSATION_REPLIES, GET_REPLY_CONVERSATION_REPLIES_ERROR, CHECK_CONVERSATIONS, CHECK_CONVERSATIONS_ERROR, GET_USER_TWO, GET_USER_TWO_ERROR, GET_CONVERSATION_ID, GET_CONVERSATION_ID_ERROR, INSERT_INTO_CONVERSATIONS, INSERT_INTO_CONVERSATIONS_ERROR, INSERT_INTO_CONVERSATION_REPLIES, INSERT_INTO_CONVERSATION_REPLIES_ERROR, CHANGES_REPLY_TO_REALTIME } from "../actions/types"
+import { GET_CONVERSATION_LISTS, GET_CONVERSATION_LISTS_ERROR, GET_REPLY_CONVERSATION_REPLIES, GET_REPLY_CONVERSATION_REPLIES_ERROR, CHECK_CONVERSATIONS, CHECK_CONVERSATIONS_ERROR, GET_USER_GUEST_UID, GET_USER_GUEST_UID_ERROR, GET_CONVERSATION_UID, GET_CONVERSATION_UID_ERROR, INSERT_INTO_CONVERSATIONS, INSERT_INTO_CONVERSATIONS_ERROR, INSERT_INTO_CONVERSATION_REPLIES, INSERT_INTO_CONVERSATION_REPLIES_ERROR, CHANGES_REPLY_TO_REALTIME } from "../actions/types"
 const initialState = {
-  user_two: null,
-  conversation_id: null,
-  check_conversations: null,
-  conversation_lists: [],
+  userGuestUid: null,
+  conversationUid: null,
+  checkConversations: null,
+  conversationLists: [],
   replies: [],
   error: {}
 }
@@ -13,7 +13,7 @@ export default function (state = initialState, action) {
     case GET_CONVERSATION_LISTS:
       return {
         ...state,
-        conversation_lists: payload
+        conversationLists: payload
       }
     case GET_CONVERSATION_LISTS_ERROR:
       return {
@@ -30,12 +30,12 @@ export default function (state = initialState, action) {
         ...state,
         error: payload
       }
-    case GET_USER_TWO:
+    case GET_USER_GUEST_UID:
       return {
         ...state,
-        user_two: payload
+        userGuestUid: payload
       }
-    case GET_USER_TWO_ERROR:
+    case GET_USER_GUEST_UID_ERROR:
       return {
         ...state,
         error: payload
@@ -43,19 +43,19 @@ export default function (state = initialState, action) {
     case CHECK_CONVERSATIONS:
       return {
         ...state,
-        check_conversations: payload
+        checkConversations: payload
       }
     case CHECK_CONVERSATIONS_ERROR:
       return {
         ...state,
         error: payload
       }
-    case GET_CONVERSATION_ID:
+    case GET_CONVERSATION_UID:
       return {
         ...state,
-        conversation_id: payload
+        conversationUid: payload
       }
-    case GET_CONVERSATION_ID_ERROR:
+    case GET_CONVERSATION_UID_ERROR:
       return {
         ...state,
         error: payload

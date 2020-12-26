@@ -8,9 +8,10 @@ import HeaderFilter from "../layouts/headerfilter"
 import Spinner from "../spinner"
 import EngineerList from "./engineerlist"
 const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQueryParam, handleSearch, handleSort, handleSortBy, handleLimit }) => {
-  const [sortBy, setSortBy] = useState([])
-  const [sort, setSort] = useState([])
-  const [limit, setLimit] = useState([])
+  const [page, setPage] = useState(1)
+  const [sortBy, setSortBy] = useState()
+  const [sort, setSort] = useState()
+  const [limit, setLimit] = useState(5)
   useEffect(() => {
     const fetchData = async () => {
       if (gettingQueryUrl) {
@@ -20,11 +21,11 @@ const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQue
       }
     }
     fetchData()
-  }, [getEngineers, gettingQueryUrl])
-  const getPageCount = (total, perPage) => {
-    return Math.ceil(total / perPage)
-  }
+    changeQueryParam("page", page)
+    changeQueryParam("limit", limit.value)
+  }, [getEngineers, gettingQueryUrl, changeQueryParam, page, limit])
   const handlePage = (_, page) => {
+    setPage(page)
     changeQueryParam("page", page)
   }
   handleSearch = search => {
@@ -46,7 +47,7 @@ const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQue
     <>
       <Header handleSearchEngineer={handleSearch} />
       <HeaderFilter handleSortBy={handleSortBy} handleSort={handleSort} handleLimit={handleLimit} setSortBy={setSortBy} setSort={setSort} setLimit={setLimit} sortByE={sortBy} sortE={sort} limitE={limit} />
-      {loading ? <Spinner /> : <EngineerList engineers={engineers} handlePage={handlePage} pageCount={getPageCount(engineers && engineers.pageDetail && engineers.pageDetail.total, engineers && engineers.pageDetail && engineers.pageDetail.per_page)} currentPage={engineers && engineers.pageDetail && engineers.pageDetail.current_page} />}
+      {loading ? <Spinner /> : <EngineerList engineers={engineers} handlePage={handlePage} pageCount={engineers && engineers.pageDetail && engineers.pageDetail.total} currentPage={engineers && engineers.pageDetail && engineers.pageDetail.currentPage} />}
     </>
   )
 }

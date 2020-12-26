@@ -16,19 +16,19 @@ import ConversationLists from "../conversationlists"
 import MessageLists from "../messagelists"
 import ProfileSkillsItem from "../../profileskillsitem/profileskillsitem"
 
-const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyConversationReplies, conversation_lists, changesReplyToRealtime, checkConversations, check_conversations, InsertIntoConversationReplies }) => {
+const ProfileShowItem = ({ engineer, user, replies, getConversationLists, getReplyConversationReplies, conversationLists, changesReplyToRealtime, getCheckConversations, checkConversations, InsertIntoConversationReplies }) => {
   const messagesEndRef = useRef(null)
   const [open, setOpen] = useState(false)
   const [inputMessage, setInputMessage] = useState("")
   useEffect(() => {
-    const pusher = new Pusher("20b3b98bfc23f9164876", {
+    const pusher = new Pusher("f0c968ffa2c271711c29", {
       cluster: "ap1",
       forceTLS: true
     })
     const fetchData = async () => {
-      await getConversationLists(item.user_id)
-      await checkConversations(item.user_id)
-      await getReplyConversationReplies(check_conversations)
+      await getConversationLists(engineer.user_uid)
+      await getCheckConversations(engineer.user_uid)
+      await getReplyConversationReplies(checkConversations)
     }
     fetchData()
     const channel = pusher.subscribe("my-channel")
@@ -47,7 +47,7 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
       channel.unbind("my-event")
       channel.unsubscribe("my-channel")
     }
-  }, [item, changesReplyToRealtime, checkConversations, check_conversations, getConversationLists, getReplyConversationReplies])
+  }, [engineer, changesReplyToRealtime, checkConversations, getCheckConversations, getConversationLists, getReplyConversationReplies])
 
   const StyledBadge = withStyles(theme => ({
     badge: {
@@ -70,11 +70,9 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
     }
   }))
   const classes = useStyles()
-  const handleOpen = () => {
-    setOpen(true)
-  }
-  const handleClose = () => {
-    setOpen(false)
+  const toggleMsgOpen = async () => {
+    await getConversationLists(engineer.user_uid)
+    setOpen(!open)
   }
   const handleMessage = event => {
     setInputMessage(event.target.value)
@@ -83,12 +81,11 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
     let data = {
       id: new Date(),
       reply: inputMessage,
-      name: user.name,
-      created_at: moment().format("YYYY-MM-DD HH:mm:ss")
+      createdAt: moment().format("YYYY-MM-DD HH:mm:ss")
     }
     if (event.which === 13) {
       try {
-        await InsertIntoConversationReplies(item.user_id, data)
+        await InsertIntoConversationReplies(engineer.user_uid, data)
       } catch (error) {
         console.log(error)
       } finally {
@@ -98,7 +95,7 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
     }
   }
   return (
-    <>
+    <div>
       <div className="backdrop-top"></div>
       <Container className="mt-64" fixed>
         <div className={classes.root}>
@@ -107,28 +104,28 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
               <Paper className={classes.paper}>
                 <Grid container>
                   <Grid item xs={6} md={6}>
-                    <AvatarComponent imageSource={item.avatar} altName={item.name} type="avatar" width="80" height="80" spaceBottom="20" />
+                    <AvatarComponent imageSource={engineer.avatar} altName={engineer.name} type="avatar" width="80" height="80" spaceBottom="20" />
                   </Grid>
                   <Grid item xs={6} md={4}>
-                    {/* <StyledBadge badgeContent={4} color="secondary">
-                      <Button variant="contained" color="primary" onClick={handleOpen} startIcon={<MessageIcon />}>
-                        Messages
-                      </Button>
-                    </StyledBadge> */}
-                    <Modal open={open} onClose={handleClose}>
+                    {/* <StyledBadge badgeContent={4} color="secondary"> */}
+                    <Button variant="contained" color="primary" onClick={toggleMsgOpen} startIcon={<MessageIcon />}>
+                      Messages
+                    </Button>
+                    {/* </StyledBadge> */}
+                    <Modal open={open} onClose={toggleMsgOpen}>
                       <Paper className="p-5 conversation-lists">
-                        {user.id !== item.user_uid && (
+                        {user.uid !== engineer.user_uid && (
                           <div className="p-5 relative container-direct-message">
-                            <MessageLists replies={replies} userTwo={item.user_uid} messagesEndRef={messagesEndRef} />
+                            <MessageLists replies={replies} userGuestUid={engineer.user_uid} messagesEndRef={messagesEndRef} />
                             <div className="bar-bottom-message p-2">
                               <Input fullWidth name="message" value={inputMessage} onChange={handleMessage} onKeyPress={handleEnterMessage} />
                             </div>
                           </div>
                         )}
-                        {user.id === item.user_uid && (
+                        {user.uid === engineer.user_uid && (
                           <div>
-                            {conversation_lists.length === 0 && <p className="center">No conversations.</p>}
-                            <ConversationLists checkConversations={checkConversations} conversation_lists={conversation_lists} />
+                            {conversationLists.length === 0 && <p className="center">No conversations.</p>}
+                            <ConversationLists getCheckConversations={getCheckConversations} conversationLists={conversationLists} />
                           </div>
                         )}
                       </Paper>
@@ -140,7 +137,7 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
                     <PersonIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {item.name} </p>
+                    <p>{engineer.fullname}</p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -148,7 +145,7 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
                     <EmailIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {item.email} </p>
+                    <p> {engineer.email} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -156,7 +153,7 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
                     <CakeIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {moment(item.birthdate).format("D MMMM YYYY")} </p>
+                    <p> {moment(engineer.birthdate).format("D MMMM YYYY")} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -164,7 +161,7 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
                     <LocationOnIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p className="leading-loose"> {item.location} </p>
+                    <p className="leading-loose"> {engineer.location} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -172,7 +169,7 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
                     <PhoneIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {item.telephone} </p>
+                    <p> {engineer.telephone} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -180,7 +177,7 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
                     <SlideshowIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {item.showcase} </p>
+                    <p> {engineer.showcase} </p>
                   </Grid>
                 </Grid>
                 <Button type="button" variant="contained" color="primary" component={Link} to="/engineers">
@@ -190,27 +187,27 @@ const ProfileShowItem = ({ item, user, replies, getConversationLists, getReplyCo
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <p> {item.description} </p>
+                <p> {engineer.description} </p>
               </Paper>
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
                 <p className="mb-2">
                   skills
-                  <ProfileSkillsItem items={item.skills} />
+                  <ProfileSkillsItem items={engineer.skills} />
                 </p>
               </Paper>
               <div className="mt-6">
                 <Paper className={classes.paper}>
                   <p className="mb-2">Expected Salary</p>
-                  <p>{item.salary}</p>
+                  <p>{engineer.salary}</p>
                 </Paper>
               </div>
             </Grid>
           </Grid>
         </div>
       </Container>
-    </>
+    </div>
   )
 }
 

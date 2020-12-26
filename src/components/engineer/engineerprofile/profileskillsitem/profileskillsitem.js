@@ -5,7 +5,7 @@ const ProfileSkillsItem = ({ items }) => {
     <>
       {items &&
         items.map(skill => (
-          <p className={`tag-${skill.color} margin-normal`} key={skill.uid}>
+          <p className={`tag-${skill.color} margin-tag`} key={skill.uid}>
             {skill.name}
           </p>
         ))}

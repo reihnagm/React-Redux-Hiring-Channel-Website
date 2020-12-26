@@ -3,10 +3,10 @@ import { Avatar } from "@material-ui/core"
 const AvatarComponent = ({ imageSource, type, altName, width, height, spaceBottom }) => {
   const [image, setImage] = useState(null)
   useEffect(() => {
-    if (type === "avatar") {
+    if (type === "engineers") {
       setImage(`http://localhost:5000/images/engineer/${imageSource}`)
     }
-    if (type === "logo") {
+    if (type === "companies") {
       setImage(`http://localhost:5000/images/company/${imageSource}`)
     }
   }, [imageSource, type, setImage])

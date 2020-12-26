@@ -2,7 +2,7 @@ import axios from "axios"
 import store from "../store.js"
 import { decodeJWT } from "../configs/helper"
 import { logout } from "./auth"
-import { LOADING, LOADED, GET_SKILLS, GET_SKILLS_ERROR, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR, DELETE_ENGINEER, DELETE_ENGINEER_ERROR } from "./types"
+import { LOADING, LOADED, GET_SKILLS, GET_SKILLS_ERROR, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR } from "./types"
 export const getEngineers = () => async (dispatch, getState) => {
   try {
     dispatch({
@@ -98,18 +98,18 @@ export const updateProfileEngineer = payload => async dispatch => {
     })
   }
 }
-export const deleteProfileEngineer = (engineer_id, user_id) => async dispatch => {
-  store.dispatch(logout())
-  try {
-    await axios.delete(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/${engineer_id}/${user_id}`)
-    dispatch({
-      type: DELETE_ENGINEER,
-      payload: engineer_id
-    })
-  } catch (error) {
-    dispatch({
-      type: DELETE_ENGINEER_ERROR,
-      payload: error
-    })
-  }
-}
+// export const deleteProfileEngineer = (engineer_id, user_id) => async dispatch => {
+//   store.dispatch(logout())
+//   try {
+//     await axios.delete(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/${engineer_id}/${user_id}`)
+//     dispatch({
+//       type: DELETE_ENGINEER,
+//       payload: engineer_id
+//     })
+//   } catch (error) {
+//     dispatch({
+//       type: DELETE_ENGINEER_ERROR,
+//       payload: error
+//     })
+//   }
+// }

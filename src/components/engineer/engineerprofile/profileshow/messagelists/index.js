@@ -1,21 +1,19 @@
 import React from "react"
 import * as moment from "moment"
-import { connect } from "react-redux"
-const MessageLists = ({ userTwo, replies, messagesEndRef }) => {
+const MessageLists = ({ userGuestUid, replies, messagesEndRef }) => {
   return (
     <div ref={messagesEndRef} className="p-2 overflow-y-scroll h-56">
-      {replies.map(message => {
-        const box = message.user_id !== userTwo ? `box-left` : "box-right"
-        const chatDirection = message.user_id !== userTwo ? "flex justify-start" : "flex justify-end"
+      {replies.map(reply => {
+        const userAuthenticatedUid = reply.user_uid
+        const box = userAuthenticatedUid !== userGuestUid ? "box-left" : "box-right"
+        const chatDirection = userAuthenticatedUid !== userGuestUid ? "flex justify-c-start" : "flex justify-c-end"
         return (
-          <div key={message.id} className={`${chatDirection}`}>
-            <div key={message.id} className={`chat-${box} text-white p-3 my-3`}>
-              <p>{message.reply}</p>
+          <div key={reply.uid} className={`${chatDirection}`}>
+            <div className={`chat-${box} text-white p-3 my-3`}>
+              <p>{reply.reply}</p>
               <div className="p-2 mt-4 chat-author inline-block">
-                from{" "}
                 <span className="bold">
-                  {" "}
-                  {message.name} - {moment(message.created_at).format("YYYY-MM-DD HH:mm:ss")}{" "}
+                  {userAuthenticatedUid !== userGuestUid ? "You" : reply.fullname} - {moment(reply.createdAt).format("YYYY-MM-DD HH:mm:ss")}
                 </span>
               </div>
             </div>
@@ -26,4 +24,4 @@ const MessageLists = ({ userTwo, replies, messagesEndRef }) => {
   )
 }
 
-export default connect(null, {})(MessageLists)
+export default MessageLists

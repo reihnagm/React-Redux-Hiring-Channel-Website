@@ -26,7 +26,8 @@ const Register = ({ register, isAuthenticated, history }) => {
   const { fullname, nickname, email, password } = formData
   const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
   const onChangeRole = element => {
-    setRole({ value: element.value, label: element.label }, { role: element.value })
+    setRole(element.target.value)
+    // setRole({ value: element.value, label: element.label }, { role: element.value })
   }
   const onSubmit = event => {
     event.preventDefault()
