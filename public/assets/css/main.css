@@ -1,6 +1,6 @@
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}.fade-in{animation:fadeIn .5s ease-in}
 
-*{box-sizing:border-box}body{font-family:sans-serif}a{text-decoration:none}p{font-size:1rem !important}.title{font-size:1.4rem}.sub-title{font-size:1.2rem}.logo{max-height:50px}.cursor-pointer{cursor:pointer}.shadow-none{box-shadow:none !important}
+*{box-sizing:border-box}body{font-family:sans-serif}a{text-decoration:none}p{font-size:1rem !important}.title{font-size:1.4rem}.sub-title{font-size:1.2rem}.logo{max-height:80px}.cursor-pointer{cursor:pointer}.shadow-none{box-shadow:none !important}
 
 .button{font-size:1em;text-decoration:none;outline:none;background-color:#ea80fc;border:1px solid #ea80fc;padding:10px}.button.is-warning{border-color:#f4ef69;color:#f4ef69}.button.is-warning:hover{background:#f4ef69;color:#ffffff}.button.is-warning.is-danger{border-color:#ff3e3e;color:#ff3e3e}.button.is-warning.is-danger:hover{background:#ff3e3e;color:#ffffff}.button.is-warning.is-success{border-color:#5ad278;color:#5ad278}.button.is-warning.is-success:hover{background:#5ad278;color:#ffffff}.button.is-warning.is-info{border-color:#6aacf1;color:#6aacf1}.button.is-warning.is-info:hover{background:#6aacf1;color:#ffffff}.button.is-warning:hover{cursor:pointer;color:#ffffff}.button.is-warning.is-large{font-size:1rem}.button.is-warning.is-small{font-size:0.8rem}.is-fullwidth{width:100%}
 

@@ -1,12 +1,12 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { Avatar, Container, Grid } from "@material-ui/core"
+import { Container, Grid } from "@material-ui/core"
 import { Pagination } from "@material-ui/lab"
 import LazyLoad from "react-lazy-load"
 import ProfileSkillsItem from "../engineerprofile/profileskillsitem/profileskillsitem"
 const EngineerItem = ({ engineers, handlePage, currentPage, pageCount }) => {
   return (
-    <>
+    <div>
       <Container fixed>
         <Grid container direction="row" justify="center" alignItems="center">
           <div className="masonry-container">
@@ -34,12 +34,10 @@ const EngineerItem = ({ engineers, handlePage, currentPage, pageCount }) => {
                 )
               })}
           </div>
-          <div className="my-8">
-            <Pagination count={pageCount} onChange={(event, page) => handlePage(event, page)} page={currentPage} />
-          </div>
+          <Pagination count={pageCount} onChange={(event, page) => handlePage(event, page)} page={currentPage} />
         </Grid>
       </Container>
-    </>
+    </div>
   )
 }
 export default EngineerItem

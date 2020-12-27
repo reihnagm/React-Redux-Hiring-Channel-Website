@@ -158,7 +158,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
                 <SearchIcon />
               </div>
               <InputBase
-                placeholder="Search Name or Location Here..."
+                placeholder="Search name here..."
                 inputProps={{ "aria-label": "search" }}
                 classes={{
                   root: classes.inputRoot,
@@ -213,7 +213,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
                 <SearchIcon />
               </div>
               <InputBase
-                placeholder="Search Name or Skills Here..."
+                placeholder="Search name here..."
                 inputProps={{ "aria-label": "search" }}
                 classes={{
                   root: classes.inputRoot,
@@ -229,7 +229,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
                 <SearchIcon />
               </div>
               <InputBase
-                placeholder="Search Name or Location Here..."
+                placeholder="Search name or location here..."
                 inputProps={{ "aria-label": "search" }}
                 classes={{
                   root: classes.inputRoot,
