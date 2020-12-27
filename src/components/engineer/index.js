@@ -10,7 +10,7 @@ import EngineerList from "./engineerlist"
 const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQueryParam, handleSearch, handleSort, handleSortBy, handleShow }) => {
   const [page, setPage] = useState(1)
   const [sortBy, setSortBy] = useState("latest-update")
-  const [sort, setSort] = useState("DESC")
+  const [sort, setSort] = useState("Newer")
   const [show, setShow] = useState(5)
   useEffect(() => {
     const fetchData = async () => {

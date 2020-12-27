@@ -34,8 +34,10 @@ const EngineerItem = ({ engineers, handlePage, currentPage, pageCount }) => {
                 )
               })}
           </div>
-          <Pagination count={pageCount} onChange={(event, page) => handlePage(event, page)} page={currentPage} />
         </Grid>
+        <div className="flex justify-c-center my-10">
+          <Pagination count={pageCount} onChange={(event, page) => handlePage(event, page)} page={currentPage} />
+        </div>
       </Container>
     </div>
   )

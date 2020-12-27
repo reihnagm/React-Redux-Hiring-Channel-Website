@@ -4,10 +4,10 @@ import { InputLabel, FormControl, MenuItem, Select } from "@material-ui/core"
 import "react-dropdown/style.css"
 const HeaderFilter = ({ handleSortBy, handleSort, handleShow, sortByE, sortE, showE, sortByC, sortC, limitC, location }) => {
   return (
-    <>
+    <div>
       <div className="my-5">
-        <div className="columns">
-          <div className="column">
+        <div className="columns justify-c-around">
+          <div className="column is-one-fifth">
             <FormControl margin="normal" variant="outlined" fullWidth>
               <InputLabel htmlFor="outlined-filterby">Filter By</InputLabel>
               <Select
@@ -27,7 +27,7 @@ const HeaderFilter = ({ handleSortBy, handleSort, handleShow, sortByE, sortE, sh
               {location.pathname === "/engineers" && <Dropdown options={optionsSortByE} value={sortByE} onChange={element => handleSortBy(element.value)} />}
               {location.pathname === "/companies" && <Dropdown options={optionsSortByC} value={sortByC} onChange={element => handleSortBy(element.value)} />} */}
           </div>
-          <div className="column">
+          <div className="column is-one-fifth">
             <FormControl margin="normal" variant="outlined" fullWidth>
               <InputLabel htmlFor="outlined-sortby">Sort By</InputLabel>
               <Select
@@ -39,15 +39,15 @@ const HeaderFilter = ({ handleSortBy, handleSort, handleShow, sortByE, sortE, sh
                 value={sortE}
                 onChange={event => handleSort(event.target.value)}
               >
-                <MenuItem value="ASC">Older</MenuItem>
-                <MenuItem value="DESC">Newer</MenuItem>
+                <MenuItem value="Older">Older</MenuItem>
+                <MenuItem value="Newer">Newer</MenuItem>
               </Select>
             </FormControl>
             {/* <p className="mx-2">Sort</p>
               {location.pathname === "/engineers" && <Dropdown options={optionsOrderBy} value={sortE} onChange={element => handleSort(element.value)} />}
               {location.pathname === "/companies" && <Dropdown options={optionsOrderBy} value={sortC} onChange={element => handleSort(element.value)} />} */}
           </div>
-          <div className="column">
+          <div className="column is-one-fifth">
             {
               <FormControl margin="normal" variant="outlined" fullWidth>
                 <InputLabel htmlFor="outlined-show">Show</InputLabel>
@@ -75,7 +75,7 @@ const HeaderFilter = ({ handleSortBy, handleSort, handleShow, sortByE, sortE, sh
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 export default withRouter(HeaderFilter)
