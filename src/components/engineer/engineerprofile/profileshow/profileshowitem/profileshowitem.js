@@ -104,7 +104,7 @@ const ProfileShowItem = ({ engineer, user, replies, getConversationLists, getRep
               <Paper className={classes.paper}>
                 <Grid container>
                   <Grid item xs={6} md={6}>
-                    <AvatarComponent imageSource={engineer.avatar} altName={engineer.name} type="avatar" width="80" height="80" spaceBottom="20" />
+                    <AvatarComponent imageSource={engineer.avatar} altName={engineer.name} type="engineers" width="80" height="80" spaceBottom="20" />
                   </Grid>
                   <Grid item xs={6} md={4}>
                     {/* <StyledBadge badgeContent={4} color="secondary"> */}

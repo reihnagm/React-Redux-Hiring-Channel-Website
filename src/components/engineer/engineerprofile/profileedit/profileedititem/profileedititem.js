@@ -106,13 +106,13 @@ const ProfileEditItem = ({ engineer, user, allSkills, update, history }) => {
       fullname: engineer.fullname,
       nickname: engineer.nickname,
       email: engineer.email,
-      description: engineer.description == "null" ? "" : engineer.description,
-      showcase: engineer.showcase == "null" ? "" : engineer.showcase,
-      salary: engineer.salary == "null" ? "" : engineer.salary,
-      telephone: engineer.telephone == "null" ? "" : engineer.telephone
+      description: engineer.description === null ? "" : engineer.description,
+      showcase: engineer.showcase === null ? "" : engineer.showcase,
+      salary: engineer.salary === null ? "" : engineer.salary,
+      telephone: engineer.telephone === null ? "" : engineer.telephone
     })
-    engineer.location == "null" ? setLocation("") : setLocation(engineer.location)
-    setSelectedDate(moment(engineer.birthdate).format("YYYY-MM-DD"))
+    engineer.location === null ? setLocation("") : setLocation(engineer.location)
+    engineer.birthdate === null ? setSelectedDate(moment(new Date()).format("YYYY-MM-DD")) : setSelectedDate(moment(engineer.birthdate).format("YYYY-MM-DD"))
     setDefaultAvatar(`${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/${engineer.avatar}`)
     setAvatarNotEdited(engineer.avatar)
     setSkills(engineer.skills)

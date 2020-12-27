@@ -34,7 +34,7 @@ const ProfileItem = ({ item }) => {
           <Grid container spacing={3}>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <Avatar className={classes.avatar} src={item.avatar ? `${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/${item.avatar}` : `${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/default/avatar.png`} alt={item.name} />
+                <Avatar className={classes.avatar} src={`${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/${item.avatar}`} alt={item.name} />
                 <Grid container>
                   <Grid item md={2} xs={2}>
                     <PersonIcon />
@@ -64,7 +64,7 @@ const ProfileItem = ({ item }) => {
                     <LocationOnIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p className="leading-loose"> {item.location == "null" ? "" : item.location} </p>
+                    <p className="leading-loose"> {item.location === null ? "" : item.location} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -72,7 +72,7 @@ const ProfileItem = ({ item }) => {
                     <PhoneIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {item.telephone == "null" ? "" : item.telephone} </p>
+                    <p> {item.telephone === null ? "" : item.telephone} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -80,7 +80,7 @@ const ProfileItem = ({ item }) => {
                     <SlideshowIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {item.showcase == "null" ? "" : item.showcase} </p>
+                    <p> {item.showcase === null ? "" : item.showcase} </p>
                   </Grid>
                 </Grid>
                 <Grid>
