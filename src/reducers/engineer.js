@@ -8,7 +8,7 @@ const initialState = {
   search: "",
   sort: "DESC",
   sortBy: "updated_at",
-  limit: "10",
+  show: "10",
   page: "1"
 }
 export default (state = initialState, action) => {

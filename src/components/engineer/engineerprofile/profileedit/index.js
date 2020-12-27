@@ -6,7 +6,7 @@ import { getCurrentProfileEngineer, getSkills, updateProfileEngineer } from "../
 import Spinner from "../../../spinner"
 import ProfileEditItem from "./profileedititem/profileedititem"
 
-const ProfileEdit = ({ getCurrentProfileEngineer, getSkills, updateProfileEngineer, engineer: { engineer, skills, loading }, history }) => {
+const ProfileEdit = ({ getCurrentProfileEngineer, getSkills, updateProfileEngineer, engineer: { engineer, skills, loading }, auth: { user }, history }) => {
   useEffect(() => {
     const fetchData = async () => {
       await getCurrentProfileEngineer()
@@ -19,7 +19,7 @@ const ProfileEdit = ({ getCurrentProfileEngineer, getSkills, updateProfileEngine
   ) : (
     <>
       <div className="backdrop-bottom"></div>
-      <ProfileEditItem item={engineer} allSkills={skills} history={history} update={updateProfileEngineer} />
+      <ProfileEditItem engineer={engineer} user={user} allSkills={skills} history={history} update={updateProfileEngineer} />
     </>
   )
 }

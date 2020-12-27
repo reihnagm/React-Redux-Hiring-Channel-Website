@@ -44,7 +44,7 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
     </div>
   </div>
 )
-const ProfileEditItem = ({ item, allSkills, update, history }) => {
+const ProfileEditItem = ({ engineer, user, allSkills, update, history }) => {
   let fileRef
   const Toast = Swal.mixin({
     position: "top-end",
@@ -102,21 +102,21 @@ const ProfileEditItem = ({ item, allSkills, update, history }) => {
 
   useEffect(() => {
     setFormData({
-      uid: item.uid,
-      fullname: item.fullname,
-      nickname: item.nickname,
-      email: item.email,
-      description: item.description == "null" ? "" : item.description,
-      showcase: item.showcase == "null" ? "" : item.showcase,
-      salary: item.salary == "null" ? "" : item.salary,
-      telephone: item.telephone == "null" ? "" : item.telephone
+      uid: engineer.uid,
+      fullname: engineer.fullname,
+      nickname: engineer.nickname,
+      email: engineer.email,
+      description: engineer.description == "null" ? "" : engineer.description,
+      showcase: engineer.showcase == "null" ? "" : engineer.showcase,
+      salary: engineer.salary == "null" ? "" : engineer.salary,
+      telephone: engineer.telephone == "null" ? "" : engineer.telephone
     })
-    item.location == "null" ? setLocation("") : setLocation(item.location)
-    setSelectedDate(moment(item.birthdate).format("YYYY-MM-DD"))
-    setDefaultAvatar(`${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/${item.avatar}`)
-    setAvatarNotEdited(item.avatar)
-    setSkills(item.skills)
-  }, [item])
+    engineer.location == "null" ? setLocation("") : setLocation(engineer.location)
+    setSelectedDate(moment(engineer.birthdate).format("YYYY-MM-DD"))
+    setDefaultAvatar(`${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/${engineer.avatar}`)
+    setAvatarNotEdited(engineer.avatar)
+    setSkills(engineer.skills)
+  }, [engineer])
   const valHtml =
     skillsSelectedMask &&
     skillsSelectedMask.map((option, i) => {
@@ -210,6 +210,7 @@ const ProfileEditItem = ({ item, allSkills, update, history }) => {
       }
       let fd = new FormData()
       fd.set("uid", uid)
+      fd.set("userUid", user.uid)
       fd.set("avatar", avatar)
       fd.set("fullname", fullname)
       fd.set("nickname", nickname)

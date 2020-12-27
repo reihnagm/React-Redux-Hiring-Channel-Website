@@ -1,70 +1,77 @@
-import React, { useEffect, useCallback } from "react"
+import React from "react"
 import { withRouter } from "react-router-dom"
+import { InputLabel, FormControl, MenuItem, Select } from "@material-ui/core"
 import "react-dropdown/style.css"
-import Dropdown from "react-dropdown"
-const HeaderFilter = ({ handleSortBy, handleSort, handleLimit, setSortBy, setSort, setLimit, sortByE, sortE, limitE, sortByC, sortC, limitC, location }) => {
-  const path = location.pathname
-  let optionsSortByE = [
-    { value: "updated_at", label: "Latest Update" },
-    { value: "fullname", label: "Name" }
-  ]
-  let optionsSortByC = [
-    { value: "updated_at", label: "Latest Update" },
-    { value: "fullname", label: "Name" },
-    { value: "location", label: "Location" }
-  ]
-  let optionsOrderBy = [
-    { value: "DESC", label: "Newer" },
-    { value: "ASC", label: "Older" }
-  ]
-  let optionsShowPage = [
-    { value: "5", label: "5" },
-    { value: "10", label: "10" },
-    { value: "20", label: "20" },
-    { value: "30", label: "30" }
-  ]
-  const getFilter = useCallback(() => {
-    if (path === "/engineers") {
-      setSortBy(optionsSortByE[0])
-      setSort(optionsOrderBy[0])
-      setLimit(optionsShowPage[0])
-    }
-    if (path === "/companies") {
-      setSortBy(optionsSortByC[0])
-      setSort(optionsOrderBy[0])
-      setLimit(optionsShowPage[0])
-    }
-  }, [])
-  // kenapa di disable karena infinite looping jika ada
-  // optionsSortByC, optionsOrderBy, optionsShowPage
-  // yang merupakan nilai array
-  useEffect(() => {
-    getFilter()
-  }, [getFilter])
+const HeaderFilter = ({ handleSortBy, handleSort, handleShow, sortByE, sortE, showE, sortByC, sortC, limitC, location }) => {
   return (
     <>
       <div className="my-5">
         <div className="columns">
           <div className="column">
-            <div className="columns items-center justify-c-center">
-              <p className="mx-2">Filter By</p>
+            <FormControl margin="normal" variant="outlined" fullWidth>
+              <InputLabel htmlFor="outlined-filterby">Filter By</InputLabel>
+              <Select
+                inputProps={{
+                  name: "filterby",
+                  id: "outlined-filterby"
+                }}
+                label="Filter By"
+                value={sortByE}
+                onChange={event => handleSortBy(event.target.value)}
+              >
+                <MenuItem value="latest-update">Latest Update</MenuItem>
+                <MenuItem value="fullname">Name</MenuItem>
+              </Select>
+            </FormControl>
+            {/* <p className="mx-2">Filter By</p>
               {location.pathname === "/engineers" && <Dropdown options={optionsSortByE} value={sortByE} onChange={element => handleSortBy(element.value)} />}
-              {location.pathname === "/companies" && <Dropdown options={optionsSortByC} value={sortByC} onChange={element => handleSortBy(element.value)} />}
-            </div>
+              {location.pathname === "/companies" && <Dropdown options={optionsSortByC} value={sortByC} onChange={element => handleSortBy(element.value)} />} */}
           </div>
           <div className="column">
-            <div className="columns items-center justify-c-center">
-              <p className="mx-2">Sort</p>
+            <FormControl margin="normal" variant="outlined" fullWidth>
+              <InputLabel htmlFor="outlined-sortby">Sort By</InputLabel>
+              <Select
+                inputProps={{
+                  name: "sortby",
+                  id: "outlined-sortby"
+                }}
+                label="Sort By"
+                value={sortE}
+                onChange={event => handleSort(event.target.value)}
+              >
+                <MenuItem value="ASC">Older</MenuItem>
+                <MenuItem value="DESC">Newer</MenuItem>
+              </Select>
+            </FormControl>
+            {/* <p className="mx-2">Sort</p>
               {location.pathname === "/engineers" && <Dropdown options={optionsOrderBy} value={sortE} onChange={element => handleSort(element.value)} />}
-              {location.pathname === "/companies" && <Dropdown options={optionsOrderBy} value={sortC} onChange={element => handleSort(element.value)} />}
-            </div>
+              {location.pathname === "/companies" && <Dropdown options={optionsOrderBy} value={sortC} onChange={element => handleSort(element.value)} />} */}
           </div>
           <div className="column">
-            <div className="columns items-center justify-c-center">
-              <p className="mx-2">Show Page</p>
+            {
+              <FormControl margin="normal" variant="outlined" fullWidth>
+                <InputLabel htmlFor="outlined-show">Show</InputLabel>
+                <Select
+                  inputProps={{
+                    name: "Show",
+                    id: "outlined-show"
+                  }}
+                  label="Show"
+                  value={showE}
+                  onChange={event => handleShow(event.target.value)}
+                >
+                  <MenuItem value="5">5</MenuItem>
+                  <MenuItem value="10">10</MenuItem>
+                  <MenuItem value="15">15</MenuItem>
+                  <MenuItem value="20">20</MenuItem>
+                  <MenuItem value="25">25</MenuItem>
+                </Select>
+              </FormControl>
+              /* <p className="mx-2">Show Page</p>
               {location.pathname === "/engineers" && <Dropdown options={optionsShowPage} value={limitE} onChange={element => handleLimit(element.value)} />}
               {location.pathname === "/companies" && <Dropdown options={optionsShowPage} value={limitC} onChange={element => handleLimit(element.value)} />}
-            </div>
+        */
+            }
           </div>
         </div>
       </div>
