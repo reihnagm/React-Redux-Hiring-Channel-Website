@@ -3,10 +3,10 @@ import { getCompanies } from "../../actions/company"
 import { connect } from "react-redux"
 import { changeQueryParam } from "../../actions/company-router"
 import { parse } from "../../lib/query-string"
-import Header from "../layouts/header"
-import HeaderFilter from "../layouts/headerfilter"
-import Spinner from "../spinner"
-import CompanyList from "./companylist"
+import Header from "../Layouts/Header"
+import HeaderFilter from "../Layouts/HeaderFilter"
+import Spinner from "../Spinner/Spinner"
+import CompanyList from "./CompanyList/CompanyList"
 const Company = ({ getCompanies, companies, loading, gettingQueryUrl, changeQueryParam, handleSearch, handleSortBy, handleSort, handleLimit, querySearch, querySortBy, querySort, queryLimit }) => {
   useEffect(() => {
     const fetchData = async () => {
@@ -21,9 +21,7 @@ const Company = ({ getCompanies, companies, loading, gettingQueryUrl, changeQuer
   const [sortBy, setSortBy] = useState([])
   const [sort, setSort] = useState([])
   const [limit, setLimit] = useState([])
-  const getPageCount = (total, perPage) => {
-    return Math.ceil(total / perPage)
-  }
+
   const handlePage = (event, page) => {
     changeQueryParam("page", page)
   }
@@ -46,7 +44,7 @@ const Company = ({ getCompanies, companies, loading, gettingQueryUrl, changeQuer
     <>
       <Header handleSearchCompany={handleSearch} />
       <HeaderFilter handleSortBy={handleSortBy} handleSort={handleSort} handleLimit={handleLimit} setSortBy={setSortBy} setSort={setSort} setLimit={setLimit} sortByC={sortBy} sortC={sort} limitC={limit} />
-      {loading ? <Spinner /> : <CompanyList companies={companies && companies.data} handlePage={handlePage} pageCount={getPageCount(companies && companies.pageDetail && companies.pageDetail.total, companies && companies.pageDetail && companies.pageDetail.per_page)} currentPage={companies && companies.pageDetail && companies.pageDetail.current_page} />}
+      {loading ? <Spinner /> : <CompanyList companies={companies} handlePage={handlePage} pageCount={companies && companies.pageDetail && companies.pageDetail.total} currentPage={companies && companies.pageDetail && companies.pageDetail.currentPage} />}
     </>
   )
 }

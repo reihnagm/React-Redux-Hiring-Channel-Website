@@ -3,10 +3,10 @@ import "date-fns"
 import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
 import { getCurrentProfileEngineer, getSkills, updateProfileEngineer } from "../../../../actions/engineer"
-import Spinner from "../../../spinner"
-import ProfileEditItem from "./profileedititem/profileedititem"
+import Spinner from "../../../Spinner/Spinner"
+import ProfileEditItem from "./ProfileEditItem/ProfileEditItem"
 
-const ProfileEdit = ({ getCurrentProfileEngineer, getSkills, updateProfileEngineer, engineer: { engineer, skills, loading }, auth: { user }, history }) => {
+const ProfileEdit = ({ getCurrentProfileEngineer, getSkills, updateProfileEngineer, engineer: { engineer, skills, loading }, history }) => {
   useEffect(() => {
     const fetchData = async () => {
       await getCurrentProfileEngineer()
@@ -19,12 +19,11 @@ const ProfileEdit = ({ getCurrentProfileEngineer, getSkills, updateProfileEngine
   ) : (
     <>
       <div className="backdrop-bottom"></div>
-      <ProfileEditItem engineer={engineer} user={user} allSkills={skills} history={history} update={updateProfileEngineer} />
+      <ProfileEditItem engineer={engineer} allSkills={skills} history={history} update={updateProfileEngineer} />
     </>
   )
 }
 const mapStateToProps = state => ({
-  engineer: state.engineer,
-  auth: state.auth
+  engineer: state.engineer
 })
 export default connect(mapStateToProps, { getCurrentProfileEngineer, getSkills, updateProfileEngineer })(withRouter(ProfileEdit))

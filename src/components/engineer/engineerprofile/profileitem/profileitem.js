@@ -8,7 +8,7 @@ import CakeIcon from "@material-ui/icons/Cake"
 import PhoneIcon from "@material-ui/icons/Phone"
 import LocationOnIcon from "@material-ui/icons/LocationOn"
 import SlideshowIcon from "@material-ui/icons/Slideshow"
-import ProfileSkillsItem from "../profileskillsitem/profileskillsitem"
+import ProfileSkillsItem from "../ProfileSkillsItem/ProfileSkillsItem"
 
 const ProfileItem = ({ item }) => {
   const useStyles = makeStyles(theme => ({

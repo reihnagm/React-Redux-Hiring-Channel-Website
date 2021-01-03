@@ -11,10 +11,10 @@ import PhoneIcon from "@material-ui/icons/Phone"
 import LocationOnIcon from "@material-ui/icons/LocationOn"
 import SlideshowIcon from "@material-ui/icons/Slideshow"
 import MessageIcon from "@material-ui/icons/Message"
-import AvatarComponent from "../../../../avatar/avatar"
-import ConversationLists from "../conversationlists"
-import MessageLists from "../messagelists"
-import ProfileSkillsItem from "../../profileskillsitem/profileskillsitem"
+import AvatarComponent from "../../../../Avatar/Avatar"
+import ConversationLists from "../ConversationLists/ConversationLists"
+import MessageLists from "../MessageLists/MessageLists"
+import ProfileSkillsItem from "../../ProfileSkillsItem/ProfileSkillsItem"
 
 const ProfileShowItem = ({ engineer, user, replies, getConversationLists, getReplyConversationReplies, conversationLists, changesReplyToRealtime, getCheckConversations, checkConversations, InsertIntoConversationReplies }) => {
   const messagesEndRef = useRef(null)

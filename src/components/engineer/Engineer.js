@@ -3,15 +3,15 @@ import { getEngineers } from "../../actions/engineer"
 import { connect } from "react-redux"
 import { changeQueryParam } from "../../actions/engineer-router"
 import { parse } from "../../lib/query-string"
-import Header from "../layouts/header"
-import HeaderFilter from "../layouts/headerfilter"
-import Spinner from "../spinner"
-import EngineerList from "./engineerlist"
-const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQueryParam, handleSearch, handleSort, handleSortBy, handleShow }) => {
+import Header from "../Layouts/Header"
+import HeaderFilter from "../Layouts/HeaderFilter"
+import Spinner from "../Spinner/Spinner"
+import EngineerList from "./EngineerList/EngineerList"
+const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQueryParam, handleSearch, handleSort, handleFilterBy, handleShow }) => {
   const [page, setPage] = useState(1)
-  const [sortBy, setSortBy] = useState("latest-update")
-  const [sort, setSort] = useState("newer")
   const [show, setShow] = useState(5)
+  const [filterBy, setFilterBy] = useState("latest-update")
+  const [sort, setSort] = useState("newer")
   useEffect(() => {
     const fetchData = async () => {
       if (gettingQueryUrl) {
@@ -24,7 +24,7 @@ const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQue
     changeQueryParam("page", page)
     changeQueryParam("show", show)
     changeQueryParam("sort", sort)
-    changeQueryParam("sortby", sortBy)
+    changeQueryParam("filterby", filterBy)
   }, [getEngineers, gettingQueryUrl, changeQueryParam, page, show])
   const handlePage = (_, page) => {
     setPage(page)
@@ -33,9 +33,9 @@ const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQue
   handleSearch = search => {
     changeQueryParam("search", search)
   }
-  handleSortBy = sortBy => {
-    setSortBy(sortBy)
-    changeQueryParam("sortby", sortBy)
+  handleFilterBy = filterBy => {
+    setFilterBy(filterBy)
+    changeQueryParam("filterby", filterBy)
   }
   handleSort = sort => {
     setSort(sort)
@@ -46,11 +46,11 @@ const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQue
     changeQueryParam("show", show)
   }
   return (
-    <>
+    <div>
       <Header handleSearchEngineer={handleSearch} />
-      <HeaderFilter handleSortBy={handleSortBy} handleSort={handleSort} handleShow={handleShow} sortByE={sortBy} sortE={sort} showE={show} />
+      <HeaderFilter handleFilterBy={handleFilterBy} handleSort={handleSort} handleShow={handleShow} filterBy={filterBy} sortE={sort} showE={show} />
       {loading ? <Spinner /> : <EngineerList engineers={engineers} handlePage={handlePage} pageCount={engineers && engineers.pageDetail && engineers.pageDetail.total} currentPage={engineers && engineers.pageDetail && engineers.pageDetail.currentPage} />}
-    </>
+    </div>
   )
 }
 const mapStateToProps = state => ({
@@ -59,7 +59,7 @@ const mapStateToProps = state => ({
   gettingQueryUrl: state.router.location.search,
   querySearch: parse(state.router.location.search).search,
   querySort: parse(state.router.location.search).sort,
-  querySortBy: parse(state.router.location.search).sortby,
+  queryFilterBy: parse(state.router.location.search).filterby,
   queryShow: parse(state.router.location.search).show
 })
 export default connect(mapStateToProps, { getEngineers, changeQueryParam })(Engineer)

@@ -2,6 +2,7 @@ import axios from "axios"
 import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from "./types"
 import Swal from "sweetalert2"
 import setAuthToken from "../utils/token"
+
 const Toast = Swal.mixin({
   position: "top-end",
   toast: true,
@@ -13,6 +14,7 @@ const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer)
   }
 })
+
 export const loadUser = () => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token)
@@ -80,7 +82,7 @@ export const login = (email, password) => async dispatch => {
     })
   }
 }
-export const register = (fullname, nickname, email, password, role, history) => async dispatch => {
+export const registerEngineer = (fullname, nickname, email, password, role, history) => async dispatch => {
   let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
   let checkEmail = regexp.test(email)
   try {
@@ -110,7 +112,7 @@ export const register = (fullname, nickname, email, password, role, history) => 
       nickname,
       email,
       password,
-      role_id: role
+      role
     })
     if (role === 1) {
       history.push("/engineers")
@@ -140,6 +142,20 @@ export const register = (fullname, nickname, email, password, role, history) => 
         title: error.message
       })
     }
+    dispatch({
+      type: REGISTER_FAIL
+    })
+  }
+}
+export const registerCompany = data => async dispatch => {
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_LOCAL_REGISTER}`, data)
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: response.data
+    })
+    dispatch(loadUser())
+  } catch (error) {
     dispatch({
       type: REGISTER_FAIL
     })

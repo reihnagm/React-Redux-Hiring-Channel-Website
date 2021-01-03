@@ -23,20 +23,6 @@ export const getEngineers = () => async (dispatch, getState) => {
     })
   }
 }
-export const getSkills = () => async dispatch => {
-  try {
-    const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS_SKILLS}`)
-    dispatch({
-      type: GET_SKILLS,
-      payload: response.data.data
-    })
-  } catch (error) {
-    dispatch({
-      type: GET_SKILLS_ERROR,
-      payload: error
-    })
-  }
-}
 export const getCurrentProfileEngineer = () => async dispatch => {
   let userUid, data
   const token = localStorage.token
@@ -59,6 +45,20 @@ export const getCurrentProfileEngineer = () => async dispatch => {
   } catch (error) {
     dispatch({
       type: GET_CURRENT_PROFILE_ENGINEER_ERROR,
+      payload: error
+    })
+  }
+}
+export const getSkills = () => async dispatch => {
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS_SKILLS}`)
+    dispatch({
+      type: GET_SKILLS,
+      payload: response.data.data
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_SKILLS_ERROR,
       payload: error
     })
   }

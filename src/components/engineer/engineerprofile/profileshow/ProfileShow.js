@@ -2,10 +2,10 @@ import React, { useEffect } from "react"
 import { connect } from "react-redux"
 import { getProfileEngineerBySlug } from "../../../../actions/engineer"
 import { getConversationLists, getReplyConversationReplies, getCheckConversations, InsertIntoConversationReplies, changesReplyToRealtime } from "../../../../actions/message"
-import Spinner from "../../../spinner"
-import ProfileShowItem from "./profileshowitem/profileshowitem"
+import Spinner from "../../../Spinner/Spinner"
+import ProfileShowItem from "./ProfileShowItem/ProfileShowItem"
 
-const Profile = ({ getProfileEngineerBySlug, getConversationLists, getReplyConversationReplies, getCheckConversations, InsertIntoConversationReplies, changesReplyToRealtime, message: { conversationLists, checkConversations, replies }, engineer: { engineer, loading }, user: { user }, match }) => {
+const ProfileShow = ({ getProfileEngineerBySlug, getConversationLists, getReplyConversationReplies, getCheckConversations, InsertIntoConversationReplies, changesReplyToRealtime, message: { conversationLists, checkConversations, replies }, engineer: { engineer, loading }, user: { user }, match }) => {
   useEffect(() => {
     const fetchData = async () => {
       await getProfileEngineerBySlug(match.params.slug)
@@ -27,4 +27,4 @@ export default connect(mapStateToProps, {
   getCheckConversations,
   InsertIntoConversationReplies,
   changesReplyToRealtime
-})(Profile)
+})(ProfileShow)

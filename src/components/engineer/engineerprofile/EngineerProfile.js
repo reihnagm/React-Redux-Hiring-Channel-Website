@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import { connect } from "react-redux"
 import { getCurrentProfileEngineer } from "../../../actions/engineer"
-import ProfileItem from "./profileitem/profileitem"
-import Spinner from "../../spinner"
+import ProfileItem from "./ProfileItem/ProfileItem"
+import Spinner from "../../Spinner/Spinner"
 
 const Profile = ({ getCurrentProfileEngineer, engineer: { engineer, loading } }) => {
   useEffect(() => {

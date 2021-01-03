@@ -5,7 +5,7 @@ import { AppBar, Toolbar, InputBase, IconButton, Menu, MenuItem, fade, makeStyle
 import { logout } from "../../actions/auth"
 import { getCurrentProfileCompany } from "../../actions/company"
 import { getCurrentProfileEngineer } from "../../actions/engineer"
-import AvatarComponent from "../avatar/avatar"
+import AvatarComponent from "../Avatar/Avatar"
 import SearchIcon from "@material-ui/icons/Search"
 const Header = ({ engineer, company, location, logout, user, isAuthenticated, getCurrentProfileEngineer, getCurrentProfileCompany, handleSearchEngineer, handleSearchCompany, querySearchEngineer, querySearchCompany }) => {
   const logoutUser = () => {

@@ -3,8 +3,8 @@ import { Grid, Input, Button } from "@material-ui/core"
 import { connect } from "react-redux"
 import * as moment from "moment"
 import { getConversationLists, getReplyConversationReplies, getUserGuestUid, InsertIntoConversationReplies } from "../../../../../actions/message"
-import MessageLists from "../messagelists"
-import AvatarComponent from "../../../../avatar/avatar"
+import MessageLists from "../MessageLists/MessageLists"
+import AvatarComponent from "../../../../Avatar/Avatar"
 const ReplyLists = ({ getConversationLists, getCheckConversations, getReplyConversationReplies, InsertIntoConversationReplies, getUserGuestUid, replies, inputMessage, setInputMessage, conversationUid, userGuestUid, setConfirmConversationUid, setHideConversationLists, hideConversationLists }) => {
   const messagesEndRef = useRef(null)
   useEffect(() => {

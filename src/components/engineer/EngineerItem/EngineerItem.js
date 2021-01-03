@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { Container, Grid } from "@material-ui/core"
 import { Pagination } from "@material-ui/lab"
 import LazyLoad from "react-lazy-load"
-import ProfileSkillsItem from "../engineerprofile/profileskillsitem/profileskillsitem"
+import ProfileSkillsItem from "../EngineerProfile/ProfileSkillsItem/ProfileSkillsItem"
 const EngineerItem = ({ engineers, handlePage, currentPage, pageCount }) => {
   return (
     <div>
@@ -28,7 +28,6 @@ const EngineerItem = ({ engineers, handlePage, currentPage, pageCount }) => {
                         Skills :
                         <ProfileSkillsItem items={engineer.skills} />
                       </p>
-                      {/* <p className={`tag-${item.color} margin-normal`}> {item.skills} </p> */}
                     </div>
                   </div>
                 )
@@ -36,7 +35,7 @@ const EngineerItem = ({ engineers, handlePage, currentPage, pageCount }) => {
           </div>
         </Grid>
         <div className="flex justify-c-center my-10">
-          <Pagination count={pageCount} onChange={(event, page) => handlePage(event, page)} page={currentPage} />
+          <Pagination count={pageCount} onChange={(event, page) => handlePage(event, page)} page={typeof currentPage === "undefined" ? 1 : currentPage} />
         </div>
       </Container>
     </div>

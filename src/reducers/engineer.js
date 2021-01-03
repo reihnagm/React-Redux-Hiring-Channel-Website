@@ -5,11 +5,7 @@ const initialState = {
   skills: [],
   error: {},
   loading: true,
-  search: "",
-  sort: "DESC",
-  sortBy: "updated_at",
-  show: "10",
-  page: "1"
+  search: ""
 }
 export default (state = initialState, action) => {
   const { type, payload } = action

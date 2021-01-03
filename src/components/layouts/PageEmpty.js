@@ -1,6 +1,6 @@
 import React from "react"
 
-const DataEmpty = () => {
+const Empty = () => {
   return (
     <>
       <p>There is no Engineers yet</p>
@@ -8,4 +8,4 @@ const DataEmpty = () => {
   )
 }
 
-export default DataEmpty
+export default Empty

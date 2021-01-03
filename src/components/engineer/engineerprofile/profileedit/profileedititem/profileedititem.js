@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
 import { Container, Chip, Grid, Button, TextField, Avatar, Badge, makeStyles } from "@material-ui/core"
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers"
+import { isImage } from "../../../../../utils/helper"
 import RemoveIcon from "@material-ui/icons/RemoveCircleOutlineSharp"
 import Autocomplete from "@material-ui/lab/Autocomplete"
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined"
@@ -44,7 +45,7 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
     </div>
   </div>
 )
-const ProfileEditItem = ({ engineer, user, allSkills, update, history }) => {
+const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
   let fileRef
   const Toast = Swal.mixin({
     position: "top-end",
@@ -137,11 +138,11 @@ const ProfileEditItem = ({ engineer, user, allSkills, update, history }) => {
   const onChange = event => {
     setFormData({ ...formData, [event.target.name]: event.target.value })
   }
-  const handleChange = address => {
-    setLocation(address)
-  }
   const handleDate = value => {
     setSelectedDate(value)
+  }
+  const handleChange = address => {
+    setLocation(address)
   }
   const handleSelect = async address => {
     try {
@@ -160,7 +161,7 @@ const ProfileEditItem = ({ engineer, user, allSkills, update, history }) => {
       let extension = event.target.files[0].name.split(".").pop()
       let reader = new FileReader()
       try {
-        if (size > 1024000) {
+        if (size > process.env.REACT_APP_IMAGE_SIZE) {
           throw new Error("File size cannot larger than 1MB")
         }
         if (!isImage(extension)) {
@@ -178,19 +179,6 @@ const ProfileEditItem = ({ engineer, user, allSkills, update, history }) => {
         })
       }
     }
-  }
-  const isImage = extension => {
-    switch (extension) {
-      case "png":
-      case "jpg":
-      case "jpeg":
-      case "gif":
-      case "svg":
-      case "bmp":
-        return true
-      default:
-    }
-    return false
   }
   const onSubmit = async event => {
     event.preventDefault()
@@ -210,7 +198,6 @@ const ProfileEditItem = ({ engineer, user, allSkills, update, history }) => {
       }
       let fd = new FormData()
       fd.set("uid", uid)
-      fd.set("userUid", user.uid)
       fd.set("avatar", avatar)
       fd.set("fullname", fullname)
       fd.set("nickname", nickname)
@@ -223,7 +210,7 @@ const ProfileEditItem = ({ engineer, user, allSkills, update, history }) => {
       fd.set("telephone", telephone)
       fd.set("salary", salary)
       fd.set("location", location)
-      await update(fd)
+      update(fd)
         .then(_ => {
           Toast.fire({
             icon: "success",
@@ -330,7 +317,7 @@ const ProfileEditItem = ({ engineer, user, allSkills, update, history }) => {
                 />
               </MuiPickersUtilsProvider>
               <TextField onChange={e => onChange(e)} value={showcase ?? ""} name="showcase" margin="normal" variant="outlined" label="Showcase" fullWidth />
-              <MaskedInput mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"_"} onChange={e => onChange(e)} showMask render={(ref, props) => <TextField value={telephone ?? ""} name="telephone" margin="normal" variant="outlined" fullWidth inputRef={ref} {...props} />} />
+              <MaskedInput mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"_"} onChange={e => onChange(e)} render={(ref, props) => <TextField value={telephone ?? ""} name="telephone" margin="normal" variant="outlined" label="Telephone" fullWidth inputRef={ref} {...props} />} />
               <NumberFormat onChange={e => onChange(e)} value={salary ?? ""} name="salary" margin="normal" variant="outlined" label="salary" decimalSeparator="," thousandSeparator="." prefix="Rp " customInput={TextField} fullWidth />
               <Grid container direction="row" justify="center" alignItems="center">
                 <Button type="button" variant="contained" color="primary" component={Link} to="/engineers">

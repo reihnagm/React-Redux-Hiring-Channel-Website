@@ -11,7 +11,7 @@ import DateFnsUtils from "@date-io/date-fns"
 import * as moment from "moment"
 import { connect } from "react-redux"
 import { getCurrentProfileCompany, updateProfileCompany } from "../../../../actions/company"
-import Spinner from "../../../spinner"
+import Spinner from "../../../Spinner/Spinner"
 const ProfileEdit = ({ getCurrentProfileCompany, updateProfileCompany, company: { company, loading }, auth: { user }, history }) => {
   const Toast = Swal.mixin({
     position: "top-end",

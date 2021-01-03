@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from "@material-ui/core"
-import Spinner from "../../spinner"
+import Spinner from "../../Spinner/Spinner"
 import { getCurrentProfileCompany, deleteProfileCompany } from "../../../actions/company"
 const Profile = ({ getCurrentProfileCompany, deleteProfileCompany, company: { company, loading }, history }) => {
   const useStyles = makeStyles(theme => ({

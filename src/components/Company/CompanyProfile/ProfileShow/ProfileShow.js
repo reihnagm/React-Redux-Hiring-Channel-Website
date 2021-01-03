@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from "react"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from "@material-ui/core"
-import Spinner from "../../../spinner"
+import Spinner from "../../../Spinner/Spinner"
 import defaultImage from "../../../../images/default.png"
 import { getProfileCompanyBySlug, deleteProfileCompany } from "../../../../actions/company"
 const Profile = ({ getProfileCompanyBySlug, deleteProfileCompany, company: { company, loading }, history, match }) => {
