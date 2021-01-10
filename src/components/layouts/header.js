@@ -77,7 +77,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
       }
     }
   }))
-  const userRoleId = user && user.role_id
+  const userRole = typeof user !== "undefined" && user && user.role
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
@@ -91,7 +91,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
   }
   const renderMenu = (
     <Menu keepMounted elevation={1} anchorOrigin={{ vertical: "top", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} anchorEl={anchorEl} id={menuId} open={isMenuOpen} onClose={handleMenuClose}>
-      {userRoleId === 1 && (
+      {userRole === 1 && (
         <div>
           <MenuItem className="text-black" component={Link} to="/engineers/profile">
             Profile
@@ -101,7 +101,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
           </MenuItem>
         </div>
       )}
-      {userRoleId === 2 && (
+      {userRole === 2 && (
         <div>
           <MenuItem className="text-black" component={Link} to="/companies/profile">
             Profile
@@ -116,19 +116,15 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
   )
   useEffect(() => {
     const fetchData = async () => {
-      if (typeof userRoleId === "undefined") {
-        return false
-      } else {
-        if (userRoleId === 1) {
-          await getCurrentProfileEngineer()
-        }
-        if (userRoleId === 2) {
-          await getCurrentProfileCompany()
-        }
+      if (userRole === 1) {
+        await getCurrentProfileEngineer()
+      }
+      if (userRole === 2) {
+        await getCurrentProfileCompany()
       }
     }
     fetchData()
-  }, [getCurrentProfileEngineer, getCurrentProfileCompany, userRoleId])
+  }, [getCurrentProfileEngineer, getCurrentProfileCompany, userRole])
   const authLinks = (
     <div className={classes.grow}>
       <AppBar elevation={1} color="transparent" position="static">
@@ -180,19 +176,19 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
             </Link>
           </div>
           <div className={classes.grow}>
-            {userRoleId === 1 && (
+            {userRole === 1 && (
               <span className="mx-3 cursor-pointer" onClick={handleProfileMenuOpen}>
                 Hello, {engineer && engineer.fullname}
               </span>
             )}
-            {userRoleId === 2 && (
+            {userRole === 2 && (
               <span className="mx-3 cursor-pointer" onClick={handleProfileMenuOpen}>
-                {company && company.data && company.data.name}
+                Hello, {company && company.username}
               </span>
             )}
             <IconButton edge="end" aria-label="account of current user" aria-haspopup="true" color="inherit" aria-controls={menuId} onClick={handleProfileMenuOpen}>
-              {userRoleId === 1 && <AvatarComponent imageSource={engineer && engineer.avatar} altName={engineer && engineer.nickname} type="engineers" width="30" height="30" />}
-              {userRoleId === 2 && <AvatarComponent imageSource={company && company.data && company.data.logo} altName={company && company.data && company.data.name} type="companies" width="30" height="30" />}
+              {userRole === 1 && <AvatarComponent imageSource={engineer && engineer.avatar} altName={engineer && engineer.nickname} type="engineers" width="30" height="30" />}
+              {userRole === 2 && <AvatarComponent imageSource={company && company.logo} altName={company && company.nickname} type="companies" width="30" height="30" />}
             </IconButton>
           </div>
         </Toolbar>

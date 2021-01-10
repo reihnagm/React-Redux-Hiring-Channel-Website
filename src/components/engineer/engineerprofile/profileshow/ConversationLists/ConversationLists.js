@@ -32,7 +32,7 @@ const ReplyLists = ({ getConversationLists, getCheckConversations, getReplyConve
       try {
         await InsertIntoConversationReplies(userGuestUid, payload)
       } catch (error) {
-        console.log(error)
+        console.log(err)
       } finally {
         messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight
         setInputMessage("")

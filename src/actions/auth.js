@@ -31,131 +31,73 @@ export const loadUser = () => async dispatch => {
     })
   }
 }
-export const login = (email, password) => async dispatch => {
-  let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
-  let checkEmail = regexp.test(email)
+export const login = (email, password, history) => async dispatch => {
   try {
-    if (email.trim() === "") {
-      throw new Error("Email Required")
-    }
-    if (password.trim() === "") {
-      throw new Error("Password Required")
-    }
-    if (!checkEmail) {
-      throw new Error("Invalid Email. e.g (johndoe@gmail.com)")
-    }
-    if (password.length < 6) {
-      throw new Error("Password Minimum 6 Character")
-    }
     const response = await axios.post(`${process.env.REACT_APP_LOCAL_LOGIN}`, {
       email,
       password
-    })
-    Toast.fire({
-      icon: "success",
-      title: "Successful Login"
     })
     dispatch({
       type: LOGIN_SUCCESS,
       payload: response.data
     })
+    history.push("/")
+    Toast.fire({
+      icon: "success",
+      title: "Successful Login"
+    })
     dispatch(loadUser())
-  } catch (error) {
-    if (error.response && error.response.data.message.name === "UserNotExists") {
-      Toast.fire({
-        icon: "error",
-        title: "User not exists"
-      })
-    } else if (error.response && error.response.data.message.name === "InvalidCredentials") {
-      Toast.fire({
-        icon: "error",
-        title: "Invalid Credentials"
-      })
-    } else {
-      Toast.fire({
-        icon: "error",
-        title: error.message
-      })
-    }
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      title: err.response.data.message
+    })
     dispatch({
       type: LOGIN_FAIL
     })
   }
 }
-export const registerEngineer = (fullname, nickname, email, password, role, history) => async dispatch => {
-  let regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
-  let checkEmail = regexp.test(email)
-  try {
-    if (fullname.trim() === "") {
-      throw new Error("Fullname Required")
-    }
-    if (nickname.trim() === "") {
-      throw new Error("Nickname Required")
-    }
-    if (email.trim() === "") {
-      throw new Error("Email Required")
-    }
-    if (!checkEmail) {
-      throw new Error("Invalid Email. e.g : johndoe@gmail.com")
-    }
-    if (password.trim() === "") {
-      throw new Error("Password Required")
-    }
-    if (password.length < 6) {
-      throw new Error("Password Minimum 6 Character")
-    }
-    if (typeof role === "undefined") {
-      throw new Error("Role Required")
-    }
-    const response = await axios.post(`${process.env.REACT_APP_LOCAL_REGISTER}`, {
-      fullname,
-      nickname,
-      email,
-      password,
-      role
-    })
-    if (role === 1) {
-      history.push("/engineers")
-    }
-    if (role === 2) {
-      history.push("/companies")
-    }
-    Toast.fire({
-      icon: "success",
-      title: "Successful Register"
-    })
-    dispatch({
-      type: REGISTER_SUCCESS,
-      payload: response.data
-    })
-    dispatch(loadUser())
-  } catch (error) {
-    console.log(error.response)
-    if (error.response && error.response.data.message.name === "UserAlreadyExists") {
-      Toast.fire({
-        icon: "error",
-        title: "User already exists"
-      })
-    } else {
-      Toast.fire({
-        icon: "error",
-        title: error.message
-      })
-    }
-    dispatch({
-      type: REGISTER_FAIL
-    })
-  }
-}
-export const registerCompany = data => async dispatch => {
+export const registerEngineer = (data, history) => async dispatch => {
   try {
     const response = await axios.post(`${process.env.REACT_APP_LOCAL_REGISTER}`, data)
     dispatch({
       type: REGISTER_SUCCESS,
       payload: response.data
     })
+    history.push("/")
+    Toast.fire({
+      icon: "success",
+      title: "Successful Register"
+    })
     dispatch(loadUser())
-  } catch (error) {
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      title: err.response.data.message
+    })
+    dispatch({
+      type: REGISTER_FAIL
+    })
+  }
+}
+export const registerCompany = (data, history) => async dispatch => {
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_LOCAL_REGISTER}`, data)
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: response.data
+    })
+    history.push("/")
+    Toast.fire({
+      icon: "success",
+      title: "Successful Register"
+    })
+    dispatch(loadUser())
+  } catch (err) {
+    Toast.fire({
+      icon: "error",
+      title: err.response.data.message
+    })
     dispatch({
       type: REGISTER_FAIL
     })

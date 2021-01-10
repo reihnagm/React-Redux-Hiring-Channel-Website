@@ -35,8 +35,8 @@ const ProfileShowItem = ({ engineer, user, replies, getConversationLists, getRep
     channel.bind("my-event", async data => {
       try {
         await changesReplyToRealtime(data)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       } finally {
         if (messagesEndRef.current !== null) {
           messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight
@@ -86,8 +86,8 @@ const ProfileShowItem = ({ engineer, user, replies, getConversationLists, getRep
     if (event.which === 13) {
       try {
         await InsertIntoConversationReplies(engineer.user_uid, data)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       } finally {
         messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight
         setInputMessage("")

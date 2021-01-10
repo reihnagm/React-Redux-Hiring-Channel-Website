@@ -11,7 +11,7 @@ const Profile = ({ getCurrentProfileEngineer, engineer: { engineer, loading } })
     }
     fetchData()
   }, [getCurrentProfileEngineer])
-  return loading ? <Spinner /> : <ProfileItem item={engineer} />
+  return loading ? <Spinner /> : <ProfileItem engineer={engineer} />
 }
 const mapStateToProps = state => ({
   engineer: state.engineer

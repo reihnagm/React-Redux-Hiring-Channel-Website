@@ -7,7 +7,11 @@ import Header from "../Layouts/Header"
 import HeaderFilter from "../Layouts/HeaderFilter"
 import Spinner from "../Spinner/Spinner"
 import CompanyList from "./CompanyList/CompanyList"
-const Company = ({ getCompanies, companies, loading, gettingQueryUrl, changeQueryParam, handleSearch, handleSortBy, handleSort, handleLimit, querySearch, querySortBy, querySort, queryLimit }) => {
+const Company = ({ getCompanies, companies, loading, gettingQueryUrl, changeQueryParam, handleSearch, handleSort, handleFilterBy, handleShow }) => {
+  const [page, setPage] = useState(1)
+  const [show, setShow] = useState(5)
+  const [filterBy, setFilterBy] = useState("latest-update")
+  const [sort, setSort] = useState("newer")
   useEffect(() => {
     const fetchData = async () => {
       if (gettingQueryUrl) {
@@ -17,35 +21,36 @@ const Company = ({ getCompanies, companies, loading, gettingQueryUrl, changeQuer
       }
     }
     fetchData()
-  }, [getCompanies, gettingQueryUrl])
-  const [sortBy, setSortBy] = useState([])
-  const [sort, setSort] = useState([])
-  const [limit, setLimit] = useState([])
-
-  const handlePage = (event, page) => {
+    changeQueryParam("page", page)
+    changeQueryParam("show", show)
+    changeQueryParam("sort", sort)
+    changeQueryParam("filterby", filterBy)
+  }, [getCompanies, gettingQueryUrl, changeQueryParam, page, show, sort, filterBy])
+  const handlePage = (_, page) => {
+    setPage(page)
     changeQueryParam("page", page)
   }
   handleSearch = search => {
     changeQueryParam("search", search)
   }
-  handleSortBy = sortBy => {
-    setSortBy(sortBy)
-    changeQueryParam("sortBy", sortBy)
+  handleFilterBy = filterBy => {
+    setFilterBy(filterBy)
+    changeQueryParam("filterby", filterBy)
   }
   handleSort = sort => {
     setSort(sort)
     changeQueryParam("sort", sort)
   }
-  handleLimit = limit => {
-    setLimit(limit)
-    changeQueryParam("limit", limit)
+  handleShow = show => {
+    setShow(show)
+    changeQueryParam("show", show)
   }
   return (
-    <>
+    <div>
       <Header handleSearchCompany={handleSearch} />
-      <HeaderFilter handleSortBy={handleSortBy} handleSort={handleSort} handleLimit={handleLimit} setSortBy={setSortBy} setSort={setSort} setLimit={setLimit} sortByC={sortBy} sortC={sort} limitC={limit} />
+      <HeaderFilter handleFilterBy={handleFilterBy} handleSort={handleSort} handleShow={handleShow} filterByC={filterBy} sortC={sort} showC={show} />
       {loading ? <Spinner /> : <CompanyList companies={companies} handlePage={handlePage} pageCount={companies && companies.pageDetail && companies.pageDetail.total} currentPage={companies && companies.pageDetail && companies.pageDetail.currentPage} />}
-    </>
+    </div>
   )
 }
 const mapStateToProps = state => ({
@@ -54,7 +59,7 @@ const mapStateToProps = state => ({
   gettingQueryUrl: state.router.location.search,
   querySearch: parse(state.router.location.search).search,
   querySortBy: parse(state.router.location.search).sortBy,
-  querySort: parse(state.router.location.search).sort,
-  queryLimit: parse(state.router.location.search).limit
+  queryFilterBy: parse(state.router.location.search).filterby,
+  queryShow: parse(state.router.location.search).show
 })
 export default connect(mapStateToProps, { getCompanies, changeQueryParam })(Company)

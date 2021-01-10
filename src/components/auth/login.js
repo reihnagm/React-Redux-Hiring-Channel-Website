@@ -1,18 +1,52 @@
 import React, { useState } from "react"
 import { Link, Redirect } from "react-router-dom"
-import { Button, InputLabel, FormControl, TextField, MenuItem, Select, Typography } from "@material-ui/core"
+import { Button, TextField, Typography } from "@material-ui/core"
 import { connect } from "react-redux"
 import { login } from "../../actions/auth"
-const Login = ({ login, isAuthenticated }) => {
+import { isImage, bytesToSize, validateEmail } from "../../utils/helper"
+import Swal from "sweetalert2"
+
+const Toast = Swal.mixin({
+  position: "top-end",
+  toast: true,
+  timer: 3000,
+  showConfirmButton: false,
+  timerProgressBar: false,
+  onOpen: toast => {
+    toast.addEventListener("mouseenter", Swal.stopTimer)
+    toast.addEventListener("mouseleave", Swal.resumeTimer)
+  }
+})
+
+const Login = ({ login, isAuthenticated, history }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   })
   const { email, password } = formData
   const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
-  const onSubmit = event => {
-    event.preventDefault()
-    login(email, password)
+  const onSubmit = async e => {
+    e.preventDefault()
+    try {
+      if (email.trim() === "") {
+        throw new Error("Email Required")
+      }
+      if (password.trim() === "") {
+        throw new Error("Password Required")
+      }
+      if (validateEmail(email)) {
+        throw new Error("Invalid Email. e.g (johndoe@gmail.com)")
+      }
+      if (password.length < 6) {
+        throw new Error("Password Minimum 6 Character")
+      }
+      await login(email, password, history)
+    } catch (err) {
+      Toast.fire({
+        icon: "error",
+        title: err.message
+      })
+    }
   }
   if (isAuthenticated) {
     return <Redirect to="/" />

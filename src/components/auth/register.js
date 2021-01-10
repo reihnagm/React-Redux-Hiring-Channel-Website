@@ -5,7 +5,7 @@ import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
 import { Button, InputLabel, Grid, Avatar, Badge, FormControl, makeStyles, TextField, MenuItem, Select, Typography } from "@material-ui/core"
 import { connect } from "react-redux"
 import { registerEngineer, registerCompany } from "../../actions/auth"
-import { isImage, bytesToSize, arrayBufferToWordArray } from "../../utils/helper"
+import { isImage, bytesToSize, validateEmail } from "../../utils/helper"
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined"
 import Swal from "sweetalert2"
 import MaskedInput from "react-text-mask"
@@ -71,10 +71,43 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
       password: ""
     })
     const { fullname, nickname, email, password } = formData
-    const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
-    const onSubmit = event => {
-      event.preventDefault()
-      registerEngineer(fullname, nickname, email, password, role, history)
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+    const onSubmit = async e => {
+      e.preventDefault()
+      try {
+        if (fullname.trim() === "") {
+          throw new Error("Fullname Required")
+        }
+        if (nickname.trim() === "") {
+          throw new Error("Nickname Required")
+        }
+        if (email.trim() === "") {
+          throw new Error("Email Required")
+        }
+        if (validateEmail(email)) {
+          throw new Error("Invalid Email. e.g : johndoe@gmail.com")
+        }
+        if (password.trim() === "") {
+          throw new Error("Password Required")
+        }
+        if (password.length < 6) {
+          throw new Error("Password Minimum 6 Character")
+        }
+        if (typeof role === "undefined") {
+          throw new Error("Role Required")
+        }
+        let fd = new FormData()
+        fd.set("fullname", fullname)
+        fd.set("nickname", nickname)
+        fd.set("email", email)
+        fd.set("role", role)
+        await registerEngineer(fd, history)
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: error.message
+        })
+      }
     }
     return (
       <form onSubmit={event => onSubmit(event)}>
@@ -137,10 +170,10 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
     const handleFile = _ => {
       fileRef.click()
     }
-    const handleAvatar = async event => {
-      if (event.target.files && event.target.files[0]) {
-        let size = bytesToSize(event.target.files[0].size)
-        let extension = event.target.files[0].name.split(".").pop()
+    const handleAvatar = async e => {
+      if (e.target.files && e.target.files[0]) {
+        let size = bytesToSize(e.target.files[0].size)
+        let extension = e.target.files[0].name.split(".").pop()
         let reader = new FileReader()
         try {
           if (size > process.env.REACT_APP_SIZE_IMAGE) {
@@ -149,7 +182,7 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
           if (!isImage(extension)) {
             throw new Error("File type allowed: PNG, JPG, JPEG, GIF, SVG, BMP")
           }
-          setLogoFile(event.target.files[0])
+          setLogoFile(e.target.files[0])
           reader.onload = e => {
             setDefaultLogo(e.target.result)
           }
@@ -157,7 +190,7 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
             const percent = (e.loaded / e.total) * 100
             console.log(`Progress: ${Math.round(percent)}`)
           }
-          reader.readAsDataURL(event.target.files[0])
+          reader.readAsDataURL(e.target.files[0])
         } catch (error) {
           Toast.fire({
             icon: "error",
@@ -173,17 +206,14 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
       try {
         const results = await geocodeByAddress(address)
         setCompanyLocation(results[0].formatted_address)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.log(err)
       }
     }
     const { fullname, nickname, companyname, companyemail, companytelp, companydesc, email, password } = formData
     const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
     const onSubmit = async event => {
       event.preventDefault()
-      let fd, regexp, checkEmail
-      regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
-      checkEmail = regexp.test(email)
       try {
         if (fullname.trim() === "") {
           throw new Error("Fullname Required")
@@ -197,7 +227,7 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
         if (logoFile === "") {
           throw new Error("Logo Required")
         }
-        if (!checkEmail) {
+        if (validateEmail(email)) {
           throw new Error("Invalid Email. e.g : johndoe@gmail.com")
         }
         if (password.trim() === "") {
@@ -224,7 +254,7 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
         if (typeof role === "undefined") {
           throw new Error("Role Required")
         }
-        fd = new FormData()
+        let fd = new FormData()
         fd.set("fullname", fullname)
         fd.set("nickname", nickname)
         fd.set("email", email)
@@ -236,25 +266,12 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
         fd.set("companytelp", companytelp)
         fd.set("companydesc", companydesc)
         fd.set("companylocation", companylocation)
-        registerCompany(fd).then(_ => {
-          history.push("/companies")
-          Toast.fire({
-            icon: "success",
-            title: "Successful Register"
-          })
-        })
+        await registerCompany(fd, history)
       } catch (error) {
-        if (error.response && error.response.data.message.name === "UserAlreadyExists") {
-          Toast.fire({
-            icon: "error",
-            title: "User already exists"
-          })
-        } else {
-          Toast.fire({
-            icon: "error",
-            title: error.message
-          })
-        }
+        Toast.fire({
+          icon: "error",
+          title: error.message
+        })
       }
     }
     return (

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { decodeJWT } from "../configs/helper"
+import { auth } from "../utils/helper"
 import { LOADING, LOADED, GET_COMPANIES, GET_COMPANIES_ERROR, GET_CURRENT_PROFILE_COMPANY, GET_CURRENT_PROFILE_COMPANY_ERROR, GET_PROFILE_COMPANY_BY_SLUG, GET_PROFILE_COMPANY_BY_SLUG_ERROR, UPDATE_PROFILE_COMPANY, UPDATE_PROFILE_COMPANY_ERROR, DELETE_COMPANY, DELETE_COMPANY_ERROR } from "./types"
 export const getCompanies = () => async (dispatch, getState) => {
   try {
@@ -22,23 +22,17 @@ export const getCompanies = () => async (dispatch, getState) => {
   }
 }
 export const getCurrentProfileCompany = () => async dispatch => {
-  let userUid, data
-  const token = localStorage.token
-  if (token) {
-    data = decodeJWT(token)
-    userUid = data.user.uid
-  }
   try {
     dispatch({
       type: LOADING
     })
-    const response = await axios.post(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}/profile`, { userUid })
+    const response = await axios.post(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}/profile`, { userUid: auth().uid })
     dispatch({
       type: LOADED
     })
     dispatch({
       type: GET_CURRENT_PROFILE_COMPANY,
-      payload: response.data
+      payload: response.data.data
     })
   } catch (error) {
     dispatch({

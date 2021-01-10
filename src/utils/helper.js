@@ -1,4 +1,15 @@
 import CryptoJS from "crypto-js"
+import { decodeJWT } from "../configs/helper"
+
+export function auth() {
+  let data, token
+  token = localStorage.token
+  if (token) {
+    data = decodeJWT(token)
+  }
+  return data.user
+}
+
 export function isImage(extension) {
   switch (extension) {
     case "png":
@@ -12,6 +23,16 @@ export function isImage(extension) {
   }
   return false
 }
+
+export function validateEmail(email) {
+  const regexp = /[a-zA-z-0-9_]+@[a-zA-Z]+\.(com|net|org)$/
+  const result = regexp.test(email)
+  if (result == false) {
+    return true
+  }
+  return false
+}
+
 export function bytesToSize(bytes) {
   if (bytes == 0) return "0 Byte"
   var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))

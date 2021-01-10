@@ -25,7 +25,7 @@ const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQue
     changeQueryParam("show", show)
     changeQueryParam("sort", sort)
     changeQueryParam("filterby", filterBy)
-  }, [getEngineers, gettingQueryUrl, changeQueryParam, page, show])
+  }, [getEngineers, gettingQueryUrl, changeQueryParam, page, show, sort, filterBy])
   const handlePage = (_, page) => {
     setPage(page)
     changeQueryParam("page", page)
@@ -48,7 +48,7 @@ const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQue
   return (
     <div>
       <Header handleSearchEngineer={handleSearch} />
-      <HeaderFilter handleFilterBy={handleFilterBy} handleSort={handleSort} handleShow={handleShow} filterBy={filterBy} sortE={sort} showE={show} />
+      <HeaderFilter handleFilterBy={handleFilterBy} handleSort={handleSort} handleShow={handleShow} filterByE={filterBy} sortE={sort} showE={show} />
       {loading ? <Spinner /> : <EngineerList engineers={engineers} handlePage={handlePage} pageCount={engineers && engineers.pageDetail && engineers.pageDetail.total} currentPage={engineers && engineers.pageDetail && engineers.pageDetail.currentPage} />}
     </div>
   )

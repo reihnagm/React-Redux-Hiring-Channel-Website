@@ -1,16 +1,12 @@
 import React from "react"
-import * as moment from "moment"
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from "@material-ui/core"
 import { Link } from "react-router-dom"
-import PersonIcon from "@material-ui/icons/Person"
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance"
 import EmailIcon from "@material-ui/icons/Email"
-import CakeIcon from "@material-ui/icons/Cake"
 import PhoneIcon from "@material-ui/icons/Phone"
 import LocationOnIcon from "@material-ui/icons/LocationOn"
-import SlideshowIcon from "@material-ui/icons/Slideshow"
-import ProfileSkillsItem from "../ProfileSkillsItem/ProfileSkillsItem"
 
-const ProfileItem = ({ engineer }) => {
+const ProfileItem = ({ company }) => {
   const useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1
@@ -34,13 +30,13 @@ const ProfileItem = ({ engineer }) => {
           <Grid container spacing={3}>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <Avatar className={classes.avatar} src={`${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/${engineer.avatar}`} alt={engineer.name} />
+                <Avatar className={classes.avatar} src={`${process.env.REACT_APP_GET_LOCAL_IMAGES_COMPANY}/${company.logo}`} alt={company.name} />
                 <Grid container>
-                  <Grid item md={2} xs={2}>
-                    <PersonIcon />
+                  <Grid item md={2} xs={10}>
+                    <AccountBalanceIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {engineer.fullname} </p>
+                    <p> {company.name} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -48,15 +44,7 @@ const ProfileItem = ({ engineer }) => {
                     <EmailIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {engineer.email} </p>
-                  </Grid>
-                </Grid>
-                <Grid container>
-                  <Grid item md={2} xs={2}>
-                    <CakeIcon />
-                  </Grid>
-                  <Grid item md={10} xs={10}>
-                    <p> {engineer.birthdate ? moment(engineer.birthdate).format("D MMMM YYYY") : ""} </p>
+                    <p> {company.email} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -64,7 +52,7 @@ const ProfileItem = ({ engineer }) => {
                     <LocationOnIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p className="leading-loose"> {engineer.location === null ? "" : engineer.location} </p>
+                    <p className="leading-loose"> {company.location === null ? "" : company.location} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -72,15 +60,7 @@ const ProfileItem = ({ engineer }) => {
                     <PhoneIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {engineer.telephone === null ? "" : engineer.telephone} </p>
-                  </Grid>
-                </Grid>
-                <Grid container>
-                  <Grid item md={2} xs={2}>
-                    <SlideshowIcon />
-                  </Grid>
-                  <Grid item md={10} xs={10}>
-                    <p> {engineer.showcase === null ? "" : engineer.showcase} </p>
+                    <p> {company.telephone === null ? "" : company.telephone} </p>
                   </Grid>
                 </Grid>
                 <Grid>
@@ -92,22 +72,13 @@ const ProfileItem = ({ engineer }) => {
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <p> {engineer.description} </p>
+                <p> {company.description} </p>
               </Paper>
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <p className="mb-2">
-                  Skills
-                  <ProfileSkillsItem items={engineer.skills} />
-                </p>
+                <p className="mb-2">Requirements</p>
               </Paper>
-              <div className="mt-6">
-                <Paper className={classes.paper}>
-                  <p className="mb-2">Expected Salary</p>
-                  <p>{engineer.salary}</p>
-                </Paper>
-              </div>
             </Grid>
           </Grid>
         </div>

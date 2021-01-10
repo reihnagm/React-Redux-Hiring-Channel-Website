@@ -1,6 +1,6 @@
 import axios from "axios"
 import store from "../store.js"
-import { decodeJWT } from "../configs/helper"
+import { auth } from "../utils/helper"
 import { logout } from "./auth"
 import { LOADING, LOADED, GET_SKILLS, GET_SKILLS_ERROR, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR } from "./types"
 export const getEngineers = () => async (dispatch, getState) => {
@@ -24,17 +24,11 @@ export const getEngineers = () => async (dispatch, getState) => {
   }
 }
 export const getCurrentProfileEngineer = () => async dispatch => {
-  let userUid, data
-  const token = localStorage.token
-  if (token) {
-    data = decodeJWT(token)
-    userUid = data.user.uid
-  }
   try {
     dispatch({
       type: LOADING
     })
-    const response = await axios.post(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/profile`, { userUid })
+    const response = await axios.post(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}/profile`, { userUid: auth().uid })
     dispatch({
       type: LOADED
     })
@@ -45,20 +39,6 @@ export const getCurrentProfileEngineer = () => async dispatch => {
   } catch (error) {
     dispatch({
       type: GET_CURRENT_PROFILE_ENGINEER_ERROR,
-      payload: error
-    })
-  }
-}
-export const getSkills = () => async dispatch => {
-  try {
-    const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS_SKILLS}`)
-    dispatch({
-      type: GET_SKILLS,
-      payload: response.data.data
-    })
-  } catch (error) {
-    dispatch({
-      type: GET_SKILLS_ERROR,
       payload: error
     })
   }
@@ -79,6 +59,20 @@ export const getProfileEngineerBySlug = slug => async dispatch => {
   } catch (error) {
     dispatch({
       type: GET_PROFILE_ENGINEER_BY_SLUG_ERROR,
+      payload: error
+    })
+  }
+}
+export const getSkills = () => async dispatch => {
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS_SKILLS}`)
+    dispatch({
+      type: GET_SKILLS,
+      payload: response.data.data
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_SKILLS_ERROR,
       payload: error
     })
   }

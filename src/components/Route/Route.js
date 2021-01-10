@@ -12,19 +12,27 @@ import CompanyProfile from "../Company/CompanyProfile/CompanyProfile"
 import CompanyProfileShow from "../Company/CompanyProfile/ProfileShow/ProfileShow"
 import CompanyProfileEdit from "../Company/CompanyProfile/ProfileEdit/ProfileEdit"
 import Private from "./Private/Private"
+
 const Routes = () => {
   return (
     <Switch>
+      {/* Auth Route */}
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
+      {/* Company Route */}
       <Route exact path="/companies" component={Company} />
-      <Private exact path="/companies/profile" component={CompanyProfile} />
       <Route exact path="/companies/profile/:slug" component={CompanyProfileShow} />
+      {/* Private Company Route */}
+      <Private exact path="/companies/profile" component={CompanyProfile} />
       <Private exact path="/companies/profile/me/edit" component={CompanyProfileEdit} />
+
+      {/* Engineer Route */}
       <Route exact path="/engineers" component={Engineer} />
+      <Route exact path="/engineers/profile/:slug" component={EngineerProfileShow} />
+      {/* Private Engineer Route  */}
       <Private exact path="/engineers/profile" component={EngineerProfile} />
-      <Route path="/engineers/profile/:slug" component={EngineerProfileShow} />
       <Private exact path="/engineers/profile/me/edit" component={EngineerProfileEdit} />
+      {/* 404 Page */}
       <Route component={Page404} />
     </Switch>
   )

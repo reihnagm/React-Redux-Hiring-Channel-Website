@@ -4,11 +4,7 @@ const initialState = {
   company: {},
   error: {},
   loading: true,
-  search: "",
-  sort: "DESC",
-  sortBy: "updated_at",
-  limit: "10",
-  page: "1"
+  search: ""
 }
 export default function (state = initialState, action) {
   const { type, payload } = action
