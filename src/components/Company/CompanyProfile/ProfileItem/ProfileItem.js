@@ -1,6 +1,9 @@
 import React from "react"
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from "@material-ui/core"
 import { Link } from "react-router-dom"
+import { Editor } from "@tinymce/tinymce-react"
+import { API_KEY_TINYMCE } from "../../../../configs/constants"
+import ReactHtmlParser from "react-html-parser"
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance"
 import EmailIcon from "@material-ui/icons/Email"
 import PhoneIcon from "@material-ui/icons/Phone"
@@ -77,7 +80,11 @@ const ProfileItem = ({ company }) => {
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <p className="mb-2">Requirements</p>
+                <p className="mb-2">
+                  <Editor value={company.content} init={{ menubar: false, toolbar: false }} inline={false} disabled={true} apiKey={API_KEY_TINYMCE} />
+                  {/* <div dangerouslySetInnerHTML={{ __html: company.content }} /> */}
+                  {/* {ReactHtmlParser(company.content)} */}
+                </p>
               </Paper>
             </Grid>
           </Grid>

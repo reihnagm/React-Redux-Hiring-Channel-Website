@@ -50,10 +50,7 @@ export default function (state = initialState, action) {
         error: payload
       }
     case UPDATE_PROFILE_COMPANY:
-      return {
-        ...state,
-        companies: state.companies.concat(payload)
-      }
+      return state
     case UPDATE_PROFILE_COMPANY_ERROR:
       return {
         ...state,

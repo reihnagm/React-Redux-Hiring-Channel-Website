@@ -106,7 +106,7 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
       uid: engineer.uid === null ? "" : engineer.uid,
       fullname: engineer.fullname === null ? "" : engineer.fullname,
       nickname: engineer.nickname === null ? "" : engineer.nickname,
-      email: engineer.email === null ? "" : engineer.description,
+      email: engineer.email === null ? "" : engineer.email,
       description: engineer.description === null ? "" : engineer.description,
       showcase: engineer.showcase === null ? "" : engineer.showcase,
       salary: engineer.salary === null ? "" : engineer.salary,

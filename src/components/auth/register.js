@@ -1,16 +1,14 @@
 import React, { useState } from "react"
-import CryptoJS from "crypto-js"
 import { Link, Redirect } from "react-router-dom"
 import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
 import { Button, InputLabel, Grid, Avatar, Badge, FormControl, makeStyles, TextField, MenuItem, Select, Typography } from "@material-ui/core"
 import { connect } from "react-redux"
 import { registerEngineer, registerCompany } from "../../actions/auth"
-import { isImage, bytesToSize, validateEmail } from "../../utils/helper"
+import { isImage, bytesToSize, validateEmail, Toast } from "../../utils/helper"
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined"
 import Swal from "sweetalert2"
 import MaskedInput from "react-text-mask"
 import "react-dropdown/style.css"
-const fs = require("fs")
 
 const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) => (
   <div>
@@ -45,17 +43,6 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
   </div>
 )
 const Register = ({ registerEngineer, registerCompany, isAuthenticated, history }) => {
-  const Toast = Swal.mixin({
-    position: "top-end",
-    toast: true,
-    timer: 3000,
-    showConfirmButton: false,
-    timerProgressBar: false,
-    onOpen: toast => {
-      toast.addEventListener("mouseenter", Swal.stopTimer)
-      toast.addEventListener("mouseleave", Swal.resumeTimer)
-    }
-  })
   const [role, setRole] = useState(1)
   const onChangeRole = element => {
     setRole(element.target.value)
@@ -191,10 +178,10 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
             console.log(`Progress: ${Math.round(percent)}`)
           }
           reader.readAsDataURL(e.target.files[0])
-        } catch (error) {
+        } catch (err) {
           Toast.fire({
             icon: "error",
-            title: error.message
+            title: err.message
           })
         }
       }
@@ -211,9 +198,9 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
       }
     }
     const { fullname, nickname, companyname, companyemail, companytelp, companydesc, email, password } = formData
-    const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
-    const onSubmit = async event => {
-      event.preventDefault()
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+    const onSubmit = async e => {
+      e.preventDefault()
       try {
         if (fullname.trim() === "") {
           throw new Error("Fullname Required")
@@ -349,7 +336,7 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
             }}
             value={role}
             label="Select your Role"
-            onChange={event => onChangeRole(event)}
+            onChange={e => onChangeRole(e)}
           >
             <MenuItem value={1}>Engineer</MenuItem>
             <MenuItem value={2}>Company</MenuItem>

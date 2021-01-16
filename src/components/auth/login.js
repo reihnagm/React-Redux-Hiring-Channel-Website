@@ -3,20 +3,7 @@ import { Link, Redirect } from "react-router-dom"
 import { Button, TextField, Typography } from "@material-ui/core"
 import { connect } from "react-redux"
 import { login } from "../../actions/auth"
-import { isImage, bytesToSize, validateEmail } from "../../utils/helper"
-import Swal from "sweetalert2"
-
-const Toast = Swal.mixin({
-  position: "top-end",
-  toast: true,
-  timer: 3000,
-  showConfirmButton: false,
-  timerProgressBar: false,
-  onOpen: toast => {
-    toast.addEventListener("mouseenter", Swal.stopTimer)
-    toast.addEventListener("mouseleave", Swal.resumeTimer)
-  }
-})
+import { validateEmail, Toast } from "../../utils/helper"
 
 const Login = ({ login, isAuthenticated, history }) => {
   const [formData, setFormData] = useState({
@@ -24,7 +11,7 @@ const Login = ({ login, isAuthenticated, history }) => {
     password: ""
   })
   const { email, password } = formData
-  const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
   const onSubmit = async e => {
     e.preventDefault()
     try {
@@ -63,9 +50,9 @@ const Login = ({ login, isAuthenticated, history }) => {
           <Typography variant="h5" component="h5" gutterBottom>
             Login
           </Typography>
-          <form onSubmit={event => onSubmit(event)}>
-            <TextField onChange={event => onChange(event)} value={email ?? ""} name="email" margin="normal" variant="outlined" label="Email" fullWidth />
-            <TextField onChange={event => onChange(event)} value={password ?? ""} name="password" margin="normal" variant="outlined" label="Password" fullWidth />
+          <form onSubmit={e => onSubmit(e)}>
+            <TextField onChange={e => onChange(e)} value={email ?? ""} name="email" margin="normal" variant="outlined" label="Email" fullWidth />
+            <TextField onChange={e => onChange(e)} value={password ?? ""} name="password" margin="normal" variant="outlined" label="Password" fullWidth />
             <div className="margin-normal">
               <Button style={{ margin: 0 }} type="submit" variant="contained" color="primary" fullWidth>
                 Login

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
 import { Container, Grid, Button, TextField, Avatar, Badge, makeStyles } from "@material-ui/core"
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers"
-import { bytesToSize, isImage } from "../../../../../utils/helper"
+import { auth, bytesToSize, isImage, Toast } from "../../../../../utils/helper"
+import { API_KEY_TINYMCE } from "../../../../../configs/constants"
+import { Editor } from "@tinymce/tinymce-react"
+import ReactQuill from "react-quill"
+import "react-quill/dist/quill.snow.css"
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined"
-import Swal from "sweetalert2"
 import MaskedInput from "react-text-mask"
-import DateFnsUtils from "@date-io/date-fns"
 
 const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) => (
   <div>
@@ -43,17 +44,6 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
 )
 const ProfileEditItem = ({ company, update, history }) => {
   let fileRef
-  const Toast = Swal.mixin({
-    position: "top-end",
-    toast: true,
-    timer: 3000,
-    showConfirmButton: false,
-    timerProgressBar: false,
-    onOpen: toast => {
-      toast.addEventListener("mouseenter", Swal.stopTimer)
-      toast.addEventListener("mouseleave", Swal.resumeTimer)
-    }
-  })
   const useStyles = makeStyles(theme => ({
     root: {
       display: "flex",
@@ -79,14 +69,14 @@ const ProfileEditItem = ({ company, update, history }) => {
   }))
   const classes = useStyles()
   const [isOpen, setIsOpen] = useState(false)
+  const [postJob, setPostJob] = useState("")
   const [location, setLocation] = useState("")
   const [logoNotEdited, setLogoNotEdited] = useState("")
   const [logoDefault, setDefaultLogo] = useState("")
   const [logoFile, setLogoFile] = useState("")
   const [formData, setFormData] = useState({
     uid: "",
-    fullname: "",
-    nickname: "",
+    name: "",
     email: "",
     description: "",
     telephone: ""
@@ -95,21 +85,27 @@ const ProfileEditItem = ({ company, update, history }) => {
   useEffect(() => {
     setFormData({
       uid: company.uid === null ? "" : company.uid,
-      fullname: company.fullname === null ? "" : company.fullname,
-      nickname: company.nickname === null ? "" : company.nickname,
+      name: company.name === null ? "" : company.name,
       email: company.email === null ? "" : company.email,
       description: company.description === null ? "" : company.description,
       telephone: company.telephone === null ? "" : company.telephone
     })
+    company.content === null ? setPostJob("") : setPostJob(company.content)
     company.location === null ? setLocation("") : setLocation(company.location)
     setDefaultLogo(`${process.env.REACT_APP_GET_LOCAL_IMAGES_COMPANY}/${company.logo}`)
     setLogoNotEdited(company.logo)
   }, [company])
 
-  const { uid, fullname, nickname, email, description, telephone } = formData
+  const { uid, name, email, description, telephone } = formData
 
-  const onChange = event => {
-    setFormData({ ...formData, [event.target.name]: event.target.value })
+  const onChange = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+  // const onEditorChange = (content, editor) => {
+  //   setPostJob(content)
+  // }
+  const onEditorChange = content => {
+    setPostJob(content)
   }
   const handleChange = address => {
     setLocation(address)
@@ -150,8 +146,8 @@ const ProfileEditItem = ({ company, update, history }) => {
       }
     }
   }
-  const onSubmit = async event => {
-    event.preventDefault()
+  const onSubmit = async e => {
+    e.preventDefault()
     let logo
     if (logoFile === "") {
       logo = logoNotEdited
@@ -159,36 +155,21 @@ const ProfileEditItem = ({ company, update, history }) => {
       logo = logoFile
     }
     try {
-      if (fullname.length < 3) {
-        throw new Error("Fullname Minimum 3 Character")
-      }
-      if (nickname.length < 3) {
-        throw new Error("Nickname Minimum 3 Character")
-      }
       let fd = new FormData()
       fd.set("uid", uid)
+      fd.set("userUid", auth().uid)
       fd.set("logo", logo)
-      fd.set("fullname", fullname)
-      fd.set("nickname", nickname)
+      fd.set("name", name)
       fd.set("email", email)
       fd.set("description", description)
       fd.set("telephone", telephone)
       fd.set("location", location)
-      update(fd)
-        .then(_ => {
-          Toast.fire({
-            icon: "success",
-            title: "Profile Updated"
-          })
-          history.push("/companies")
-        })
-        .catch(_ => {
-          throw new Error("Bad Connection or Server Unreachable")
-        })
-    } catch (error) {
+      fd.set("postJob", postJob)
+      await update(fd, history)
+    } catch (err) {
       Toast.fire({
         icon: "error",
-        title: error.message
+        title: err.message
       })
     }
   }
@@ -197,7 +178,7 @@ const ProfileEditItem = ({ company, update, history }) => {
       <Container fixed>
         <Grid container className="my-5" direction="row" justify="center" alignItems="center">
           <Grid className="p-5 white rounded" item md={8} xs={12}>
-            <form onSubmit={event => onSubmit(event)}>
+            <form onSubmit={e => onSubmit(e)}>
               <div className={classes.root}>
                 <Badge
                   overlap="circle"
@@ -224,17 +205,28 @@ const ProfileEditItem = ({ company, update, history }) => {
                     </Grid>
                   }
                 >
-                  <Avatar className={classes.large} alt={fullname} src={`${logoDefault}`} />
+                  <Avatar className={classes.large} alt={name} src={`${logoDefault}`} />
                 </Badge>
               </div>
-              <TextField onChange={onChange} value={fullname ?? ""} name="fullname" margin="normal" variant="outlined" label="Fullname" fullWidth />
-              <TextField onChange={onChange} value={nickname ?? ""} name="nickname" margin="normal" variant="outlined" label="Nickname" fullWidth />
+              <TextField onChange={onChange} value={name ?? ""} name="name" margin="normal" variant="outlined" label="Name" fullWidth />
               <TextField onChange={onChange} value={email ?? ""} name="email" margin="normal" variant="outlined" label="E-mail Address" fullWidth disabled />
               <TextField onChange={onChange} value={description ?? ""} multiline rows="4" name="description" margin="normal" variant="outlined" label="Description" fullWidth />
               <PlacesAutocomplete value={location ?? ""} onChange={handleChange} onSelect={handleSelect}>
                 {renderFunction}
               </PlacesAutocomplete>
               <MaskedInput mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"_"} onChange={e => onChange(e)} render={(ref, props) => <TextField value={telephone ?? ""} name="telephone" margin="normal" variant="outlined" label="Telephone" fullWidth inputRef={ref} {...props} />} />
+              {/* <Editor
+                value={postJob}
+                apiKey={API_KEY_TINYMCE}
+                init={{
+                  height: 400,
+                  menubar: false,
+                  plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table paste code help wordcount"],
+                  toolbar: "undo redo | formatselect | link image | code | bold italic backcolor |  alignleft aligncenter alignright alignjustify |  bullist numlist outdent indent | removeformat | help"
+                }}
+                onEditorChange={onEditorChange}
+              /> */}
+              <ReactQuill theme="snow" value={postJob} onChange={onEditorChange} />
               <Grid container direction="row" justify="center" alignItems="center">
                 <Button type="button" variant="contained" color="primary" component={Link} to="/companies">
                   Back

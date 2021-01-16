@@ -1,5 +1,5 @@
 import axios from "axios"
-import { auth } from "../utils/helper"
+import { Toast, auth } from "../utils/helper"
 import { LOADING, LOADED, GET_COMPANIES, GET_COMPANIES_ERROR, GET_CURRENT_PROFILE_COMPANY, GET_CURRENT_PROFILE_COMPANY_ERROR, GET_PROFILE_COMPANY_BY_SLUG, GET_PROFILE_COMPANY_BY_SLUG_ERROR, UPDATE_PROFILE_COMPANY, UPDATE_PROFILE_COMPANY_ERROR, DELETE_COMPANY, DELETE_COMPANY_ERROR } from "./types"
 export const getCompanies = () => async (dispatch, getState) => {
   try {
@@ -61,12 +61,17 @@ export const getProfileCompanyBySlug = slug => async dispatch => {
     })
   }
 }
-export const updateProfileCompany = (companyUid, payload) => async dispatch => {
+export const updateProfileCompany = (payload, history) => async dispatch => {
   try {
     dispatch({
       type: LOADING
     })
-    await axios.patch(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}/${companyUid}`, payload)
+    await axios.put(`${process.env.REACT_APP_GET_LOCAL_COMPANIES}`, payload)
+    Toast.fire({
+      icon: "success",
+      title: "Profile Updated"
+    })
+    history.push("/companies")
     dispatch({
       type: LOADED
     })
@@ -74,10 +79,10 @@ export const updateProfileCompany = (companyUid, payload) => async dispatch => {
       type: UPDATE_PROFILE_COMPANY,
       payload: payload
     })
-  } catch (error) {
+  } catch (err) {
     dispatch({
       type: UPDATE_PROFILE_COMPANY_ERROR,
-      payload: error
+      payload: err
     })
   }
 }

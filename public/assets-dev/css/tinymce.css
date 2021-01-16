@@ -1,0 +1,12 @@
+.tox-statusbar__branding {
+  display: none !important;
+}
+.tox-statusbar__resize-handle {
+  display: none !important;
+}
+.tox-statusbar {
+  border: none !important;
+}
+.tox-tinymce {
+  border: none !important;
+}

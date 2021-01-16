@@ -61,10 +61,7 @@ export default (state = initialState, action) => {
         error: payload
       }
     case UPDATE_PROFILE_ENGINEER:
-      return {
-        ...state,
-        engineers: [...payload, state.engineers]
-      }
+      return state
     case UPDATE_PROFILE_ENGINEER_ERROR:
       return {
         ...state,
