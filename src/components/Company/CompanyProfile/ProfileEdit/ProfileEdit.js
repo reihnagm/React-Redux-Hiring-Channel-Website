@@ -16,10 +16,10 @@ const ProfileEdit = ({ getCurrentProfileCompany, updateProfileCompany, company: 
   return loading ? (
     <Spinner />
   ) : (
-    <>
+    <div>
       <div className="backdrop-bottom"></div>
       <ProfileEditItem company={company} history={history} update={updateProfileCompany} />
-    </>
+    </div>
   )
 }
 const mapStateToProps = state => ({

@@ -106,8 +106,14 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
           <MenuItem className="text-black" component={Link} to="/companies/profile">
             Profile
           </MenuItem>
+          <MenuItem className="text-black" component={Link} to="/companies/add-jobs">
+            Add Jobs
+          </MenuItem>
+          <MenuItem className="text-black" component={Link} to="/companies/edit-company">
+            Edit Company Profile
+          </MenuItem>
           <MenuItem className="text-black" component={Link} to="/companies/profile/me/edit">
-            Edit Profile
+            Edit User Profile
           </MenuItem>
         </div>
       )}

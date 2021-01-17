@@ -2,7 +2,7 @@ import axios from "axios"
 import store from "../store.js"
 import { auth } from "../utils/helper"
 import { logout } from "./auth"
-import { LOADING, LOADED, GET_SKILLS, GET_SKILLS_ERROR, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR } from "./types"
+import { LOADING, LOADED, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR } from "./types"
 export const getEngineers = () => async (dispatch, getState) => {
   try {
     dispatch({
@@ -59,20 +59,6 @@ export const getProfileEngineerBySlug = slug => async dispatch => {
   } catch (error) {
     dispatch({
       type: GET_PROFILE_ENGINEER_BY_SLUG_ERROR,
-      payload: error
-    })
-  }
-}
-export const getSkills = () => async dispatch => {
-  try {
-    const response = await axios.get(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS_SKILLS}`)
-    dispatch({
-      type: GET_SKILLS,
-      payload: response.data.data
-    })
-  } catch (error) {
-    dispatch({
-      type: GET_SKILLS_ERROR,
       payload: error
     })
   }

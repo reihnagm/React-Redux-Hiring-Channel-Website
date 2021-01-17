@@ -3,11 +3,10 @@ import { Link } from "react-router-dom"
 import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
 import { Container, Chip, Grid, Button, TextField, Avatar, Badge, makeStyles } from "@material-ui/core"
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers"
-import { isImage, bytesToSize } from "../../../../../utils/helper"
+import { isImage, bytesToSize, Toast } from "../../../../../utils/helper"
 import RemoveIcon from "@material-ui/icons/RemoveCircleOutlineSharp"
 import Autocomplete from "@material-ui/lab/Autocomplete"
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined"
-import Swal from "sweetalert2"
 import * as moment from "moment"
 import MaskedInput from "react-text-mask"
 import NumberFormat from "react-number-format"
@@ -32,7 +31,7 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
               style={{
                 backgroundColor: "#ea80fc",
                 display: "inline-block",
-                height: "200",
+                height: "200px",
                 padding: "8px",
                 color: "white"
               }}
@@ -47,17 +46,6 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
 )
 const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
   let fileRef
-  const Toast = Swal.mixin({
-    position: "top-end",
-    toast: true,
-    timer: 3000,
-    showConfirmButton: false,
-    timerProgressBar: false,
-    onOpen: toast => {
-      toast.addEventListener("mouseenter", Swal.stopTimer)
-      toast.addEventListener("mouseleave", Swal.resumeTimer)
-    }
-  })
   const useStyles = makeStyles(theme => ({
     root: {
       display: "flex",
@@ -118,7 +106,7 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
     setAvatarNotEdited(engineer.avatar)
     setSkills(engineer.skills)
   }, [engineer])
-  const valHtml =
+  const renderedSkills =
     skillsSelectedMask &&
     skillsSelectedMask.map((option, i) => {
       return (
@@ -229,7 +217,7 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
     }
   }
   return (
-    <>
+    <div>
       <Container fixed>
         <Grid container className="my-5" direction="row" justify="center" alignItems="center">
           <Grid className="p-5 white rounded" item md={8} xs={12}>
@@ -283,7 +271,7 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
                 }}
                 renderInput={params => <TextField {...params} margin="normal" label="Skills" placeholder="Skills" variant="outlined" fullWidth />}
               />
-              <div>{valHtml}</div>
+              <div>{renderedSkills}</div>
               <PlacesAutocomplete value={location ?? ""} onChange={handleChange} onSelect={handleSelect}>
                 {renderFunction}
               </PlacesAutocomplete>
@@ -292,7 +280,7 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
                   onChange={handleDate}
                   value={selectedDate}
                   KeyboardButtonProps={{
-                    onFocus: e => {
+                    onFocus: _ => {
                       setIsOpen(true)
                     }
                   }}
@@ -331,7 +319,7 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
           </Grid>
         </Grid>
       </Container>
-    </>
+    </div>
   )
 }
 

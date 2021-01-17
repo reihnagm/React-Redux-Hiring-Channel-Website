@@ -1,6 +1,6 @@
 import axios from "axios"
 import { Toast, auth } from "../utils/helper"
-import { LOADING, LOADED, GET_COMPANIES, GET_COMPANIES_ERROR, GET_CURRENT_PROFILE_COMPANY, GET_CURRENT_PROFILE_COMPANY_ERROR, GET_PROFILE_COMPANY_BY_SLUG, GET_PROFILE_COMPANY_BY_SLUG_ERROR, UPDATE_PROFILE_COMPANY, UPDATE_PROFILE_COMPANY_ERROR, DELETE_COMPANY, DELETE_COMPANY_ERROR } from "./types"
+import { LOADING, LOADED, STORE_ADD_JOBS, STORE_ADD_JOBS_ERROR, GET_COMPANIES, GET_COMPANIES_ERROR, GET_CURRENT_PROFILE_COMPANY, GET_CURRENT_PROFILE_COMPANY_ERROR, GET_PROFILE_COMPANY_BY_SLUG, GET_PROFILE_COMPANY_BY_SLUG_ERROR, UPDATE_PROFILE_COMPANY, UPDATE_PROFILE_COMPANY_ERROR, DELETE_COMPANY, DELETE_COMPANY_ERROR } from "./types"
 export const getCompanies = () => async (dispatch, getState) => {
   try {
     dispatch({
@@ -58,6 +58,36 @@ export const getProfileCompanyBySlug = slug => async dispatch => {
     dispatch({
       type: GET_PROFILE_COMPANY_BY_SLUG_ERROR,
       payload: error
+    })
+  }
+}
+export const storeAddJobs = (payload, history) => async dispatch => {
+  try {
+    dispatch({
+      type: LOADING
+    })
+    await axios.post(`${process.env.REACT_APP_STORE_ADD_JOBS}`, {
+      title: payload.title,
+      content: payload.content,
+      salary: payload.salary,
+      skills: JSON.stringify(payload.skills),
+      companyUid: payload.companyUid
+    })
+    Toast.fire({
+      icon: "success",
+      title: "Profile Updated"
+    })
+    history.push("/companies")
+    dispatch({
+      type: LOADED
+    })
+    dispatch({
+      type: STORE_ADD_JOBS
+    })
+  } catch (err) {
+    dispatch({
+      type: STORE_ADD_JOBS_ERROR,
+      payload: err
     })
   }
 }

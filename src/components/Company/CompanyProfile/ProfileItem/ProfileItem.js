@@ -26,7 +26,7 @@ const ProfileItem = ({ company }) => {
   }))
   const classes = useStyles()
   return (
-    <>
+    <div>
       <div className="backdrop-top"></div>
       <Container className="mt-64" fixed>
         <div className={classes.root}>
@@ -80,17 +80,15 @@ const ProfileItem = ({ company }) => {
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <p className="mb-2">
-                  <Editor value={company.content} init={{ menubar: false, toolbar: false }} inline={false} disabled={true} apiKey={API_KEY_TINYMCE} />
-                  {/* <div dangerouslySetInnerHTML={{ __html: company.content }} /> */}
-                  {/* {ReactHtmlParser(company.content)} */}
-                </p>
+                <Editor value={company.content} init={{ menubar: false, toolbar: false }} inline={false} disabled={true} apiKey={API_KEY_TINYMCE} />
+                {/* <div dangerouslySetInnerHTML={{ __html: company.content }} /> */}
+                {/* {ReactHtmlParser(company.content)} */}
               </Paper>
             </Grid>
           </Grid>
         </div>
       </Container>
-    </>
+    </div>
   )
 }
 

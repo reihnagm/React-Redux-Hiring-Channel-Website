@@ -2,11 +2,12 @@ import React, { useEffect } from "react"
 import "date-fns"
 import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
-import { getCurrentProfileEngineer, getSkills, updateProfileEngineer } from "../../../../actions/engineer"
+import { getCurrentProfileEngineer, updateProfileEngineer } from "../../../../actions/engineer"
+import { getSkills } from "../../../../actions/skill"
 import Spinner from "../../../Spinner/Spinner"
 import ProfileEditItem from "./ProfileEditItem/ProfileEditItem"
 
-const ProfileEdit = ({ getCurrentProfileEngineer, getSkills, updateProfileEngineer, engineer: { engineer, skills, loading }, history }) => {
+const ProfileEdit = ({ getCurrentProfileEngineer, getSkills, updateProfileEngineer, engineer: { engineer, loading }, skill: { skills }, history }) => {
   useEffect(() => {
     const fetchData = async () => {
       await getCurrentProfileEngineer()
@@ -24,6 +25,7 @@ const ProfileEdit = ({ getCurrentProfileEngineer, getSkills, updateProfileEngine
   )
 }
 const mapStateToProps = state => ({
-  engineer: state.engineer
+  engineer: state.engineer,
+  skill: state.skill
 })
 export default connect(mapStateToProps, { getCurrentProfileEngineer, getSkills, updateProfileEngineer })(withRouter(ProfileEdit))
