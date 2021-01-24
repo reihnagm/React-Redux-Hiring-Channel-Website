@@ -106,11 +106,8 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
           <MenuItem className="text-black" component={Link} to="/companies/profile">
             Profile
           </MenuItem>
-          <MenuItem className="text-black" component={Link} to="/companies/add-jobs">
-            Add Jobs
-          </MenuItem>
-          <MenuItem className="text-black" component={Link} to="/companies/edit-company">
-            Edit Company Profile
+          <MenuItem className="text-black" component={Link} to="/companies/add-job">
+            Add Job
           </MenuItem>
           <MenuItem className="text-black" component={Link} to="/companies/profile/me/edit">
             Edit User Profile
@@ -174,10 +171,10 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
             <Link className="text-black mx-3" to="/">
               Home
             </Link>
-            <Link className="text-black mx-3" to="/engineers">
+            <Link className="text-black mx-3" to="/engineers?page=1&show=5&sort=newer&filterby=latest-update">
               Engineers
             </Link>
-            <Link className="text-black mx-3" to="/companies">
+            <Link className="text-black mx-3" to="/companies?page=1&show=5&sort=newer&filterby=latest-update">
               Companies
             </Link>
           </div>
@@ -245,10 +242,10 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
             <Link className="text-black mx-3" to="/">
               Home
             </Link>
-            <Link className="text-black mx-3" to="/engineers">
+            <Link className="text-black mx-3" to="/engineers?page=1&show=5&sort=newer&filterby=latest-update">
               Engineers
             </Link>
-            <Link className="text-black mx-3" to="/companies">
+            <Link className="text-black mx-3" to="/companies?page=1&show=5&sort=newer&filterby=latest-update">
               Companies
             </Link>
             <Link className="text-black mx-3" to="/login">

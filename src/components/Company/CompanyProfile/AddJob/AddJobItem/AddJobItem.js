@@ -3,17 +3,21 @@ import { Link } from "react-router-dom"
 import { Container, Grid, Chip, Button, TextField, makeStyles } from "@material-ui/core"
 import { API_KEY_TINYMCE } from "../../../../../configs/constants"
 import { Editor } from "@tinymce/tinymce-react"
+import { Toast } from "../../../../../utils/helper"
 import RemoveIcon from "@material-ui/icons/RemoveCircleOutlineSharp"
 import NumberFormat from "react-number-format"
 import Autocomplete from "@material-ui/lab/Autocomplete"
 
-const AddJobsItem = ({ company, allSkills }) => {
+const AddJobItem = ({ company, storeAddJob, allSkills, allJobTypes, history }) => {
   const [formData, setFormData] = useState({
     title: "",
     salary: ""
   })
   const [skills, setSkills] = useState([])
-  const [skillsDeleted, setSkillsDeleted] = useState("")
+  const [jobtypes, setJobTypes] = useState([])
+  // const [skillsDeleted, setSkillsDeleted] = useState([])
+  const [content, setContent] = useState("")
+  const { title, salary } = formData
   const useStyles = makeStyles(theme => ({
     chip: {
       "& > *": {
@@ -32,21 +36,19 @@ const AddJobsItem = ({ company, allSkills }) => {
             deleteIcon={<RemoveIcon />}
             onDelete={() => {
               setSkills(skills.filter(entry => entry !== option))
-              setSkillsDeleted(oldArray => [...oldArray, skills.filter(entry => entry === option)])
+              // setSkillsDeleted(oldArray => [...oldArray, skills.filter(entry => entry === option)])
             }}
           />
         </span>
       )
     })
-  const [content, setContent] = useState("")
-  const { title, salary } = formData
   const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
   const onEditorChange = content => {
     setContent(content)
   }
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault()
     try {
       let payload = {
@@ -54,10 +56,31 @@ const AddJobsItem = ({ company, allSkills }) => {
         content: content,
         salary: salary,
         skills: skills,
+        jobtypes: jobtypes,
         companyUid: company.uid
       }
-      console.log(payload)
-    } catch (err) {}
+      if (title.trim() == "") {
+        throw new Error("Title Required")
+      }
+      if (content.trim() == "") {
+        throw new Error("Content Required")
+      }
+      if (salary.trim() == "") {
+        throw new Error("Salary Required")
+      }
+      if (skills.length == 0) {
+        throw new Error("Skills Required")
+      }
+      if (jobtypes.length == 0) {
+        throw new Error("Job Type Required")
+      }
+      await storeAddJob(payload, history)
+    } catch (err) {
+      Toast.fire({
+        icon: "error",
+        title: err.message
+      })
+    }
   }
   return (
     <div>
@@ -67,6 +90,7 @@ const AddJobsItem = ({ company, allSkills }) => {
           <Grid className="p-5 white rounded" item md={8} xs={12}>
             <form onSubmit={e => onSubmit(e)}>
               <TextField onChange={onChange} value={title} name="title" margin="normal" variant="outlined" label="Title" fullWidth />
+              <p className="text-gray mb-3">Job Description</p>
               <Editor
                 value={content}
                 apiKey={API_KEY_TINYMCE}
@@ -114,16 +138,31 @@ const AddJobsItem = ({ company, allSkills }) => {
                 getOptionSelected={(option, value) => {
                   return option.uid === value.uid
                 }}
-                renderInput={params => <TextField {...params} margin="normal" label="Skills" placeholder="Skills" variant="outlined" fullWidth />}
+                renderInput={params => <TextField {...params} margin="normal" label="Skill Requirements" placeholder="Skill Requirements" variant="outlined" fullWidth />}
               />
               <div>{renderedSkills}</div>
-              <NumberFormat onChange={e => onChange(e)} value={salary} name="salary" margin="normal" variant="outlined" label="Salary" decimalSeparator="," thousandSeparator="." prefix="Rp " customInput={TextField} fullWidth />
+              <Autocomplete
+                filterSelectedOptions
+                freeSolo
+                value={jobtypes}
+                options={allJobTypes}
+                onChange={(_, value) => {
+                  setJobTypes(value)
+                }}
+                getOptionLabel={allJobTypes => allJobTypes.name}
+                getOptionSelected={(option, value) => {
+                  return option.uid === value.uid
+                }}
+                renderInput={params => <TextField {...params} margin="normal" label="Job Types" placeholder="Job Types" variant="outlined" fullWidth />}
+              />
+              {/* <div>{renderedJobTypes}</div> */}
+              <NumberFormat onChange={e => onChange(e)} value={salary} name="salary" margin="normal" variant="outlined" label="Salary" decimalSeparator="," thousandSeparator="." prefix="IDR " allowNegative={false} customInput={TextField} fullWidth />
               <Grid container direction="row" justify="center" alignItems="center">
                 <Button type="button" variant="contained" color="primary" component={Link} to="/companies">
                   Back
                 </Button>
                 <Button type="submit" variant="contained" color="primary">
-                  Update
+                  Create
                 </Button>
               </Grid>
             </form>
@@ -134,4 +173,4 @@ const AddJobsItem = ({ company, allSkills }) => {
   )
 }
 
-export default AddJobsItem
+export default AddJobItem

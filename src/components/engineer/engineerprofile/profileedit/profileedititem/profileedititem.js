@@ -77,7 +77,7 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
   const [avatarDefault, setDefaultAvatar] = useState("")
   const [avatarFile, setAvatarFile] = useState("")
   const [skillsSelectedMask, setSkills] = useState([])
-  const [skillsDeleted, setSkillsDeleted] = useState("")
+  const [skillsDeleted, setSkillsDeleted] = useState([])
   const [formData, setFormData] = useState({
     uid: "",
     fullname: "",
@@ -91,17 +91,17 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
 
   useEffect(() => {
     setFormData({
-      uid: engineer.uid === null ? "" : engineer.uid,
-      fullname: engineer.fullname === null ? "" : engineer.fullname,
-      nickname: engineer.nickname === null ? "" : engineer.nickname,
-      email: engineer.email === null ? "" : engineer.email,
-      description: engineer.description === null ? "" : engineer.description,
-      showcase: engineer.showcase === null ? "" : engineer.showcase,
-      salary: engineer.salary === null ? "" : engineer.salary,
-      telephone: engineer.telephone === null ? "" : engineer.telephone
+      uid: engineer && engineer.uid === null ? "" : engineer.uid,
+      fullname: engineer && engineer.fullname === null ? "" : engineer.fullname,
+      nickname: engineer && engineer.nickname === null ? "" : engineer.nickname,
+      email: engineer && engineer.email === null ? "" : engineer.email,
+      description: engineer && engineer.description === null ? "" : engineer.description,
+      showcase: engineer && engineer.showcase === null ? "" : engineer.showcase,
+      salary: engineer && engineer.salary === null ? "" : engineer.salary,
+      telephone: engineer && engineer.telephone === null ? "" : engineer.telephone
     })
-    engineer.location === null ? setLocation("") : setLocation(engineer.location)
-    engineer.birthdate === null ? setSelectedDate(moment(new Date()).format("YYYY-MM-DD")) : setSelectedDate(moment(engineer.birthdate).format("YYYY-MM-DD"))
+    engineer && engineer.location === null ? setLocation("") : setLocation(engineer.location)
+    engineer && engineer.birthdate === null ? setSelectedDate(moment(new Date()).format("YYYY-MM-DD")) : setSelectedDate(moment(engineer.birthdate).format("YYYY-MM-DD"))
     setDefaultAvatar(`${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/${engineer.avatar}`)
     setAvatarNotEdited(engineer.avatar)
     setSkills(engineer.skills)
@@ -160,10 +160,10 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
           setDefaultAvatar(e.target.result)
         }
         reader.readAsDataURL(e.target.files[0])
-      } catch (e) {
+      } catch (err) {
         Toast.fire({
           icon: "error",
-          title: e.message
+          title: err.message
         })
       }
     }
@@ -265,7 +265,7 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
                 onChange={(_, value) => {
                   setSkills(value)
                 }}
-                getOptionLabel={allSkills => allSkills.name}
+                getOptionLabel={allSkills => allSkills.name ?? ""}
                 getOptionSelected={(option, value) => {
                   return option.uid === value.uid
                 }}
@@ -306,7 +306,7 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
               </MuiPickersUtilsProvider>
               <TextField onChange={e => onChange(e)} value={showcase ?? ""} name="showcase" margin="normal" variant="outlined" label="Showcase" fullWidth />
               <MaskedInput mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"_"} onChange={e => onChange(e)} render={(ref, props) => <TextField value={telephone ?? ""} name="telephone" margin="normal" variant="outlined" label="Telephone" fullWidth inputRef={ref} {...props} />} />
-              <NumberFormat onChange={e => onChange(e)} value={salary ?? ""} name="salary" margin="normal" variant="outlined" label="salary" decimalSeparator="," thousandSeparator="." prefix="Rp " customInput={TextField} fullWidth />
+              <NumberFormat onChange={e => onChange(e)} value={salary ?? ""} name="salary" margin="normal" variant="outlined" label="salary" decimalSeparator="," thousandSeparator="." prefix="Rp " allowNegative={false} customInput={TextField} fullWidth />
               <Grid container direction="row" justify="center" alignItems="center">
                 <Button type="button" variant="contained" color="primary" component={Link} to="/engineers">
                   Back

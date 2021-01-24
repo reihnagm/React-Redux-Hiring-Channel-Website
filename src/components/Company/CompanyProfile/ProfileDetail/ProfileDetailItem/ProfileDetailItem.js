@@ -1,15 +1,14 @@
 import React from "react"
 import { Container, Grid, Paper, Button, makeStyles, Avatar } from "@material-ui/core"
 import { Link } from "react-router-dom"
-import { Editor } from "@tinymce/tinymce-react"
-import { API_KEY_TINYMCE } from "../../../../../configs/constants"
 import ReactHtmlParser from "react-html-parser"
-import PersonIcon from "@material-ui/icons/Person"
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance"
 import EmailIcon from "@material-ui/icons/Email"
 import PhoneIcon from "@material-ui/icons/Phone"
 import LocationOnIcon from "@material-ui/icons/LocationOn"
+import ProfileSkillsItem from "../../ProfileSkillsItem/ProfileSkillsItem"
 
-const ProfileShowItem = ({ company }) => {
+const ProfileDetailItem = ({ company }) => {
   const useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1
@@ -35,7 +34,7 @@ const ProfileShowItem = ({ company }) => {
                 <Avatar className={classes.avatar} src={`${process.env.REACT_APP_GET_LOCAL_IMAGES_COMPANY}/${company.logo}`} alt={company.name} />
                 <Grid container>
                   <Grid item md={2} xs={2}>
-                    <PersonIcon />
+                    <AccountBalanceIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
                     <p>{company.name}</p>
@@ -65,19 +64,39 @@ const ProfileShowItem = ({ company }) => {
                     <p> {company.telephone} </p>
                   </Grid>
                 </Grid>
-                <Button type="button" variant="contained" color="primary" component={Link} to="/companies">
+                <Button type="button" variant="contained" color="primary" component={Link} to="/companies?page=1&show=5&sort=newer&filterby=latest-update">
                   Back
                 </Button>
               </Paper>
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
+                <h1 className="text-title mb-3">About Company</h1>
                 <p> {company.description} </p>
               </Paper>
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <div id="tinymce-rendered-html">{ReactHtmlParser(company.content)}</div>
+                <div id="tinymce-rendered-html">
+                  <Grid container>
+                    <Grid item md={9} xs={12}>
+                      <h2 className="mb-3">{company.title}</h2>
+                    </Grid>
+                    <Grid item md={3} xs={12}>
+                      <Button type="button" variant="contained" color="primary" component={Link} to={`/companies/${company.slug}/edit-job`}>
+                        Edit
+                      </Button>
+                    </Grid>
+                  </Grid>
+                  <h2 className="my-3">Job description & requirements</h2>
+                  {ReactHtmlParser(company.content)}
+                </div>
+              </Paper>
+              <Paper className={`${classes.paper} mt-4`}>
+                <p>
+                  Requirements :
+                  <ProfileSkillsItem items={company.skills} />
+                </p>
               </Paper>
             </Grid>
           </Grid>
@@ -87,4 +106,4 @@ const ProfileShowItem = ({ company }) => {
   )
 }
 
-export default ProfileShowItem
+export default ProfileDetailItem

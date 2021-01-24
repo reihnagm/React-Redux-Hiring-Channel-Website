@@ -9,8 +9,9 @@ import EngineerProfileShow from "../Engineer/EngineerProfile/ProfileShow/Profile
 import EngineerProfileEdit from "../Engineer/EngineerProfile/ProfileEdit/ProfileEdit"
 import Company from "../Company/Company"
 import CompanyProfile from "../Company/CompanyProfile/CompanyProfile"
-import AddJobs from "../Company/CompanyProfile/AddJobs/AddJobs"
-import CompanyProfileShow from "../Company/CompanyProfile/ProfileShow/ProfileShow"
+import AddJob from "../Company/CompanyProfile/AddJob/AddJob"
+import EditJob from "../Company/CompanyProfile/EditJob/EditJob"
+import CompanyProfileDetail from "../Company/CompanyProfile/ProfileDetail/ProfileDetail"
 import CompanyProfileEdit from "../Company/CompanyProfile/ProfileEdit/ProfileEdit"
 import Private from "./Private/Private"
 
@@ -21,9 +22,10 @@ const Routes = () => {
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
       {/* Company Route */}
-      <Route exact path="/companies/add-jobs" component={AddJobs} />
+      <Route exact path="/companies/add-job" component={AddJob} />
+      <Route exact path="/companies/:slug/edit-job" component={EditJob} />
       <Route exact path="/companies" component={Company} />
-      <Route exact path="/companies/profile/:slug" component={CompanyProfileShow} />
+      <Route exact path="/companies/detail/:slug" component={CompanyProfileDetail} />
       {/* Private Company Route */}
       <Private exact path="/companies/profile" component={CompanyProfile} />
       <Private exact path="/companies/profile/me/edit" component={CompanyProfileEdit} />

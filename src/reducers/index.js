@@ -4,7 +4,9 @@ import alert from "./alert"
 import auth from "./auth"
 import engineer from "./engineer"
 import company from "./company"
+import postjob from "./postjob"
 import skill from "./skill"
+import jobtype from "./jobtype"
 import message from "./message"
 
 const createRootReducer = history =>
@@ -14,7 +16,9 @@ const createRootReducer = history =>
     auth,
     engineer,
     company,
-    message,
-    skill
+    postjob,
+    skill,
+    jobtype,
+    message
   })
 export default createRootReducer
