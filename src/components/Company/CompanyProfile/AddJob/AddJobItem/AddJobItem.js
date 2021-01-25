@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useDebugValue, useState } from "react"
 import { Link } from "react-router-dom"
 import { Container, Grid, Chip, Button, TextField, makeStyles } from "@material-ui/core"
 import { API_KEY_TINYMCE } from "../../../../../configs/constants"
@@ -13,11 +13,10 @@ const AddJobItem = ({ company, storeAddJob, allSkills, allJobTypes, history }) =
     title: "",
     salary: ""
   })
+  const { title, salary } = formData
   const [skills, setSkills] = useState([])
   const [jobtypes, setJobTypes] = useState([])
-  // const [skillsDeleted, setSkillsDeleted] = useState([])
   const [content, setContent] = useState("")
-  const { title, salary } = formData
   const useStyles = makeStyles(theme => ({
     chip: {
       "& > *": {
@@ -59,19 +58,19 @@ const AddJobItem = ({ company, storeAddJob, allSkills, allJobTypes, history }) =
         jobtypes: jobtypes,
         companyUid: company.uid
       }
-      if (title.trim() == "") {
+      if (title.trim() === "") {
         throw new Error("Title Required")
       }
-      if (content.trim() == "") {
+      if (content.trim() === "") {
         throw new Error("Content Required")
       }
-      if (salary.trim() == "") {
+      if (salary.trim() === "") {
         throw new Error("Salary Required")
       }
-      if (skills.length == 0) {
+      if (skills.length === 0) {
         throw new Error("Skills Required")
       }
-      if (jobtypes.length == 0) {
+      if (jobtypes.length === 0) {
         throw new Error("Job Type Required")
       }
       await storeAddJob(payload, history)
@@ -89,10 +88,10 @@ const AddJobItem = ({ company, storeAddJob, allSkills, allJobTypes, history }) =
         <Grid container className="my-5" direction="row" justify="center" alignItems="center">
           <Grid className="p-5 white rounded" item md={8} xs={12}>
             <form onSubmit={e => onSubmit(e)}>
-              <TextField onChange={onChange} value={title} name="title" margin="normal" variant="outlined" label="Title" fullWidth />
+              <TextField onChange={onChange} value={title ?? ""} name="title" margin="normal" variant="outlined" label="Title" fullWidth />
               <p className="text-gray mb-3">Job Description</p>
               <Editor
-                value={content}
+                value={content ?? ""}
                 apiKey={API_KEY_TINYMCE}
                 init={{
                   height: 400,
@@ -129,12 +128,12 @@ const AddJobItem = ({ company, storeAddJob, allSkills, allJobTypes, history }) =
                 filterSelectedOptions
                 freeSolo
                 renderTags={() => {}}
-                value={skills}
+                value={skills ?? ""}
                 options={allSkills}
                 onChange={(_, value) => {
                   setSkills(value)
                 }}
-                getOptionLabel={allSkills => allSkills.name}
+                getOptionLabel={allSkills => allSkills.name ?? ""}
                 getOptionSelected={(option, value) => {
                   return option.uid === value.uid
                 }}
@@ -142,21 +141,25 @@ const AddJobItem = ({ company, storeAddJob, allSkills, allJobTypes, history }) =
               />
               <div>{renderedSkills}</div>
               <Autocomplete
+                multiple
                 filterSelectedOptions
                 freeSolo
-                value={jobtypes}
+                value={jobtypes ?? ""}
                 options={allJobTypes}
                 onChange={(_, value) => {
-                  setJobTypes(value)
+                  if (jobtypes.length > 0) {
+                    setJobTypes(value.splice(1))
+                  } else {
+                    setJobTypes(value)
+                  }
                 }}
-                getOptionLabel={allJobTypes => allJobTypes.name}
+                getOptionLabel={allJobTypes => allJobTypes.name ?? ""}
                 getOptionSelected={(option, value) => {
                   return option.uid === value.uid
                 }}
                 renderInput={params => <TextField {...params} margin="normal" label="Job Types" placeholder="Job Types" variant="outlined" fullWidth />}
               />
-              {/* <div>{renderedJobTypes}</div> */}
-              <NumberFormat onChange={e => onChange(e)} value={salary} name="salary" margin="normal" variant="outlined" label="Salary" decimalSeparator="," thousandSeparator="." prefix="IDR " allowNegative={false} customInput={TextField} fullWidth />
+              <NumberFormat onChange={e => onChange(e)} value={salary ?? ""} name="salary" margin="normal" variant="outlined" label="Salary" decimalSeparator="," thousandSeparator="." prefix="IDR " allowNegative={false} customInput={TextField} fullWidth />
               <Grid container direction="row" justify="center" alignItems="center">
                 <Button type="button" variant="contained" color="primary" component={Link} to="/companies">
                   Back

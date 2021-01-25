@@ -18,10 +18,10 @@ const ProfileEdit = ({ getCurrentProfileEngineer, getSkills, updateProfileEngine
   return loading ? (
     <Spinner />
   ) : (
-    <>
+    <div>
       <div className="backdrop-bottom"></div>
-      <ProfileEditItem engineer={engineer} allSkills={skills} history={history} update={updateProfileEngineer} />
-    </>
+      <ProfileEditItem engineer={engineer} allSkills={skills} history={history} updateProfileEngineer={updateProfileEngineer} />
+    </div>
   )
 }
 const mapStateToProps = state => ({

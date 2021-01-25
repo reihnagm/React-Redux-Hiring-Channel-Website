@@ -67,7 +67,6 @@ const ProfileEditItem = ({ company, update, history }) => {
   }))
   const classes = useStyles()
   const [isOpen, setIsOpen] = useState(false)
-  const [postJob, setPostJob] = useState("")
   const [location, setLocation] = useState("")
   const [logoNotEdited, setLogoNotEdited] = useState("")
   const [logoDefault, setDefaultLogo] = useState("")
@@ -82,14 +81,13 @@ const ProfileEditItem = ({ company, update, history }) => {
 
   useEffect(() => {
     setFormData({
-      uid: company.uid === null ? "" : company.uid,
-      name: company.name === null ? "" : company.name,
-      email: company.email === null ? "" : company.email,
-      description: company.description === null ? "" : company.description,
-      telephone: company.telephone === null ? "" : company.telephone
+      uid: company && company.uid === null ? "" : company.uid,
+      name: company && company.name === null ? "" : company.name,
+      email: company && company.email === null ? "" : company.email,
+      description: company && company.description === null ? "" : company.description,
+      telephone: company && company.telephone === null ? "" : company.telephone
     })
-    company.content === null ? setPostJob("") : setPostJob(company.content)
-    company.location === null ? setLocation("") : setLocation(company.location)
+    company && company.location === null ? setLocation("") : setLocation(company.location)
     setDefaultLogo(`${process.env.REACT_APP_GET_LOCAL_IMAGES_COMPANY}/${company.logo}`)
     setLogoNotEdited(company.logo)
   }, [company])
@@ -98,9 +96,6 @@ const ProfileEditItem = ({ company, update, history }) => {
 
   const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-  const onEditorChange = content => {
-    setPostJob(content)
   }
   const handleChange = address => {
     setLocation(address)
@@ -159,7 +154,6 @@ const ProfileEditItem = ({ company, update, history }) => {
       fd.set("description", description)
       fd.set("telephone", telephone)
       fd.set("location", location)
-      fd.set("postJob", postJob)
       await update(fd, history)
     } catch (err) {
       Toast.fire({
@@ -210,39 +204,6 @@ const ProfileEditItem = ({ company, update, history }) => {
                 {renderFunction}
               </PlacesAutocomplete>
               <MaskedInput mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"_"} onChange={e => onChange(e)} render={(ref, props) => <TextField value={telephone ?? ""} name="telephone" margin="normal" variant="outlined" label="Telephone" fullWidth inputRef={ref} {...props} />} />
-              <Editor
-                value={postJob}
-                apiKey={API_KEY_TINYMCE}
-                init={{
-                  height: 400,
-                  menubar: false,
-                  valid_classes: {
-                    "*": ""
-                  },
-                  image_title: true,
-                  image_caption: true,
-                  plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table paste code help wordcount"],
-                  toolbar: "table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol | undo redo | formatselect | link image | code | bold italic backcolor |  alignleft aligncenter alignright alignjustify |  bullist numlist outdent indent | removeformat | help",
-                  file_picker_callback: function (cb, value, meta) {
-                    var input = document.createElement("input")
-                    input.setAttribute("type", "file")
-                    input.setAttribute("accept", "image/*")
-                    input.onchange = function () {
-                      var file = this.files[0]
-                      var reader = new FileReader()
-                      reader.onload = function (e) {
-                        cb(e.target.result, {
-                          title: file.name,
-                          alt: file.name
-                        })
-                      }
-                      reader.readAsDataURL(file)
-                    }
-                    input.click()
-                  }
-                }}
-                onEditorChange={onEditorChange}
-              />
               <Grid container direction="row" justify="center" alignItems="center">
                 <Button type="button" variant="contained" color="primary" component={Link} to="/companies">
                   Back

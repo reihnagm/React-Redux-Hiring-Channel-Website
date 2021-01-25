@@ -27,7 +27,7 @@ const ProfileItem = ({ engineer }) => {
   }))
   const classes = useStyles()
   return (
-    <>
+    <div>
       <div className="backdrop-top"></div>
       <Container className="mt-64" fixed>
         <div className={classes.root}>
@@ -40,7 +40,7 @@ const ProfileItem = ({ engineer }) => {
                     <PersonIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {engineer.fullname} </p>
+                    <p> {engineer.fullname === null ? "" : engineer.fullname} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -48,7 +48,7 @@ const ProfileItem = ({ engineer }) => {
                     <EmailIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {engineer.email} </p>
+                    <p> {engineer.email === null ? "" : engineer.email} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -56,7 +56,7 @@ const ProfileItem = ({ engineer }) => {
                     <CakeIcon />
                   </Grid>
                   <Grid item md={10} xs={10}>
-                    <p> {engineer.birthdate ? moment(engineer.birthdate).format("D MMMM YYYY") : ""} </p>
+                    <p> {engineer.birthdate === null ? "" : moment(engineer.birthdate).format("D MMMM YYYY")} </p>
                   </Grid>
                 </Grid>
                 <Grid container>
@@ -84,7 +84,7 @@ const ProfileItem = ({ engineer }) => {
                   </Grid>
                 </Grid>
                 <Grid>
-                  <Button type="button" variant="contained" color="primary" component={Link} to="/engineers">
+                  <Button type="button" variant="contained" color="primary" component={Link} to="/engineers?page=1&show=5&sort=newer&filterby=latest-update">
                     Back
                   </Button>
                 </Grid>
@@ -92,7 +92,7 @@ const ProfileItem = ({ engineer }) => {
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <p> {engineer.description} </p>
+                <p> {engineer.description === null ? "" : engineer.description} </p>
               </Paper>
             </Grid>
             <Grid item md={4} xs={12}>
@@ -105,14 +105,14 @@ const ProfileItem = ({ engineer }) => {
               <div className="mt-6">
                 <Paper className={classes.paper}>
                   <p className="mb-2">Expected Salary</p>
-                  <p>{engineer.salary}</p>
+                  <p>{engineer.salary === null ? "" : engineer.salary}</p>
                 </Paper>
               </div>
             </Grid>
           </Grid>
         </div>
       </Container>
-    </>
+    </div>
   )
 }
 

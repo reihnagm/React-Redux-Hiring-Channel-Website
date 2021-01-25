@@ -31,7 +31,7 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
               style={{
                 backgroundColor: "#ea80fc",
                 display: "inline-block",
-                height: "200px",
+                margin: "5px 0",
                 padding: "8px",
                 color: "white"
               }}
@@ -44,7 +44,7 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
     </div>
   </div>
 )
-const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
+const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer, history }) => {
   let fileRef
   const useStyles = makeStyles(theme => ({
     root: {
@@ -91,17 +91,17 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
 
   useEffect(() => {
     setFormData({
-      uid: engineer && engineer.uid === null ? "" : engineer.uid,
-      fullname: engineer && engineer.fullname === null ? "" : engineer.fullname,
-      nickname: engineer && engineer.nickname === null ? "" : engineer.nickname,
-      email: engineer && engineer.email === null ? "" : engineer.email,
-      description: engineer && engineer.description === null ? "" : engineer.description,
-      showcase: engineer && engineer.showcase === null ? "" : engineer.showcase,
-      salary: engineer && engineer.salary === null ? "" : engineer.salary,
-      telephone: engineer && engineer.telephone === null ? "" : engineer.telephone
+      uid: engineer.uid === null ? "" : engineer.uid,
+      fullname: engineer.fullname === null ? "" : engineer.fullname,
+      nickname: engineer.nickname === null ? "" : engineer.nickname,
+      email: engineer.email === null ? "" : engineer.email,
+      description: engineer.description === null ? "" : engineer.description,
+      showcase: engineer.showcase === null ? "" : engineer.showcase,
+      salary: engineer.salary === null ? "" : engineer.salary,
+      telephone: engineer.telephone === null ? "" : engineer.telephone
     })
-    engineer && engineer.location === null ? setLocation("") : setLocation(engineer.location)
-    engineer && engineer.birthdate === null ? setSelectedDate(moment(new Date()).format("YYYY-MM-DD")) : setSelectedDate(moment(engineer.birthdate).format("YYYY-MM-DD"))
+    engineer.location === null ? setLocation("") : setLocation(engineer.location)
+    engineer.birthdate === null ? setSelectedDate(moment(new Date()).format("YYYY-MM-DD")) : setSelectedDate(moment(engineer.birthdate).format("YYYY-MM-DD"))
     setDefaultAvatar(`${process.env.REACT_APP_GET_LOCAL_IMAGES_ENGINEER}/${engineer.avatar}`)
     setAvatarNotEdited(engineer.avatar)
     setSkills(engineer.skills)
@@ -178,11 +178,11 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
       avatar = avatarFile
     }
     try {
-      if (fullname.length < 3) {
-        throw new Error("Fullname Minimum 3 Character")
+      if (fullname.trim() === "") {
+        throw new Error("Fullname Required")
       }
-      if (nickname.length < 3) {
-        throw new Error("Nickname Minimum 3 Character")
+      if (nickname.trim() === "") {
+        throw new Error("Nickname Required")
       }
       let fd = new FormData()
       fd.set("uid", uid)
@@ -198,17 +198,7 @@ const ProfileEditItem = ({ engineer, allSkills, update, history }) => {
       fd.set("telephone", telephone)
       fd.set("salary", salary)
       fd.set("location", location)
-      update(fd)
-        .then(_ => {
-          Toast.fire({
-            icon: "success",
-            title: "Profile Updated"
-          })
-          history.push("/engineers")
-        })
-        .catch(_ => {
-          throw new Error("Bad Connection or Server Unreachable")
-        })
+      await updateProfileEngineer(fd, history)
     } catch (e) {
       Toast.fire({
         icon: "error",

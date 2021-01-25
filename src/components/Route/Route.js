@@ -25,6 +25,7 @@ const Routes = () => {
       <Route exact path="/companies/add-job" component={AddJob} />
       <Route exact path="/companies/:slug/edit-job" component={EditJob} />
       <Route exact path="/companies" component={Company} />
+      {/* <Redirect from="/companies" to="/companies?page=1&show=5&sort=newer&filterby=latest-update" /> */}
       <Route exact path="/companies/detail/:slug" component={CompanyProfileDetail} />
       {/* Private Company Route */}
       <Private exact path="/companies/profile" component={CompanyProfile} />

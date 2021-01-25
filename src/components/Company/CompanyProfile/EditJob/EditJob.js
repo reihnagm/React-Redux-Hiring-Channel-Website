@@ -15,7 +15,7 @@ const EditJob = ({ editPostJob, updatePostJob, getSkills, getJobTypes, postjob: 
       await getJobTypes()
     }
     fetchData()
-  }, [editPostJob, getSkills, getJobTypes])
+  }, [editPostJob, getSkills, getJobTypes, match.params.slug])
   return loading ? (
     <Spinner />
   ) : (

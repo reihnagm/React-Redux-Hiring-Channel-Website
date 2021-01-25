@@ -80,7 +80,7 @@ export const storeAddJob = (payload, history) => async dispatch => {
     history.push("/companies")
     Toast.fire({
       icon: "success",
-      title: "Company Created"
+      title: "Post Job Created"
     })
     dispatch({
       type: STORE_ADD_JOBS

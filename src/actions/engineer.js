@@ -1,6 +1,6 @@
 import axios from "axios"
 import store from "../store.js"
-import { auth } from "../utils/helper"
+import { Toast, auth } from "../utils/helper"
 import { logout } from "./auth"
 import { LOADING, LOADED, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR } from "./types"
 export const getEngineers = () => async (dispatch, getState) => {
@@ -63,18 +63,27 @@ export const getProfileEngineerBySlug = slug => async dispatch => {
     })
   }
 }
-export const updateProfileEngineer = payload => async dispatch => {
+export const updateProfileEngineer = (payload, history) => async dispatch => {
   try {
-    const response = await axios.put(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}`, payload)
     dispatch({
-      type: UPDATE_PROFILE_ENGINEER,
-      payload: payload
+      type: LOADING
     })
-    return response
-  } catch (error) {
+    await axios.put(`${process.env.REACT_APP_GET_LOCAL_ENGINEERS}`, payload)
+    dispatch({
+      type: LOADED
+    })
+    Toast.fire({
+      icon: "success",
+      title: "Profile Updated"
+    })
+    history.push("/engineers")
+    dispatch({
+      type: UPDATE_PROFILE_ENGINEER
+    })
+  } catch (err) {
     dispatch({
       type: UPDATE_PROFILE_ENGINEER_ERROR,
-      payload: error
+      payload: err
     })
   }
 }

@@ -23,11 +23,6 @@ const CompanyItem = ({ companies, handlePage, currentPage, pageCount }) => {
           {companies &&
             companies.map(company => (
               <div className="masonry-item text-white" key={company.uid}>
-                {/* <Link className="text-white" to={`companies/profile/${company.slug}`}>
-                  <LazyLoad>
-                    <img className="image rounded" src={`${process.env.REACT_APP_GET_LOCAL_IMAGES_COMPANY}/${company.logo}`} alt={company.name} />
-                  </LazyLoad>
-                </Link> */}
                 <Link className="text-white" to={`companies/detail/${company.slug}`}>
                   <LazyLoad>
                     <img className="image rounded" src={`${process.env.REACT_APP_GET_LOCAL_IMAGES_COMPANY}/${company.logo}`} alt={company.name} />
@@ -49,7 +44,7 @@ const CompanyItem = ({ companies, handlePage, currentPage, pageCount }) => {
             ))}
         </div>
         <div className={classes.root}>
-          <Pagination count={pageCount} onChange={(event, page) => handlePage(event, page)} page={currentPage} />
+          <Pagination count={pageCount ?? 0} onChange={(event, page) => handlePage(event, page)} page={currentPage ?? 1} />
         </div>
       </Grid>
     </Container>
