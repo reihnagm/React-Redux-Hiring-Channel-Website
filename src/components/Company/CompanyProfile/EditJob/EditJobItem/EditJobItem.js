@@ -17,7 +17,7 @@ const EditJobItem = ({ postJob, updatePostJob, allSkills, allJobTypes, history }
   const [content, setContent] = useState("")
   const [jobtypesSelectedMask, setJobTypes] = useState("")
   const [skillsSelectedMask, setSkills] = useState([])
-  const [skillsDeleted, setSkillsDeleted] = useState([])
+  const [skillsSelectedDestroy, setSkillsDestroy] = useState([])
   useEffect(() => {
     setFormData({
       title: postJob.title === null ? "" : postJob.title,
@@ -45,7 +45,7 @@ const EditJobItem = ({ postJob, updatePostJob, allSkills, allJobTypes, history }
             deleteIcon={<RemoveIcon />}
             onDelete={() => {
               setSkills(skillsSelectedMask.filter(entry => entry !== option))
-              setSkillsDeleted(oldArray => [...oldArray, skillsSelectedMask.filter(entry => entry === option)])
+              setSkillsDestroy(prevArray => [...prevArray, skillsSelectedMask.filter(entry => entry === option)])
             }}
           />
         </span>
@@ -64,9 +64,9 @@ const EditJobItem = ({ postJob, updatePostJob, allSkills, allJobTypes, history }
         title: title,
         content: content,
         salary: salary,
-        skills: skillsSelectedMask,
-        skillsDeleted: skillsDeleted,
-        jobtypes: jobtypesSelectedMask,
+        skillsStore: { skillsSelectedMask },
+        skillsDestroy: { skillsSelectedDestroy },
+        jobtypes: { jobtypesSelectedMask } ,
         postJobUid: postJob.uid
       }
       if (title.trim() === "") {

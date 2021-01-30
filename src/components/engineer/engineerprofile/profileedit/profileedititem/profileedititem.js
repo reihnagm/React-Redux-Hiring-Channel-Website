@@ -77,7 +77,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer, history }
   const [avatarDefault, setDefaultAvatar] = useState("")
   const [avatarFile, setAvatarFile] = useState("")
   const [skillsSelectedMask, setSkills] = useState([])
-  const [skillsDeleted, setSkillsDeleted] = useState([])
+  const [skillsSelectedDestroy, setSkillsDestroy] = useState([])
   const [formData, setFormData] = useState({
     uid: "",
     fullname: "",
@@ -116,7 +116,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer, history }
             deleteIcon={<RemoveIcon />}
             onDelete={() => {
               setSkills(skillsSelectedMask.filter(entry => entry !== option))
-              setSkillsDeleted(oldArray => [...oldArray, skillsSelectedMask.filter(entry => entry === option)])
+              setSkillsDestroy(oldArray => [...oldArray, skillsSelectedMask.filter(entry => entry === option)])
             }}
           />
         </span>
@@ -193,16 +193,16 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer, history }
       fd.set("birthdate", convertDate)
       fd.set("description", description)
       fd.set("skillsStore", JSON.stringify(skillsSelectedMask))
-      fd.set("skillsDestroy", JSON.stringify(skillsDeleted))
+      fd.set("skillsDestroy", JSON.stringify(skillsSelectedDestroy))
       fd.set("showcase", showcase)
       fd.set("telephone", telephone)
       fd.set("salary", salary)
       fd.set("location", location)
       await updateProfileEngineer(fd, history)
-    } catch (e) {
+    } catch (err) {
       Toast.fire({
         icon: "error",
-        title: e.message
+        title: err.message
       })
     }
   }

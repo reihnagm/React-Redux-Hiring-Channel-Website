@@ -31,10 +31,7 @@ const CompanyItem = ({ companies, handlePage, currentPage, pageCount }) => {
                 <div className="masonry-description">
                   <h1 className="masonry-job-title mb-1"> {company.title} </h1>
                   <p className="masonry-salary mb-1"> {company.salary} </p>
-                  <p className="masonry-content mb-1">
-                    Job description & requirements .............
-                    {ReactHtmlParser(company.content)}
-                  </p>
+                  <p className="masonry-content mb-1">Job description & requirements ..........................</p>
                   <div className="mb-1">
                     Requirements :
                     <ProfileSkillsItem items={company.skills} />

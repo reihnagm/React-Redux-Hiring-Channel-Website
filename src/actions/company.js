@@ -156,9 +156,12 @@ export const editPostJob = slug => async dispatch => {
   }
 }
 
-export const updatePostJob = slug => async dispatch => {
+export const updatePostJob = (payload, history) => async dispatch => {
+  // console.log(payload)
   try {
-    await axios.put(process.env.REACT_APP_UPDATE_POST_JOB)
+    await axios.put(process.env.REACT_APP_UPDATE_POST_JOB, {
+      payload: payload
+    })
     dispatch({
       type: UPDATE_POST_JOB
     })

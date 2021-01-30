@@ -52,7 +52,7 @@ const Login = ({ login, isAuthenticated, history }) => {
           </Typography>
           <form onSubmit={e => onSubmit(e)}>
             <TextField onChange={e => onChange(e)} value={email ?? ""} name="email" margin="normal" variant="outlined" label="Email" fullWidth />
-            <TextField onChange={e => onChange(e)} value={password ?? ""} name="password" margin="normal" variant="outlined" label="Password" fullWidth />
+            <TextField onChange={e => onChange(e)} value={password ?? ""} name="password" type="password" margin="normal" variant="outlined" label="Password" fullWidth />
             <div className="margin-normal">
               <Button style={{ margin: 0 }} type="submit" variant="contained" color="primary" fullWidth>
                 Login
