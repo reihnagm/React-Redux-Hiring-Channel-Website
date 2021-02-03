@@ -1,14 +1,15 @@
-import React from "react"
+import React, { Suspense } from "react"
 import * as moment from "moment"
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from "@material-ui/core"
-import { Link } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import PersonIcon from "@material-ui/icons/Person"
 import EmailIcon from "@material-ui/icons/Email"
 import CakeIcon from "@material-ui/icons/Cake"
 import PhoneIcon from "@material-ui/icons/Phone"
 import LocationOnIcon from "@material-ui/icons/LocationOn"
 import SlideshowIcon from "@material-ui/icons/Slideshow"
-import ProfileSkillsItem from "../ProfileSkillsItem/ProfileSkillsItem"
+import Spinner from "../../../Spinner/Spinner"
+const ProfileSkillsItem = React.lazy(() => import("../ProfileSkillsItem/ProfileSkillsItem"))
 
 const ProfileItem = ({ engineer }) => {
   const useStyles = makeStyles(theme => ({
@@ -26,6 +27,7 @@ const ProfileItem = ({ engineer }) => {
     }
   }))
   const classes = useStyles()
+  const history = useHistory()
   return (
     <div>
       <div className="backdrop-top"></div>
@@ -84,7 +86,7 @@ const ProfileItem = ({ engineer }) => {
                   </Grid>
                 </Grid>
                 <Grid>
-                  <Button type="button" variant="contained" color="primary" component={Link} to="/engineers?page=1&show=5&sort=newer&filterby=latest-update">
+                  <Button type="button" variant="contained" color="primary" onClick={() => history.go(-1)}>
                     Back
                   </Button>
                 </Grid>
@@ -99,7 +101,9 @@ const ProfileItem = ({ engineer }) => {
               <Paper className={classes.paper}>
                 <p className="mb-2">
                   Skills
-                  <ProfileSkillsItem items={engineer.skills} />
+                  <Suspense fallback={<Spinner />}>
+                    <ProfileSkillsItem items={engineer.skills} />
+                  </Suspense>
                 </p>
               </Paper>
               <div className="mt-6">

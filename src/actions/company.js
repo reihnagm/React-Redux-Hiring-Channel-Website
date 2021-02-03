@@ -70,7 +70,7 @@ export const storeAddJob = (payload, history) => async dispatch => {
       title: payload.title,
       content: payload.content,
       salary: payload.salary,
-      skills: JSON.stringify(payload.skills),
+      skills: { skills: payload.skills },
       jobtypes: payload.jobtypes,
       companyUid: payload.companyUid
     })
@@ -157,10 +157,16 @@ export const editPostJob = slug => async dispatch => {
 }
 
 export const updatePostJob = (payload, history) => async dispatch => {
-  // console.log(payload)
   try {
+    dispatch({
+      type: LOADING
+    })
     await axios.put(process.env.REACT_APP_UPDATE_POST_JOB, {
       payload: payload
+    })
+    history.push("/companies")
+    dispatch({
+      type: LOADED
     })
     dispatch({
       type: UPDATE_POST_JOB

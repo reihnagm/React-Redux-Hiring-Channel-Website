@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, Suspense } from "react"
 import { Container, Grid, Badge, Paper, Button, Modal, Input, makeStyles } from "@material-ui/core"
-import { Link } from "react-router-dom"
+import { useHistory } from "react-router-dom"
+import { withStyles } from "@material-ui/core/styles"
 import * as moment from "moment"
 import Pusher from "pusher-js"
-import { withStyles } from "@material-ui/core/styles"
 import PersonIcon from "@material-ui/icons/Person"
 import EmailIcon from "@material-ui/icons/Email"
 import CakeIcon from "@material-ui/icons/Cake"
@@ -14,7 +14,8 @@ import MessageIcon from "@material-ui/icons/Message"
 import AvatarComponent from "../../../../Avatar/Avatar"
 import ConversationLists from "../ConversationLists/ConversationLists"
 import MessageLists from "../MessageLists/MessageLists"
-import ProfileSkillsItem from "../../ProfileSkillsItem/ProfileSkillsItem"
+import Spinner from "../../../../Spinner/Spinner"
+const ProfileSkillsItem = React.lazy(() => import("../../ProfileSkillsItem/ProfileSkillsItem"))
 
 const ProfileShowItem = ({ engineer, user, replies, getConversationLists, getReplyConversationReplies, conversationLists, changesReplyToRealtime, getCheckConversations, checkConversations, InsertIntoConversationReplies }) => {
   const messagesEndRef = useRef(null)
@@ -70,6 +71,7 @@ const ProfileShowItem = ({ engineer, user, replies, getConversationLists, getRep
     }
   }))
   const classes = useStyles()
+  const history = useHistory()
   const toggleMsgOpen = async () => {
     await getConversationLists(engineer.user_uid)
     setOpen(!open)
@@ -180,7 +182,7 @@ const ProfileShowItem = ({ engineer, user, replies, getConversationLists, getRep
                     <p> {engineer.showcase} </p>
                   </Grid>
                 </Grid>
-                <Button type="button" variant="contained" color="primary" component={Link} to="/engineers">
+                <Button type="button" variant="contained" color="primary" onClick={() => history.go(-1)}>
                   Back
                 </Button>
               </Paper>
@@ -194,7 +196,9 @@ const ProfileShowItem = ({ engineer, user, replies, getConversationLists, getRep
               <Paper className={classes.paper}>
                 <p className="mb-2">
                   skills
-                  <ProfileSkillsItem items={engineer.skills} />
+                  <Suspense fallback={<Spinner />}>
+                    <ProfileSkillsItem items={engineer.skills} />
+                  </Suspense>
                 </p>
               </Paper>
               <div className="mt-6">

@@ -1,6 +1,7 @@
 import React from "react"
 import { Container, Grid, Paper, Button, makeStyles, Avatar } from "@material-ui/core"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
+import Company from "../../../Company"
 import ReactHtmlParser from "react-html-parser"
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance"
 import EmailIcon from "@material-ui/icons/Email"
@@ -23,6 +24,7 @@ const ProfileDetailItem = ({ company }) => {
     }
   }))
   const classes = useStyles()
+  const history = useHistory()
   return (
     <div>
       <div className="backdrop-top"></div>
@@ -64,7 +66,7 @@ const ProfileDetailItem = ({ company }) => {
                     <p> {company.telephone} </p>
                   </Grid>
                 </Grid>
-                <Button type="button" variant="contained" color="primary" component={Link} to="/companies?page=1&show=5&sort=newer&filterby=latest-update">
+                <Button type="button" variant="contained" color="primary" onClick={() => history.go(-1)}>
                   Back
                 </Button>
               </Paper>
@@ -82,6 +84,7 @@ const ProfileDetailItem = ({ company }) => {
                     <Grid item md={9} xs={12}>
                       <h2 className="mb-3">{company.title}</h2>
                     </Grid>
+                    {/* {company.compan} */}
                     <Grid item md={3} xs={12}>
                       <Button type="button" variant="contained" color="primary" component={Link} to={`/companies/${company.slug}/edit-job`}>
                         Edit

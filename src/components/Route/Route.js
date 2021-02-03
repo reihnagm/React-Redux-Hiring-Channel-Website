@@ -19,24 +19,22 @@ const Routes = () => {
   return (
     <Switch>
       {/* Auth Route */}
-      <Route exact path="/register" component={Register} />
-      <Route exact path="/login" component={Login} />
+      <Route path="/register" exact component={Register} />
+      <Route path="/login" exact component={Login} />
       {/* Company Route */}
-      <Route exact path="/companies/add-job" component={AddJob} />
-      <Route exact path="/companies/:slug/edit-job" component={EditJob} />
-      <Route exact path="/companies" component={Company} />
-      {/* <Redirect from="/companies" to="/companies?page=1&show=5&sort=newer&filterby=latest-update" /> */}
-      <Route exact path="/companies/detail/:slug" component={CompanyProfileDetail} />
+      <Route path="/companies" exact component={Company} />
+      <Route path="/companies/add-job" exact component={AddJob} />
+      <Route path="/companies/detail/:slug" exact component={CompanyProfileDetail} />
+      <Route path="/companies/:slug/edit-job" exact component={EditJob} />
       {/* Private Company Route */}
-      <Private exact path="/companies/profile" component={CompanyProfile} />
-      <Private exact path="/companies/profile/me/edit" component={CompanyProfileEdit} />
-
+      <Private path="/companies/profile" exact component={CompanyProfile} />
+      <Private path="/companies/profile/me/edit" exact component={CompanyProfileEdit} />
       {/* Engineer Route */}
-      <Route exact path="/engineers" component={Engineer} />
-      <Route exact path="/engineers/profile/:slug" component={EngineerProfileShow} />
+      <Route path="/engineers" exact component={Engineer} />
+      <Route path="/engineers/profile/:slug" exact component={EngineerProfileShow} />
       {/* Private Engineer Route  */}
-      <Private exact path="/engineers/profile" component={EngineerProfile} />
-      <Private exact path="/engineers/profile/me/edit" component={EngineerProfileEdit} />
+      <Private path="/engineers/profile" exact component={EngineerProfile} />
+      <Private path="/engineers/profile/me/edit" exact component={EngineerProfileEdit} />
       {/* 404 Page */}
       <Route component={Page404} />
     </Switch>

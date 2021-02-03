@@ -17,6 +17,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      {/* if forceRefresh load web nothing use SPA */}
       <Router>
         <Switch>
           <Route exact path="/" component={Landing} />

@@ -298,7 +298,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer, history }
               <MaskedInput mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"_"} onChange={e => onChange(e)} render={(ref, props) => <TextField value={telephone ?? ""} name="telephone" margin="normal" variant="outlined" label="Telephone" fullWidth inputRef={ref} {...props} />} />
               <NumberFormat onChange={e => onChange(e)} value={salary ?? ""} name="salary" margin="normal" variant="outlined" label="salary" decimalSeparator="," thousandSeparator="." prefix="Rp " allowNegative={false} customInput={TextField} fullWidth />
               <Grid container direction="row" justify="center" alignItems="center">
-                <Button type="button" variant="contained" color="primary" component={Link} to="/engineers">
+                <Button type="button" variant="contained" color="primary" onClick={() => history.go(-1)} component={Link}>
                   Back
                 </Button>
                 <Button type="submit" variant="contained" color="primary">

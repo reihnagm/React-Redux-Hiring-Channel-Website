@@ -1,9 +1,9 @@
-import React, { useEffect } from "react"
+import React, { useEffect, Suspense } from "react"
 import { connect } from "react-redux"
 import { getProfileEngineerBySlug } from "../../../../actions/engineer"
 import { getConversationLists, getReplyConversationReplies, getCheckConversations, InsertIntoConversationReplies, changesReplyToRealtime } from "../../../../actions/message"
 import Spinner from "../../../Spinner/Spinner"
-import ProfileShowItem from "./ProfileShowItem/ProfileShowItem"
+const ProfileShowItem = React.lazy(() => import("./ProfileShowItem/ProfileShowItem"))
 
 const ProfileShow = ({ getProfileEngineerBySlug, getConversationLists, getReplyConversationReplies, getCheckConversations, InsertIntoConversationReplies, changesReplyToRealtime, message: { conversationLists, checkConversations, replies }, engineer: { engineer, loading }, user: { user }, match }) => {
   useEffect(() => {
@@ -13,7 +13,13 @@ const ProfileShow = ({ getProfileEngineerBySlug, getConversationLists, getReplyC
     fetchData()
   }, [getProfileEngineerBySlug, match])
 
-  return loading ? <Spinner /> : <ProfileShowItem engineer={engineer} user={user} getConversationLists={getConversationLists} getReplyConversationReplies={getReplyConversationReplies} conversationLists={conversationLists} replies={replies} changesReplyToRealtime={changesReplyToRealtime} getCheckConversations={getCheckConversations} checkConversations={checkConversations} InsertIntoConversationReplies={InsertIntoConversationReplies} />
+  return loading ? (
+    <Spinner />
+  ) : (
+    <Suspense fallback={<Spinner />}>
+      <ProfileShowItem engineer={engineer} user={user} getConversationLists={getConversationLists} getReplyConversationReplies={getReplyConversationReplies} conversationLists={conversationLists} replies={replies} changesReplyToRealtime={changesReplyToRealtime} getCheckConversations={getCheckConversations} checkConversations={checkConversations} InsertIntoConversationReplies={InsertIntoConversationReplies} />{" "}
+    </Suspense>
+  )
 }
 const mapStateToProps = state => ({
   engineer: state.engineer,

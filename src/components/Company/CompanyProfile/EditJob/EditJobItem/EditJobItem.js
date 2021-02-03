@@ -172,7 +172,7 @@ const EditJobItem = ({ postJob, updatePostJob, allSkills, allJobTypes, history }
               />
               <NumberFormat onChange={e => onChange(e)} value={salary ?? ""} name="salary" margin="normal" variant="outlined" label="Salary" decimalSeparator="," thousandSeparator="." prefix="IDR " allowNegative={false} customInput={TextField} fullWidth />
               <Grid container direction="row" justify="center" alignItems="center">
-                <Button type="button" variant="contained" color="primary" component={Link} to={`/companies/detail/${postJob.slug}`}>
+                <Button type="button" variant="contained" color="primary" onClick={() => history.go(-1)}>
                   Back
                 </Button>
                 <Button type="submit" variant="contained" color="primary">

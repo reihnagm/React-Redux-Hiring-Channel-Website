@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, Suspense } from "react"
 import { getEngineers } from "../../actions/engineer"
 import { connect } from "react-redux"
 import { changeQueryParam } from "../../actions/engineer-router"
 import { parse } from "../../lib/query-string"
-import Header from "../Layouts/Header"
-import HeaderFilter from "../Layouts/HeaderFilter"
 import Spinner from "../Spinner/Spinner"
-import EngineerList from "./EngineerList/EngineerList"
+const Header = React.lazy(() => import("../Layouts/Header"))
+const HeaderFilter = React.lazy(() => import("../Layouts/HeaderFilter"))
+const EngineerList = React.lazy(() => import("./EngineerList/EngineerList"))
 const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQueryParam, handleSearch, handleSort, handleFilterBy, handleShow }) => {
   const [page, setPage] = useState(1)
   const [show, setShow] = useState(5)
@@ -48,9 +48,19 @@ const Engineer = ({ getEngineers, engineers, loading, gettingQueryUrl, changeQue
 
   return (
     <div>
-      <Header handleSearchEngineer={handleSearch} />
-      <HeaderFilter handleFilterBy={handleFilterBy} handleSort={handleSort} handleShow={handleShow} filterByE={filterBy} sortE={sort} showE={show} />
-      {loading ? <Spinner /> : <EngineerList engineers={engineers} handlePage={handlePage} pageCount={engineers && engineers.pageDetail && engineers.pageDetail.total} currentPage={engineers && engineers.pageDetail && engineers.pageDetail.currentPage} />}
+      <Suspense fallback={<Spinner />}>
+        <Header handleSearchEngineer={handleSearch} />
+      </Suspense>
+      <Suspense fallback={<Spinner />}>
+        <HeaderFilter handleFilterBy={handleFilterBy} handleSort={handleSort} handleShow={handleShow} filterByE={filterBy} sortE={sort} showE={show} />
+      </Suspense>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <Suspense fallback={<Spinner />}>
+          <EngineerList engineers={engineers} handlePage={handlePage} pageCount={engineers && engineers.pageDetail && engineers.pageDetail.total} currentPage={engineers && engineers.pageDetail && engineers.pageDetail.currentPage} />
+        </Suspense>
+      )}
     </div>
   )
 }

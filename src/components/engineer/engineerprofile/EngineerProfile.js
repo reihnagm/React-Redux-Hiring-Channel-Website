@@ -1,8 +1,8 @@
-import React, { useEffect } from "react"
+import React, { useEffect, Suspense } from "react"
 import { connect } from "react-redux"
 import { getCurrentProfileEngineer } from "../../../actions/engineer"
-import ProfileItem from "./ProfileItem/ProfileItem"
 import Spinner from "../../Spinner/Spinner"
+const ProfileItem = React.lazy(() => import("./ProfileItem/ProfileItem"))
 
 const Profile = ({ getCurrentProfileEngineer, engineer: { engineer, loading } }) => {
   useEffect(() => {
@@ -11,7 +11,13 @@ const Profile = ({ getCurrentProfileEngineer, engineer: { engineer, loading } })
     }
     fetchData()
   }, [getCurrentProfileEngineer])
-  return loading ? <Spinner /> : <ProfileItem engineer={engineer} />
+  return loading ? (
+    <Spinner />
+  ) : (
+    <Suspense fallback={<Spinner />}>
+      <ProfileItem engineer={engineer} />
+    </Suspense>
+  )
 }
 const mapStateToProps = state => ({
   engineer: state.engineer

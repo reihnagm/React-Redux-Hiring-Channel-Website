@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
 import { Container, Grid, Button, TextField, Avatar, Badge, makeStyles } from "@material-ui/core"
 import { auth, bytesToSize, isImage, Toast } from "../../../../../utils/helper"
@@ -40,7 +40,7 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
     </div>
   </div>
 )
-const ProfileEditItem = ({ company, update, history }) => {
+const ProfileEditItem = ({ company, update }) => {
   let fileRef
   const useStyles = makeStyles(theme => ({
     root: {
@@ -66,6 +66,7 @@ const ProfileEditItem = ({ company, update, history }) => {
     }
   }))
   const classes = useStyles()
+  const history = useHistory()
   const [isOpen, setIsOpen] = useState(false)
   const [location, setLocation] = useState("")
   const [logoNotEdited, setLogoNotEdited] = useState("")
@@ -205,7 +206,7 @@ const ProfileEditItem = ({ company, update, history }) => {
               </PlacesAutocomplete>
               <MaskedInput mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"_"} onChange={e => onChange(e)} render={(ref, props) => <TextField value={telephone ?? ""} name="telephone" margin="normal" variant="outlined" label="Telephone" fullWidth inputRef={ref} {...props} />} />
               <Grid container direction="row" justify="center" alignItems="center">
-                <Button type="button" variant="contained" color="primary" component={Link} to="/companies">
+                <Button type="button" variant="contained" color="primary" onClick={() => history.goBack()}>
                   Back
                 </Button>
                 <Button type="submit" variant="contained" color="primary">

@@ -3,11 +3,9 @@ import { connect } from "react-redux"
 import { Link, withRouter } from "react-router-dom"
 import { AppBar, Toolbar, InputBase, IconButton, Menu, MenuItem, fade, makeStyles } from "@material-ui/core"
 import { logout } from "../../actions/auth"
-import { getCurrentProfileCompany } from "../../actions/company"
-import { getCurrentProfileEngineer } from "../../actions/engineer"
 import AvatarComponent from "../Avatar/Avatar"
 import SearchIcon from "@material-ui/icons/Search"
-const Header = ({ engineer, company, location, logout, user, isAuthenticated, getCurrentProfileEngineer, getCurrentProfileCompany, handleSearchEngineer, handleSearchCompany, querySearchEngineer, querySearchCompany }) => {
+const Header = ({ location, logout, user, isAuthenticated, handleSearchEngineer, handleSearchCompany }) => {
   const logoutUser = () => {
     logout()
     handleMenuClose()
@@ -117,17 +115,6 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
       <MenuItem onClick={logoutUser}>Logout</MenuItem>
     </Menu>
   )
-  useEffect(() => {
-    const fetchData = async () => {
-      if (userRole === 1) {
-        await getCurrentProfileEngineer()
-      }
-      if (userRole === 2) {
-        await getCurrentProfileCompany()
-      }
-    }
-    fetchData()
-  }, [getCurrentProfileEngineer, getCurrentProfileCompany, userRole])
   const authLinks = (
     <div className={classes.grow}>
       <AppBar elevation={1} color="transparent" position="static">
@@ -147,7 +134,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
                   root: classes.inputRoot,
                   input: classes.inputInput
                 }}
-                onChange={event => handleSearchEngineer(event.target.value)}
+                onChange={ev => handleSearchEngineer(ev.target.value)}
               />
             </div>
           )}
@@ -163,7 +150,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
                   root: classes.inputRoot,
                   input: classes.inputInput
                 }}
-                onChange={event => handleSearchCompany(event.target.value)}
+                onChange={ev => handleSearchCompany(ev.target.value)}
               />
             </div>
           )}
@@ -171,27 +158,19 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
             <Link className="text-black mx-3" to="/">
               Home
             </Link>
-            <Link className="text-black mx-3" to="/engineers?page=1&show=5&sort=newer&filterby=latest-update">
+            <Link className="text-black mx-3" to="/engineers">
               Engineers
             </Link>
-            <Link className="text-black mx-3" to="/companies?page=1&show=5&sort=newer&filterby=latest-update">
+            <Link className="text-black mx-3" to="/companies">
               Companies
             </Link>
           </div>
           <div className={classes.grow}>
-            {userRole === 1 && (
-              <span className="mx-3 cursor-pointer" onClick={handleProfileMenuOpen}>
-                Hello, {engineer && engineer.fullname}
-              </span>
-            )}
-            {userRole === 2 && (
-              <span className="mx-3 cursor-pointer" onClick={handleProfileMenuOpen}>
-                Hello, {company && company.username}
-              </span>
-            )}
+            <span className="mx-3 cursor-pointer" onClick={handleProfileMenuOpen}>
+              Hello, {user && user.fullname}
+            </span>
             <IconButton edge="end" aria-label="account of current user" aria-haspopup="true" color="inherit" aria-controls={menuId} onClick={handleProfileMenuOpen}>
-              {userRole === 1 && <AvatarComponent imageSource={engineer && engineer.avatar} altName={engineer && engineer.nickname} type="engineers" width="30" height="30" />}
-              {userRole === 2 && <AvatarComponent imageSource={company && company.logo} altName={company && company.nickname} type="companies" width="30" height="30" />}
+              <AvatarComponent imageSource={user && user.avatar} altName={user && user.avatar} type={userRole === 1 ? "engineers" : "companies"} width="30" height="30" />
             </IconButton>
           </div>
         </Toolbar>
@@ -234,7 +213,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
                   root: classes.inputRoot,
                   input: classes.inputInput
                 }}
-                onChange={event => handleSearchCompany(event.target.value)}
+                onChange={ev => handleSearchCompany(ev.target.value)}
               />
             </div>
           )}
@@ -242,10 +221,10 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
             <Link className="text-black mx-3" to="/">
               Home
             </Link>
-            <Link className="text-black mx-3" to="/engineers?page=1&show=5&sort=newer&filterby=latest-update">
+            <Link className="text-black mx-3" to="/engineers">
               Engineers
             </Link>
-            <Link className="text-black mx-3" to="/companies?page=1&show=5&sort=newer&filterby=latest-update">
+            <Link className="text-black mx-3" to="/companies">
               Companies
             </Link>
             <Link className="text-black mx-3" to="/login">
@@ -263,9 +242,7 @@ const Header = ({ engineer, company, location, logout, user, isAuthenticated, ge
   return <>{isAuthenticated ? authLinks : guestLinks}</>
 }
 const mapStateToProps = state => ({
-  engineer: state.engineer.engineer,
-  company: state.company.company,
   isAuthenticated: state.auth.isAuthenticated,
   user: state.auth.user
 })
-export default connect(mapStateToProps, { getCurrentProfileEngineer, getCurrentProfileCompany, logout })(withRouter(Header))
+export default connect(mapStateToProps, { logout })(withRouter(Header))
