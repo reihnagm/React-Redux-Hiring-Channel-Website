@@ -2,18 +2,7 @@ import axios from "axios"
 import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from "./types"
 import Swal from "sweetalert2"
 import setAuthToken from "../utils/token"
-
-const Toast = Swal.mixin({
-  position: "top-end",
-  toast: true,
-  timer: 3000,
-  showConfirmButton: false,
-  timerProgressBar: false,
-  onOpen: toast => {
-    toast.addEventListener("mouseenter", Swal.stopTimer)
-    toast.addEventListener("mouseleave", Swal.resumeTimer)
-  }
-})
+import { Toast } from "../utils/helper"
 
 export const loadUser = () => async dispatch => {
   if (localStorage.token) {
@@ -31,6 +20,7 @@ export const loadUser = () => async dispatch => {
     })
   }
 }
+
 export const login = (email, password, history) => async dispatch => {
   try {
     const response = await axios.post(`${process.env.REACT_APP_LOCAL_LOGIN}`, {
@@ -57,6 +47,7 @@ export const login = (email, password, history) => async dispatch => {
     })
   }
 }
+
 export const registerEngineer = (data, history) => async dispatch => {
   try {
     const response = await axios.post(`${process.env.REACT_APP_LOCAL_REGISTER}`, data)
@@ -80,6 +71,7 @@ export const registerEngineer = (data, history) => async dispatch => {
     })
   }
 }
+
 export const registerCompany = (data, history) => async dispatch => {
   try {
     const response = await axios.post(`${process.env.REACT_APP_LOCAL_REGISTER}`, data)
@@ -103,6 +95,7 @@ export const registerCompany = (data, history) => async dispatch => {
     })
   }
 }
+
 export const logout = () => async dispatch => {
   dispatch({
     type: LOGOUT

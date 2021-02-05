@@ -7,7 +7,7 @@ export const clearQueryParams = () => async (dispatch, getState) => {
 export const changeQueryParam = (name, value) => async (dispatch, getState) => {
   const { location } = getState().router
   const query = parse(location.search)
-  if (query[name] && name !== "page" && name !== "sort" && name !== "search" && name !== "filterby" && name !== "show") {
+  if (query[name] && name !== "page" && name !== "sort" && name !== "search" && name !== "filterby" && name !== "show" && name !== "offset") {
     delete query[name]
   } else {
     query[name] = value

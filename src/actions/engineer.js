@@ -2,7 +2,8 @@ import axios from "axios"
 import store from "../store.js"
 import { Toast, auth } from "../utils/helper"
 import { logout } from "./auth"
-import { LOADING, LOADED, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR } from "./types"
+import { LOADING, LOADED, LOADING_MORE_DATA, LOADED_MORE_DATA, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_MORE_DATA, GET_MORE_DATA_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR } from "./types"
+
 export const getEngineers = () => async (dispatch, getState) => {
   try {
     dispatch({
@@ -14,12 +15,32 @@ export const getEngineers = () => async (dispatch, getState) => {
     })
     dispatch({
       type: GET_ENGINEERS,
-      payload: response.data
+      payload: response.data.data
     })
-  } catch (error) {
+  } catch (err) {
     dispatch({
       type: GET_ENGINEERS_ERROR,
-      payload: error
+      payload: err
+    })
+  }
+}
+export const getEngineersMoreData = (offset) => async dispatch => {
+  try {
+    dispatch({
+      type: LOADING_MORE_DATA
+    })
+    const response = await axios.get(`${process.env.REACT_APP_GET_ENGINEERS}?page=1&show=10&sort=newer&filterby=latest-update&offset=${offset}`)
+    dispatch({
+      type: LOADED_MORE_DATA
+    })
+    dispatch({
+      type: GET_MORE_DATA,
+      payload: response.data.data
+    })
+  } catch (err) {
+    dispatch({
+      type: GET_MORE_DATA_ERROR,
+      payload: err
     })
   }
 }
@@ -36,10 +57,10 @@ export const getCurrentProfileEngineer = () => async dispatch => {
       type: GET_CURRENT_PROFILE_ENGINEER,
       payload: response.data.data
     })
-  } catch (error) {
+  } catch (err) {
     dispatch({
       type: GET_CURRENT_PROFILE_ENGINEER_ERROR,
-      payload: error
+      payload: err
     })
   }
 }
@@ -56,10 +77,10 @@ export const getProfileEngineerBySlug = slug => async dispatch => {
       type: GET_PROFILE_ENGINEER_BY_SLUG,
       payload: response.data.data
     })
-  } catch (error) {
+  } catch (err) {
     dispatch({
       type: GET_PROFILE_ENGINEER_BY_SLUG_ERROR,
-      payload: error
+      payload: err
     })
   }
 }

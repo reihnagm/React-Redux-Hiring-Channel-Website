@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, Suspense } from "react"
 import { getCompanies } from "../../actions/company"
 import { connect } from "react-redux"
 import { changeQueryParam } from "../../actions/company-router"
 import { parse } from "../../lib/query-string"
-import Header from "../Layouts/Header"
-import HeaderFilter from "../Layouts/HeaderFilter"
 import Spinner from "../Spinner/Spinner"
-import CompanyList from "./CompanyList/CompanyList"
+const Header = React.lazy(() => import("../Layouts/Header"))
+const HeaderFilter = React.lazy(() => import("../Layouts/HeaderFilter"))
+const CompanyList = React.lazy(() => import("./CompanyList/CompanyList"))
+
 const Company = ({ getCompanies, companies, loading, gettingQueryUrl, changeQueryParam, handleSearch, handleSort, handleFilterBy, handleShow }) => {
   const [page, setPage] = useState(1)
   const [show, setShow] = useState(5)
@@ -47,9 +48,19 @@ const Company = ({ getCompanies, companies, loading, gettingQueryUrl, changeQuer
   }
   return (
     <div>
-      <Header handleSearchCompany={handleSearch} />
-      <HeaderFilter handleFilterBy={handleFilterBy} handleSort={handleSort} handleShow={handleShow} filterByC={filterBy} sortC={sort} showC={show} />
-      {loading ? <Spinner /> : <CompanyList companies={companies} handlePage={handlePage} pageCount={companies && companies.pageDetail && companies.pageDetail.total} currentPage={companies && companies.pageDetail && companies.pageDetail.currentPage} />}
+      <Suspense fallback={<Spinner />}>
+        <Header handleSearchCompany={handleSearch} />
+      </Suspense>
+      <Suspense fallback={<Spinner />}>
+        <HeaderFilter handleFilterBy={handleFilterBy} handleSort={handleSort} handleShow={handleShow} filterByC={filterBy} sortC={sort} showC={show} />
+      </Suspense>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <Suspense fallback={<Spinner />}>
+          <CompanyList companies={companies} handlePage={handlePage} pageCount={companies && companies.pageDetail && companies.pageDetail.total} currentPage={companies && companies.pageDetail && companies.pageDetail.currentPage} />
+        </Suspense>
+      )}
     </div>
   )
 }

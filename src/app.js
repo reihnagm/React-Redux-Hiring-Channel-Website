@@ -17,7 +17,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {/* if forceRefresh load web nothing use SPA */}
+      {/* if use forceRefresh refresh web like normal website without React cannot effect when use SPA */}
       <Router>
         <Switch>
           <Route exact path="/" component={Landing} />

@@ -87,12 +87,13 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
         fd.set("fullname", fullname)
         fd.set("nickname", nickname)
         fd.set("email", email)
+        fd.set("password", password)
         fd.set("role", role)
         await registerEngineer(fd, history)
-      } catch (error) {
+      } catch (err) {
         Toast.fire({
           icon: "error",
-          title: error.message
+          title: err.message
         })
       }
     }
@@ -175,7 +176,6 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
           }
           reader.onprogress = e => {
             const percent = (e.loaded / e.total) * 100
-            console.log(`Progress: ${Math.round(percent)}`)
           }
           reader.readAsDataURL(e.target.files[0])
         } catch (err) {
@@ -254,10 +254,10 @@ const Register = ({ registerEngineer, registerCompany, isAuthenticated, history 
         fd.set("companydesc", companydesc)
         fd.set("companylocation", companylocation)
         await registerCompany(fd, history)
-      } catch (error) {
+      } catch (err) {
         Toast.fire({
           icon: "error",
-          title: error.message
+          title: err.message
         })
       }
     }

@@ -1,9 +1,14 @@
 import React from "react"
 
 const Empty = () => {
+  const style = {
+    "font-size": "30px",
+    "margin": "10% auto",
+    "text-align" : "center" 
+  }
   return (
     <>
-      <p>There is no Engineers yet</p>
+      <h2 style={style}>There is no data yet</h2>
     </>
   )
 }
